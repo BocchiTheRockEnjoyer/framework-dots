@@ -145,6 +145,10 @@ The bell opens the **notification center**: Wi-Fi, Bluetooth, quiet mode, night 
 brightness. Middle-click it for quiet mode. To hide KDE's own bell, right-click the tray arrow, choose
 **Configure System Tray**, then **Entries**, and set **Notifications** to **Always hidden**. Pop-ups still appear.
 
+The nine dots in the dock open the **app launcher**. Just start typing to search, or use the arrow keys, **Tab** for the next
+category, **Enter** to open and **Esc** to close. Right-click an app to add it to your favorites.
+If your dock was made by an older version, right-click its nine dots, remove them, then add **Dot Launcher** from **Add Widgets**.
+
 You can also add single widgets: right-click the desktop, **Add Widgets**, and search for **Dot**.
 
 ### Light and dark mode

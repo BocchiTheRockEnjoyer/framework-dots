@@ -102,7 +102,7 @@ def recolour(path, data, p):
     if "/kitty/" in path: s = re.sub(r"(?m)^((?:selection_foreground|cursor_text_color|active_tab_foreground)\s+)#141414", r"\g<1>" + on, s)
     elif name.endswith(".theme"): s = re.sub(r'(theme\[selected_fg\]=")#141414', r"\g<1>" + on, s)
     elif name.startswith("user") and name.endswith(".css"): s = s.replace("#141414", on)
-    elif path.endswith(("Tile.qml", "Accent.qml")): s = s.replace('"#141414"', '"' + on + '"')
+    elif "/plasma/plasmoids/local." in path and name.endswith(".qml"): s = s.replace('"#141414"', '"' + on + '"')
     return s.encode()
 def colours(s, p):
     sec = bg = ""; out = []

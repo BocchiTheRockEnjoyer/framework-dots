@@ -85,10 +85,10 @@ if [ -z "${FD_TEST:-}" ]; then
     if (!o || o[0] == "org.kde.image") d.writeConfig("Image", o ? o[1] : ""); d.reloadConfig() })' >/dev/null
   # ---- bar, dock and widgets ----
   ids="$(tr -cs '0-9' ',' < "$state/panels" 2>/dev/null | sed 's/^,*//; s/,*$//')"
-  plasma "var ids = [$ids];"' var mine = ["dotboard", "dotmedia", "dotclock", "dotsysmon", "dotplaying", "dottimer", "dotkeys", "dotdesktops", "dotbatterypercent", "dotcenter", "claudeusage"].map(function(x) { return "local." + x });
+  plasma "var ids = [$ids];"' var mine = ["dotboard", "dotmedia", "dotclock", "dotsysmon", "dotplaying", "dottimer", "dotkeys", "dotdesktops", "dotbatterypercent", "dotcenter", "dotlauncher", "claudeusage"].map(function(x) { return "local." + x });
     function clear(c) { mine.forEach(function(t) { c.widgets(t).forEach(function(w) { w.remove() }) }) }
     panels().forEach(function(p) {
-      var bar = p.widgets("local.dotdesktops").length > 0 && p.widgets("local.dotclock").length > 0, dock = ids.indexOf(p.id) >= 0;
+      var bar = p.widgets("local.dotdesktops").length > 0 && p.widgets("local.dotclock").length > 0, dock = ids.indexOf(p.id) >= 0 || (p.location == "bottom" && p.widgets("local.dotlauncher").length > 0 && p.widgets().length == 3);
       var types = ["org.kde.plasma.icontasks", "org.kde.plasma.marginsseparator", "org.kde.plasma.kickerdash"];
       // Added by the first installer, which kept no record: match only a dock with exactly our three widgets
       if (!ids.length && p.location == "bottom" && p.widgets().length == 3 && types.every(function(t) { return p.widgets(t).length == 1 }))
@@ -172,7 +172,7 @@ else
   esac
 fi
 for f in "$state"/*-theme.auto.conf; do if [ -e "$f" ] && cmp -s "$f" "$C/kitty/$(basename "$f")"; then rm -f "$C/kitty/$(basename "$f")"; fi; done
-for w in dotboard dotmedia dotclock dotsysmon dotplaying dottimer dotkeys dotdesktops dotbatterypercent dotcenter claudeusage; do rm -rf "$S/plasma/plasmoids/local.$w"; done
+for w in dotboard dotmedia dotclock dotsysmon dotplaying dottimer dotkeys dotdesktops dotbatterypercent dotcenter dotlauncher claudeusage; do rm -rf "$S/plasma/plasmoids/local.$w"; done
 rm -rf "$S/icons/nothing-dots" "$S/icons/nothing-dots-light" "$S/plasma/desktoptheme/breeze-rounded-dock" "$S/plasma/desktoptheme/breeze-rounded-dock-light"
 rm -rf "$S/plasma/look-and-feel/$D" "$S/plasma/look-and-feel/$L" "$S/fonts/fd-dots" "$S/plasma-qml/org/kde/plasma/workspace/osd"
 rm -f "$S/icons/hicolor/scalable/apps"/framework-logo-dots*.svg

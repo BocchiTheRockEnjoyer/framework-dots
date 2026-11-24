@@ -1,0 +1,1 @@
+{"KPackageStructure":"Plasma/Applet","KPlugin":{"Id":"local.dotlauncher","Name":"Dot Launcher","Description":"Full-screen app launcher with dotted search","Category":"Application Launchers","Icon":"view-app-grid-symbolic","License":"GPL-3.0","Version":"1.1","EnabledByDefault":true},"X-Plasma-API-Minimum-Version":"6.0"}
