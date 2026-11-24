@@ -68,25 +68,35 @@ PlasmoidItem {
         }
     }
 
+    // Long text is cut off with an ellipsis; hovering scrolls through the rest
     component Marquee: Item {
         id: mq
         property alias text: t.text
         property alias font: t.font
         property alias color: t.color
+        readonly property bool need: t.implicitWidth > width + 1
+        readonly property bool scrolling: need && hover.hovered
         clip: true
         implicitHeight: t.implicitHeight
-        Text { id: t; textFormat: Text.PlainText; x: 0
-            onTextChanged: { scroll.stop(); x = 0; if (scroll.need) scroll.start() } }
+        HoverHandler { id: hover }
+        Text {
+            id: t
+            textFormat: Text.PlainText
+            elide: Text.ElideRight
+            width: mq.scrolling || back.running ? implicitWidth : mq.width
+            onTextChanged: { back.stop(); x = 0; if (mq.scrolling) scroll.restart() }
+        }
+        onScrollingChanged: if (scrolling) { back.stop(); scroll.restart() } else { scroll.stop(); back.restart() }
         SequentialAnimation {
             id: scroll
-            readonly property bool need: t.implicitWidth > mq.width && root.playing
-            onNeedChanged: if (need) restart(); else { stop(); t.x = 0 }
             loops: Animation.Infinite
-            PauseAnimation { duration: 2500 }
-            NumberAnimation { target: t; property: "x"; to: mq.width - t.implicitWidth; duration: Math.max(1, t.implicitWidth - mq.width) * 25 }
-            PauseAnimation { duration: 2500 }
+            PauseAnimation { duration: 300 }
+            NumberAnimation { target: t; property: "x"; to: mq.width - t.implicitWidth; duration: Math.max(1, t.implicitWidth - mq.width) * 20 }
+            PauseAnimation { duration: 1500 }
             NumberAnimation { target: t; property: "x"; to: 0; duration: 400 }
+            PauseAnimation { duration: 700 }
         }
+        NumberAnimation { id: back; target: t; property: "x"; to: 0; duration: 250 }
     }
 
     fullRepresentation: Item {
