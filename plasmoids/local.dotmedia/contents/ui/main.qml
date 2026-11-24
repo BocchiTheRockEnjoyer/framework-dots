@@ -106,8 +106,13 @@ PlasmoidItem {
             onImageLoaded: requestPaint()
             onPaint: {
                 if (img.status !== Image.Ready || held === "" || !isImageLoaded(held)) return
-                var c = getContext("2d"), w = img.implicitWidth, h = img.implicitHeight, S = n * 3, k = S / Math.min(w, h)
-                c.reset(); c.drawImage(held, (S - w * k) / 2, (S - h * k) / 2, w * k, h * k)
+                var c = getContext("2d"), w = img.implicitWidth, h = img.implicitHeight, S = n * 3
+                // getImageData counts physical pixels on scaled screens: paint the right
+                // half and see whether a point in it can be read back
+                c.reset(); c.fillStyle = "#ffffff"; c.fillRect(S / 2, 0, S / 2, S)
+                var physical = c.getImageData(Math.floor(S * 0.55), 4, 1, 1).data[3] === 0
+                var D = physical ? S / Screen.devicePixelRatio : S, k = D / Math.min(w, h)
+                c.reset(); c.drawImage(held, (D - w * k) / 2, (D - h * k) / 2, w * k, h * k)
                 var d = c.getImageData(0, 0, S, S).data, o = []
                 for (var i = 0; i < n * n; i++) {
                     var bx = (i % n) * 3, by = Math.floor(i / n) * 3, t = [0, 0, 0]
