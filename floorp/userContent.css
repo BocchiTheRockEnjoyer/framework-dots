@@ -1,0 +1,10 @@
+/* Graphite / orange dot theme. Delete everything here to undo. */
+@charset "UTF-8";
+@-moz-document url-prefix("about:newtab"), url-prefix("about:home"), url-prefix("about:privatebrowsing"), url("about:blank") {
+  :root { --newtab-background-color: #0c0c0c !important; --newtab-background-color-secondary: #1a1a1a !important; --newtab-text-primary-color: #f0f0f0 !important; --newtab-primary-action-background: #f3531a !important; }
+  body { background-color: #0c0c0c !important; background-image: radial-gradient(circle, rgba(255,255,255,.075) 2.2px, transparent 2.9px) !important; background-size: 12px 12px !important; }
+}
+@-moz-document url-prefix("about:") {
+  :root { color-scheme: dark !important; accent-color: #f3531a; --color-accent-primary: #f3531a !important; --color-accent-primary-hover: #ff6a35 !important; --in-content-primary-button-background: #f3531a !important; --in-content-primary-button-text-color: #141414 !important; --in-content-accent-color: #f3531a !important; --in-content-page-background: #1a1a1a !important; --in-content-box-background: #252525 !important; --background-color-canvas: #1a1a1a !important; --background-color-box: #252525 !important; --card-background-color: #252525 !important; --text-color: #f0f0f0 !important; --border-color-card: #3a3a3a !important; --link-color: #ff8052 !important; }
+  ::selection { background: #f3531a; color: #141414; }
+}

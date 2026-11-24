@@ -1,0 +1,52 @@
+#!/usr/bin/env -S python3 -I
+"""Claude Code usage. `--record` is a statusLine command (reads JSON on stdin);
+with no arguments, prints a JSON summary for the Plasma widget. Local files only."""
+import sys, os, json, glob, time, datetime
+cache = os.path.join(os.environ.get("XDG_CACHE_HOME") or os.path.expanduser("~/.cache"), "claude-usage")
+path = os.path.join(cache, "limits.json")
+
+def record():
+    try: d = json.load(sys.stdin)
+    except Exception: return
+    rl = d.get("rate_limits") or {}
+    keep = {k: {x: v[x] for x in ("used_percentage", "resets_at") if x in v}
+            for k, v in rl.items() if isinstance(v, dict)}
+    if keep:
+        os.makedirs(cache, exist_ok=True)
+        tmp = f"{path}.{os.getpid()}"
+        with open(tmp, "w") as f: json.dump({"at": time.time(), "limits": keep}, f)
+        os.replace(tmp, path)
+    out = []
+    for k, n in (("five_hour", "5h"), ("seven_day", "week")):
+        p = keep.get(k, {}).get("used_percentage")
+        if isinstance(p, (int, float)): out.append(f"{n} {p:.0f}%")
+    ctx = (d.get("context_window") or {}).get("used_percentage")
+    if isinstance(ctx, (int, float)): out.append(f"context {ctx:.0f}%")
+    print(" · ".join(out))
+
+def summary():
+    now = time.time()
+    day = datetime.datetime.now().astimezone().replace(hour=0, minute=0, second=0, microsecond=0).timestamp()
+    msgs = {}
+    root = os.environ.get("CLAUDE_CONFIG_DIR") or os.path.expanduser("~/.claude")
+    for f in glob.glob(os.path.join(root, "projects", "**", "*.jsonl"), recursive=True):
+        try:
+            if os.path.getmtime(f) < day: continue
+            for line in open(f, errors="ignore"):
+                if '"usage"' not in line: continue
+                try:
+                    d = json.loads(line); m = d["message"]; u = m["usage"]
+                    t = datetime.datetime.fromisoformat(d["timestamp"].replace("Z", "+00:00")).timestamp()
+                except Exception: continue
+                if t >= day: msgs[(m.get("id"), d.get("requestId"))] = u  # last entry per message wins
+        except OSError: continue
+    tot = lambda k: sum(int(u.get(k) or 0) for u in msgs.values())
+    r = {"output": tot("output_tokens"), "input": tot("input_tokens") + tot("cache_creation_input_tokens"),
+         "cached": tot("cache_read_input_tokens"), "limits": {}, "age": None}
+    try:
+        s = json.load(open(path)); r["age"] = int(now - s["at"])
+        r["limits"] = {k: v for k, v in s["limits"].items() if v.get("resets_at", now + 1) > now}
+    except Exception: pass
+    print(json.dumps(r))
+
+record() if "--record" in sys.argv else summary()

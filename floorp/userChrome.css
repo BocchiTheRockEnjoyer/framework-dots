@@ -1,0 +1,36 @@
+/* Graphite / orange dot theme. Delete everything here to undo. */
+@charset "UTF-8";
+@-moz-document url(chrome://browser/content/browser.xhtml) {
+:root, :root[lwtheme], #browser {
+  --gr-0: #0c0c0c; --gr-1: #1a1a1a; --gr-2: #252525; --gr-3: #343434; --gr-tx: #f0f0f0; --gr-dim: #9a9a9a; --gr-or: #f3531a;
+  color-scheme: dark !important;
+  --toolbox-bgcolor: var(--gr-1) !important; --toolbox-bgcolor-inactive: var(--gr-1) !important;
+  --lwt-accent-color: var(--gr-1) !important; --lwt-accent-color-inactive: var(--gr-1) !important; --lwt-text-color: var(--gr-tx) !important;
+  --toolbar-bgcolor: var(--gr-2) !important; --toolbar-background-color: var(--gr-2) !important; --toolbar-color: var(--gr-tx) !important; --toolbar-text-color: var(--gr-tx) !important;
+  --tab-selected-bgcolor: var(--gr-2) !important; --tab-selected-background-color: var(--gr-2) !important; --tab-selected-textcolor: var(--gr-tx) !important; --tab-selected-color: var(--gr-tx) !important;
+  --lwt-tab-line-color: transparent !important; --tab-line-color: transparent !important; --tabs-border-color: transparent !important;
+  --toolbar-field-background-color: var(--gr-1) !important; --toolbar-field-color: var(--gr-tx) !important; --toolbar-field-border-color: transparent !important;
+  --toolbar-field-focus-background-color: var(--gr-0) !important; --toolbar-field-focus-color: var(--gr-tx) !important; --toolbar-field-focus-border-color: var(--gr-or) !important;
+  --urlbar-box-bgcolor: var(--gr-2) !important; --urlbar-popup-url-color: #ff8052 !important; --urlbarView-highlight-background: var(--gr-or) !important; --urlbarView-highlight-color: #141414 !important;
+  --arrowpanel-background: var(--gr-1) !important; --arrowpanel-color: var(--gr-tx) !important; --arrowpanel-border-color: var(--gr-3) !important; --panel-background: var(--gr-1) !important; --panel-color: var(--gr-tx) !important;
+  --toolbarbutton-icon-fill: var(--gr-tx) !important; --toolbarbutton-icon-fill-attention: var(--gr-or) !important; --lwt-toolbarbutton-icon-fill: var(--gr-tx) !important;
+  --toolbarbutton-hover-background: var(--gr-3) !important; --toolbarbutton-active-background: #444 !important;
+  --button-primary-bgcolor: var(--gr-or) !important; --button-primary-color: #141414 !important; --color-accent-primary: var(--gr-or) !important; --color-accent-primary-hover: #ff6a35 !important; --color-accent-primary-active: #d9460f !important;
+  --focus-outline-color: var(--gr-or) !important; --sidebar-background-color: var(--gr-1) !important; --sidebar-text-color: var(--gr-tx) !important; --chrome-content-separator-color: var(--gr-3) !important;
+  --tabpanel-background-color: var(--gr-0) !important; --newtab-background-color: var(--gr-0) !important;
+  --toolbar-field-border-radius: 10px; --tab-border-radius: 9px !important;
+  accent-color: var(--gr-or);
+}
+:root, #navigator-toolbox, panel, menupopup, tooltip { font-family: "Space Mono", monospace !important; }
+#navigator-toolbox { background: var(--gr-1) !important; border-bottom-color: var(--gr-3) !important; }
+#nav-bar, #PersonalToolbar { background: var(--gr-2) !important; }
+/* Selected tab: orange dot under the title, like the dock */
+.tabbrowser-tab[selected] .tab-background { outline: none !important; border-color: transparent !important; box-shadow: none !important; background: radial-gradient(circle 3px at 50% calc(100% - 5px), #f3531a 2.4px, transparent 3px), var(--gr-2) !important; }
+.tabbrowser-tab:not([selected]) .tab-label { color: var(--gr-dim) !important; }
+.tabbrowser-tab:not([selected]):hover .tab-background { background: #222 !important; }
+/* Address bar */
+#urlbar[focused] > .urlbar-background, #urlbar[focused] > #urlbar-background { border-color: var(--gr-or) !important; outline: none !important; }
+::selection { background: #f3531a; color: #141414; }
+/* Sidebars, including Floorp's own */
+#panel-sidebar-select-box, #panel-sidebar-box, #sidebar-select-box, #sidebar-box, #sidebar-main, #statusBar, #nora-statusbar { background: var(--gr-1) !important; color: var(--gr-tx) !important; }
+}

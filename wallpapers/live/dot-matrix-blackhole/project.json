@@ -1,0 +1,364 @@
+{
+ "title": "Dot Matrix Black Hole",
+ "type": "web",
+ "file": "index.html",
+ "preview": "preview.jpg",
+ "description": "Original dot-matrix particle field",
+ "tags": [
+  "Abstract"
+ ],
+ "contentrating": "Everyone",
+ "general": {
+  "supportsaudioprocessing": true,
+  "properties": {
+   "schemecolor": {
+    "order": 1,
+    "index": 1,
+    "text": "Dot colour",
+    "type": "color",
+    "value": "0.953 0.325 0.102"
+   },
+   "hotcolor": {
+    "order": 2,
+    "index": 2,
+    "text": "Bright dot colour",
+    "type": "color",
+    "value": "1 0.56 0.34"
+   },
+   "bgcolor": {
+    "order": 3,
+    "index": 3,
+    "text": "Background colour",
+    "type": "color",
+    "value": "0.035 0.035 0.035"
+   },
+   "pattern": {
+    "order": 4,
+    "index": 4,
+    "text": "Pattern",
+    "type": "combo",
+    "value": "blackhole",
+    "options": [
+     {
+      "label": "Black hole",
+      "value": "blackhole"
+     },
+     {
+      "label": "Swirl",
+      "value": "swirl"
+     },
+     {
+      "label": "Waves",
+      "value": "waves"
+     },
+     {
+      "label": "Rain",
+      "value": "rain"
+     },
+     {
+      "label": "Ripples",
+      "value": "ripples"
+     }
+    ]
+   },
+   "density": {
+    "order": 10,
+    "index": 10,
+    "text": "Dots across the screen",
+    "type": "slider",
+    "value": 224,
+    "min": 40,
+    "max": 360,
+    "step": 1,
+    "fraction": false,
+    "precision": 0,
+    "editable": true
+   },
+   "dotsize": {
+    "order": 11,
+    "index": 11,
+    "text": "Dot size %",
+    "type": "slider",
+    "value": 50,
+    "min": 30,
+    "max": 100,
+    "step": 1,
+    "fraction": false,
+    "precision": 0,
+    "editable": true
+   },
+   "shape": {
+    "order": 12,
+    "index": 12,
+    "text": "Dot shape",
+    "type": "combo",
+    "value": "round",
+    "options": [
+     {
+      "label": "Round",
+      "value": "round"
+     },
+     {
+      "label": "Square",
+      "value": "square"
+     }
+    ]
+   },
+   "unlit": {
+    "order": 13,
+    "index": 13,
+    "text": "Unlit dots %",
+    "type": "slider",
+    "value": 35,
+    "min": 0,
+    "max": 100,
+    "step": 1,
+    "fraction": false,
+    "precision": 0,
+    "editable": true
+   },
+   "brightness": {
+    "order": 14,
+    "index": 14,
+    "text": "Brightness %",
+    "type": "slider",
+    "value": 100,
+    "min": 20,
+    "max": 250,
+    "step": 1,
+    "fraction": false,
+    "precision": 0,
+    "editable": true
+   },
+   "speed": {
+    "order": 15,
+    "index": 15,
+    "text": "Speed %",
+    "type": "slider",
+    "value": 100,
+    "min": 0,
+    "max": 400,
+    "step": 1,
+    "fraction": false,
+    "precision": 0,
+    "editable": true
+   },
+   "reverse": {
+    "order": 16,
+    "index": 16,
+    "text": "Reverse direction",
+    "type": "bool",
+    "value": false
+   },
+   "particles": {
+    "order": 17,
+    "index": 17,
+    "text": "Particles",
+    "type": "slider",
+    "value": 8000,
+    "min": 200,
+    "max": 8000,
+    "step": 100,
+    "fraction": false,
+    "precision": 0,
+    "editable": true
+   },
+   "trail": {
+    "order": 18,
+    "index": 18,
+    "text": "Trail length %",
+    "type": "slider",
+    "value": 58,
+    "min": 0,
+    "max": 97,
+    "step": 1,
+    "fraction": false,
+    "precision": 0,
+    "editable": true
+   },
+   "centerx": {
+    "order": 19,
+    "index": 19,
+    "text": "Centre X %",
+    "type": "slider",
+    "value": 50,
+    "min": 0,
+    "max": 100,
+    "step": 1,
+    "fraction": false,
+    "precision": 0,
+    "editable": true
+   },
+   "centery": {
+    "order": 20,
+    "index": 20,
+    "text": "Centre Y %",
+    "type": "slider",
+    "value": 52,
+    "min": 0,
+    "max": 100,
+    "step": 1,
+    "fraction": false,
+    "precision": 0,
+    "editable": true
+   },
+   "hole": {
+    "order": 21,
+    "index": 21,
+    "text": "Centre hole % (Swirl, Ripples)",
+    "type": "slider",
+    "value": 45,
+    "min": 0,
+    "max": 100,
+    "step": 1,
+    "fraction": false,
+    "precision": 0,
+    "editable": true
+   },
+   "spread": {
+    "order": 22,
+    "index": 22,
+    "text": "Spread %",
+    "type": "slider",
+    "value": 100,
+    "min": 30,
+    "max": 200,
+    "step": 1,
+    "fraction": false,
+    "precision": 0,
+    "editable": true
+   },
+   "flat": {
+    "order": 23,
+    "index": 23,
+    "text": "Flatten %",
+    "type": "slider",
+    "value": 65,
+    "min": 0,
+    "max": 95,
+    "step": 1,
+    "fraction": false,
+    "precision": 0,
+    "editable": true
+   },
+   "tilt": {
+    "order": 24,
+    "index": 24,
+    "text": "Tilt (degrees)",
+    "type": "slider",
+    "value": 12,
+    "min": -90,
+    "max": 90,
+    "step": 1,
+    "fraction": false,
+    "precision": 0,
+    "editable": true
+   },
+   "fade": {
+    "order": 25,
+    "index": 25,
+    "text": "Fade to the right %",
+    "type": "slider",
+    "value": 1,
+    "min": 0,
+    "max": 100,
+    "step": 1,
+    "fraction": false,
+    "precision": 0,
+    "editable": true
+   },
+   "audio": {
+    "order": 26,
+    "index": 26,
+    "text": "React to music",
+    "type": "bool",
+    "value": true
+   },
+   "audioamt": {
+    "order": 27,
+    "index": 27,
+    "text": "Music strength %",
+    "type": "slider",
+    "value": 100,
+    "min": 10,
+    "max": 300,
+    "step": 1,
+    "fraction": false,
+    "precision": 0,
+    "editable": true
+   },
+   "mouse": {
+    "order": 28,
+    "index": 28,
+    "text": "Push dots with the mouse",
+    "type": "bool",
+    "value": false
+   },
+   "holesize": {
+    "order": 5,
+    "index": 5,
+    "text": "Black hole size",
+    "type": "slider",
+    "value": 81,
+    "min": 20,
+    "max": 200,
+    "step": 1,
+    "fraction": false,
+    "precision": 0,
+    "editable": true
+   },
+   "ring": {
+    "order": 6,
+    "index": 6,
+    "text": "Light ring %",
+    "type": "slider",
+    "value": 100,
+    "min": 0,
+    "max": 250,
+    "step": 1,
+    "fraction": false,
+    "precision": 0,
+    "editable": true
+   },
+   "bend": {
+    "order": 7,
+    "index": 7,
+    "text": "Light bending %",
+    "type": "slider",
+    "value": 100,
+    "min": 0,
+    "max": 250,
+    "step": 1,
+    "fraction": false,
+    "precision": 0,
+    "editable": true
+   },
+   "doppler": {
+    "order": 8,
+    "index": 8,
+    "text": "One side brighter %",
+    "type": "slider",
+    "value": 0,
+    "min": 0,
+    "max": 100,
+    "step": 1,
+    "fraction": false,
+    "precision": 0,
+    "editable": true
+   },
+   "stars": {
+    "order": 9,
+    "index": 9,
+    "text": "Stars %",
+    "type": "slider",
+    "value": 50,
+    "min": 0,
+    "max": 100,
+    "step": 1,
+    "fraction": false,
+    "precision": 0,
+    "editable": true
+   }
+  }
+ }
+}

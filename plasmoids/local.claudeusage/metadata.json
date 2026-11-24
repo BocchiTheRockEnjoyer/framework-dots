@@ -1,0 +1,1 @@
+{"KPackageStructure":"Plasma/Applet","KPlugin":{"Id":"local.claudeusage","Name":"Claude Code Usage","Description":"Claude Code limits and tokens (local data)","Category":"System Information","Icon":"utilities-terminal","License":"GPL-3.0","Version":"1.1","EnabledByDefault":true},"X-Plasma-API-Minimum-Version":"6.0"}

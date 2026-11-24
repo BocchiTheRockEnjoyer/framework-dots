@@ -1,0 +1,1 @@
+{"KPackageStructure":"Plasma/Applet","KPlugin":{"Id":"local.dotbatterypercent","Name":"Dot Battery","Description":"Battery percentage in a dot-matrix font","Category":"System Information","Icon":"battery-060","License":"GPL-3.0","Version":"1.1","EnabledByDefault":true},"X-Plasma-API-Minimum-Version":"6.0"}

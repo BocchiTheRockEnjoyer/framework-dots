@@ -1,0 +1,1 @@
+{"KPackageStructure":"Plasma/Applet","KPlugin":{"Id":"local.dottimer","Name":"Dot Focus Timer","Description":"Focus timer that fills with dots","Category":"System Information","Icon":"clock","License":"GPL-3.0","Version":"1.2","EnabledByDefault":true},"X-Plasma-API-Minimum-Version":"6.0"}

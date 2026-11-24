@@ -1,0 +1,218 @@
+import re,os,sys,glob
+out=sys.argv[1]; src='/usr/share/icons/breeze-dark'
+os.makedirs(out+'/tray',exist_ok=True)
+def G(s):
+    rows=[r for r in s.split()]; assert len(rows)==11 and all(len(r)==11 for r in rows),(len(rows),[len(r) for r in rows]); return [list(r) for r in rows]
+def svg(g):
+    d={'#':[], 'o':[], 'R':[]}
+    for y,r in enumerate(g):
+        for x,c in enumerate(r):
+            if c in d: d[c].append(f'<circle cx="{2*x+1}" cy="{2*y+1}" r=".85"/>')
+    return ('<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 22 22" width="22" height="22"><defs><style id="current-color-scheme" type="text/css">.ColorScheme-Text{color:#fcfcfc;}</style></defs>'
+     f'<g class="ColorScheme-Text" fill="currentColor">{"".join(d["#"])}</g><g class="ColorScheme-Text" fill="currentColor" opacity=".28">{"".join(d["o"])}</g><g fill="#f3531a">{"".join(d["R"])}</g></svg>')
+def slash(g):
+    g=[r[:] for r in g]
+    for i in range(11): g[i][i]='R'
+    return g
+def dim(g): return [['o' if c=='#' else c for c in r] for r in g]
+def dot(g,c):
+    g=[r[:] for r in g]
+    for y in (9,10):
+        for x in (9,10): g[y][x]=c
+    return g
+VOL="""...........
+....#......
+...##......
+..###......
+#####......
+#####......
+#####......
+..###......
+...##......
+....#......
+..........."""
+def vol(n):
+    g=G(VOL); arcs=[[(6,4),(7,5),(6,6)],[(6,2),(8,3),(9,4),(9,5),(9,6),(8,7),(6,8)]]
+    arcs[1]=[(7,2),(8,3),(9,4),(9,5),(9,6),(8,7),(7,8)]
+    for i,a in enumerate(arcs):
+        for x,y in a: g[y][x]='#' if n>i else 'o'
+    if n==0:
+        for a in arcs:
+            for x,y in a: g[y][x]='.'
+        for x,y in ((7,4),(9,4),(8,5),(7,6),(9,6)): g[y][x]='R'
+    if n==3:
+        for x,y in arcs[1]: g[y][x]='R'
+    return g
+def wifi(level,off=False): # 0..4
+    W="""...........
+...#####...
+.##.....##.
+#.........#
+...#####...
+..#.....#..
+...........
+....###....
+...#...#...
+.....#.....
+.....#....."""
+    g=G(W); band=lambda y:4 if y<=3 else 3 if y<=5 else 2 if y<=8 else 1
+    for y in range(11):
+        for x in range(11):
+            if g[y][x]=='#' and level<band(y): g[y][x]='o'
+    return slash(g) if off else g
+def bat(p,ch,low=None):
+    g=[['.']*11 for _ in range(11)]
+    for x in range(1,9): g[3][x]=g[9][x]='#'
+    for y in range(4,9): g[y][0]=g[y][9]='#'
+    for y in (5,6,7): g[y][10]='#'
+    n=round(p/100*6); n=max(n,1) if p>0 else 0
+    c='R' if p<=20 and not ch else '#'
+    for y in range(5,8):
+        for x in range(6): g[y][2+x]=c if x<n else 'o'
+    if ch:
+        for x,y in ((9,0),(8,1),(9,1),(10,1),(9,2)): g[y][x]='R'
+    return g
+BT=G(""".....##....
+.....#.#...
+.#...#..#..
+..#..#...#.
+...#.#..#..
+....###....
+...#.#..#..
+..#..#...#.
+.#...#..#..
+.....#.#...
+.....##....""")
+SUN=G(""".....#.....
+.#.......#.
+...........
+....###....
+...#####...
+#..#####..#
+...#####...
+....###....
+...........
+.#.......#.
+.....#.....""")
+SUNLO=G("""...........
+...........
+.....#.....
+....###....
+...#####...
+.#.#####.#.
+...#####...
+....###....
+.....#.....
+...........
+...........""")
+CLIP=G("""....###....
+####...####
+#...###...#
+#.........#
+#.#######.#
+#.........#
+#.#######.#
+#.........#
+#.####....#
+#.........#
+###########""")
+BELL=G(""".....#.....
+....###....
+...#...#...
+..#.....#..
+..#.....#..
+..#.....#..
+..#.....#..
+.#.......#.
+.#########.
+...........
+....###....""")
+MIC=G("""....###....
+....###....
+....###....
+....###....
+.#..###..#.
+.#..###..#.
+.#.......#.
+..#.....#..
+...#####...
+.....#.....
+...#####...""")
+ETH=G("""....###....
+....#.#....
+....###....
+.....#.....
+.....#.....
+.#########.
+.#.......#.
+.#.......#.
+###.....###
+#.#.....#.#
+###.....###""")
+PLANE=G(""".....#.....
+.....#.....
+....###....
+....###....
+..#######..
+.#########.
+##..###..##
+.....#.....
+....###....
+...##.##...
+...........""")
+DESK=G("""...........
+###########
+#.........#
+#.........#
+#.........#
+#.........#
+#.........#
+###########
+...........
+...#####...
+...........""")
+def badge(n,g):
+    if 'limited' in n: return dot(g,'R')
+    if 'locked' in n: return dot(g,'#')
+    return g
+def make(n):
+    b=n.removesuffix('-symbolic'); m=re.fullmatch(r'audio-volume-(muted|low|medium|high)(-danger|-warning)?',b)
+    if m: return vol(3 if m[2] else {'muted':0,'low':1,'medium':1,'high':2}[m[1]])
+    m=re.fullmatch(r'microphone-sensitivity-(\w+)',b)
+    if m: return slash(MIC) if m[1]=='muted' else MIC
+    m=re.fullmatch(r'battery-(\d{3})(-charging)?(-profile-\w+)?',b)
+    if m: return bat(int(m[1]),bool(m[2]))
+    m=re.fullmatch(r'battery-(caution|empty|full|good|low)(-charging)?',b)
+    if m: return bat({'caution':10,'empty':0,'full':100,'good':60,'low':20}[m[1]],bool(m[2]))
+    if re.fullmatch(r'battery-profile-\w+',b): return bat(100,False)
+    if b=='battery-missing': return slash(bat(0,False))
+    m=re.fullmatch(r'network-wireless-(?:connected-)?(\d+)(-limited|-locked)?',b)
+    if m:
+        p=int(m[1]); return badge(b,wifi(0 if p==0 else 1 if p<=20 else 2 if p<=40 else 3 if p<=60 else 4))
+    m=re.fullmatch(r'network-wireless-signal-(\w+)',b)
+    if m: return wifi({'none':0,'weak':1,'ok':2,'good':3,'excellent':4}[m[1]])
+    if b in('network-wireless-available','network-wireless-acquiring'): return wifi(1)
+    if b=='network-wireless-on': return wifi(4)
+    if b in('network-wireless-disconnected','network-wireless-off','network-offline'): return wifi(0,True)
+    if b=='network-limited': return dot(wifi(4),'R')
+    if re.fullmatch(r'network-wired(-activated)?(-limited|-locked)?|network-wired-available',b): return badge(b,ETH)
+    if re.fullmatch(r'network-wired-(disconnected|unavailable)',b): return slash(dim(ETH))
+    if b=='network-flightmode-on': return PLANE
+    if b=='network-flightmode-off': return slash(dim(PLANE))
+    if re.fullmatch(r'(network|preferences-system)-bluetooth(-activated)?(-locked)?',b) and (b.startswith('network') or n.endswith('symbolic')): return dot(BT,'R') if 'activated' in b else BT
+    if re.fullmatch(r'(network|preferences-system)-bluetooth-inactive',b): return slash(dim(BT))
+    if b in('brightness-high','high-brightness'): return SUN
+    if b in('brightness-low','low-brightness'): return SUNLO
+    if n=='video-display-brightness': return SUN
+    if n in('klipper-symbolic',): return CLIP
+    if b in('notifications','notification-inactive','notification-empty'): return BELL
+    if b=='notification-active': return dot(BELL,'R')
+    if b in('notifications-disabled','notification-disabled'): return slash(dim(BELL))
+    if n=='user-desktop-symbolic': return DESK
+names={os.path.basename(p)[:-4] for p in glob.glob(src+'/*/*/*.svg')}
+k=0
+for n in sorted(names):
+    g=make(n)
+    if g: open(f'{out}/tray/{n}.svg','w').write(svg(g)); k+=1
+open(out+'/index.theme','w').write('[Icon Theme]\nName=Nothing Dots\nComment=Dot-matrix tray icons over Breeze Dark\nInherits=breeze-dark,breeze,hicolor\nExample=battery-060\nFollowsColorScheme=true\nDirectories=tray\n\n[tray]\nSize=22\nMinSize=8\nMaxSize=256\nType=Scalable\nContext=Status\n')
+print(k,'icons')

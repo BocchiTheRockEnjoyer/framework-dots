@@ -1,0 +1,1 @@
+{"KPackageStructure":"Plasma/Applet","KPlugin":{"Id":"local.dotplaying","Name":"Dot Now Playing","Description":"Current track with a dotted visualiser","Category":"System Information","Icon":"media-playback-start","License":"GPL-3.0","Version":"1.1","EnabledByDefault":true},"X-Plasma-API-Minimum-Version":"6.0"}
