@@ -25,6 +25,24 @@ for j in range(G+2*pad):
 H=round(W*(15*1.481)/(36*.612)); dy=(H-W)/2
 svg=f'<svg xmlns="http://www.w3.org/2000/svg" width="{W}" height="{H}" viewBox="0 {-dy} {W} {H}">{"".join(o)}</svg>'
 subprocess.run(['magick','-background','none','svg:-','-strip','-define','png:compression-level=9',f'PNG32:{png}'],input=svg.encode(),check=True)
+# Palette picture with transparency, so framework-dots-accent can recolour it without touching the pixels
+import struct,zlib
+w,h=W,H
+rgba=subprocess.run(['magick',png,'-depth','8','rgba:-'],stdout=subprocess.PIPE,check=True).stdout
+pal={(0,0,0,0):0}; rows_=[]
+for y in range(h):
+    row=bytearray(b'\0')
+    for x in range(w):
+        r,g,b,a=rgba[(y*w+x)*4:(y*w+x)*4+4]; a=round(a/17)*17
+        if a==0: row.append(0); continue
+        if max(r,g,b)-min(r,g,b)<40: c=(128,128,128,a)
+        else: t=min(1,max(0,(g-83)/39)); t=round(t*11)/11; c=(round(243+12*t),round(83+39*t),round(26+46*t),a)
+        row.append(pal.setdefault(c,len(pal)))
+    rows_.append(bytes(row))
+assert len(pal)<=256,len(pal)
+ch=lambda t,d: struct.pack('>I4s',len(d),t)+d+struct.pack('>I',zlib.crc32(t+d))
+P_=sorted(pal,key=pal.get)
+open(png,'wb').write(b'\x89PNG\r\n\x1a\n'+ch(b'IHDR',struct.pack('>IIBBBBB',w,h,8,3,0,0,0))+ch(b'PLTE',b''.join(bytes(c[:3]) for c in P_))+ch(b'tRNS',bytes(c[3] for c in P_))+ch(b'IDAT',zlib.compress(b''.join(rows_),9))+ch(b'IEND',b''))
 # braille: 2x4 dots a cell; fewer rows than columns because cells are tall
 cols,rows=32,13
 dw,dh=cols*2,rows*4

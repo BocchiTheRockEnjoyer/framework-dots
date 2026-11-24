@@ -11,9 +11,17 @@ grey and orange. Made with help from [Claude Code](https://claude.com/claude-cod
 
 ![Full desktop in light mode](preview/desktop-light.png)
 
+**Any accent colour**
+
+![Four desktops in green, blue, pink and purple](preview/accents.png)
+
+**Windows and terminal**
+
+![Dotted title bars, fastfetch, a music visualiser and btop](preview/windows.png)
+
 ### Widgets
 
-Pictures use demo music, London weather and sample Claude usage.
+Pictures use demo music and notifications, London weather, and sample Claude usage and slider levels.
 
 **Clock, calendar and weather**
 
@@ -27,13 +35,13 @@ Pictures use demo music, London weather and sample Claude usage.
 |:---:|:---:|
 | <img src="preview/boards.png" width="380" alt="Desktop clock and media player"> | <img src="preview/shortcuts.png" width="380" alt="Keyboard shortcuts popup"> |
 
+| Notification center | Volume pop-up |
+|:---:|:---:|
+| <img src="preview/center.png" width="360" alt="Notification center with toggles, sliders, accent colours and notifications"> | <img src="preview/volume.png" width="320" alt="Volume pop-up"> |
+
 | Focus timer | Claude Code usage |
 |:---:|:---:|
 | <img src="preview/timer.png" width="310" alt="Focus timer popup"> | <img src="preview/claude.png" width="310" alt="Claude Code usage popup"> |
-
-**Volume pop-up**
-
-<img src="preview/volume.png" width="360" alt="Volume pop-up">
 
 New to Linux? This guide assumes no experience. Copy each grey box into a terminal and press Enter.
 
