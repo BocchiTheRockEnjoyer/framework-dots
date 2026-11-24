@@ -1,0 +1,270 @@
+#!/usr/bin/env -S python3 -I
+"""Changes the accent colour of Framework Dots.
+
+  framework-dots-accent '#39ff14'    any colour, as #rrggbb
+  framework-dots-accent green        a preset: orange red pink purple blue cyan green lime yellow white
+  framework-dots-accent pick         choose from a colour window
+  framework-dots-accent reset        back to orange
+  framework-dots-accent show         print the current colour
+
+Everything is recoloured from saved originals, so colours never drift and reset restores the exact files.
+"""
+import glob, hashlib, json, math, os, re, shutil, struct, subprocess, sys, time, zlib
+
+HOME = os.path.expanduser("~")
+SHARE, CONF = HOME + "/.local/share", os.environ.get("XDG_CONFIG_HOME") or HOME + "/.config"
+STATE = SHARE + "/framework-dots/accent"          # originals and what was written
+CHOICE = CONF + "/framework-dots/accent"          # the chosen colour, read by framework-dots-mode
+DEFAULT = "#f3531a"
+PRESETS = dict(orange=DEFAULT, red="#ff3b3b", pink="#ff4fa3", purple="#a970ff", blue="#4c8dff", cyan="#22d3ee",
+               green="#39d353", lime="#39ff14", yellow="#ffd60a", white="#f2f2f2")
+# Every shade the theme uses. Each keeps its difference from the accent.
+SHADES = ["f3531a", "b93a10", "ff8052", "b83808", "ff6a35", "f27a4e", "f0a88c", "c5441a", "8a3315", "d9460f", "b8745a", "c84212", "6e3219", "c83e0a", "ff966e", "785041", "3c190a", "be9687"]
+BASE_FILES = [
+    SHARE + "/icons/nothing-dots/*/*.svg", SHARE + "/plasma/plasmoids/local.*/contents/**/*.qml",
+    SHARE + "/plasma/desktoptheme/breeze-rounded-dock*/**/*.svg", SHARE + "/plasma/look-and-feel/framework.dots.*/contents/splash/**/*",
+    SHARE + "/plasma-qml/org/kde/plasma/workspace/osd/OsdItem.qml", SHARE + "/color-schemes/FrameworkGraphite*.colors",
+    SHARE + "/aurorae/themes/framework-dots*/*.svg", SHARE + "/icons/hicolor/scalable/apps/framework-logo-dots*.svg",
+    CONF + "/kitty/kitty.conf", CONF + "/kitty/*-theme.auto.conf", CONF + "/fastfetch/config.jsonc", CONF + "/fastfetch/framework-dots.png",
+    CONF + "/fish/functions/fish_prompt.fish", CONF + "/btop/themes/framework-dots*.theme", CONF + "/cava/framework-dots", HOME + "/.local/bin/cava-dots",
+    CONF + "/floorp/*/chrome/user*.css", HOME + "/.floorp/*/chrome/user*.css",
+] + [HOME + f"/Pictures/Wallpapers/{n}.png" for n in ("dot-matrix-blackhole", "dot-matrix-blackhole-light", "framework-logo-dots", "graphite-orange-dots")]
+
+# ---- colour maths (OKLCH: even lightness steps for every hue) ----
+def rgb(h): return tuple(int(h[i:i + 2], 16) for i in (0, 2, 4))
+def hexs(c): return "%02x%02x%02x" % tuple(c)
+def lin(v): v /= 255; return v / 12.92 if v <= .04045 else ((v + .055) / 1.055) ** 2.4
+def unlin(v): return 12.92 * v if v <= .0031308 else 1.055 * v ** (1 / 2.4) - .055
+def lch(c):
+    r, g, b = map(lin, c)
+    l, m, s = (x ** (1 / 3) for x in (.4122214708 * r + .5363325363 * g + .0514459929 * b, .2119034982 * r + .6806995451 * g + .1073969566 * b, .0883024619 * r + .2817188376 * g + .6299787005 * b))
+    L, A, B = .2104542553 * l + .793617785 * m - .0040720468 * s, 1.9779984951 * l - 2.428592205 * m + .4505937099 * s, .0259040371 * l + .7827717662 * m - .808675766 * s
+    return L, math.hypot(A, B), math.atan2(B, A)
+def unlch(L, C, h):
+    L = min(1, max(0, L))
+    for _ in range(60):                             # lower the chroma until it fits the screen's range
+        A, B = C * math.cos(h), C * math.sin(h)
+        l, m, s = (L + .3963377774 * A + .2158037573 * B) ** 3, (L - .1055613458 * A - .0638541728 * B) ** 3, (L - .0894841775 * A - 1.291485548 * B) ** 3
+        v = (4.0767416621 * l - 3.3077115913 * m + .2309699292 * s, -1.2684380046 * l + 2.6097574011 * m - .3413193965 * s, -.0041960863 * l - .7034186147 * m + 1.707614701 * s)
+        if all(-.0005 <= x <= 1.0005 for x in v): break
+        C *= .95
+    return tuple(round(255 * min(1, max(0, unlin(max(0, x))))) for x in v)
+def lum(c): r, g, b = map(lin, c); return .2126 * r + .7152 * g + .0722 * b
+def contrast(a, b): x, y = sorted((lum(a), lum(b))); return (y + .05) / (x + .05)
+def readable(c, bg, want):
+    """The same colour, lighter or darker until it can be read on bg."""
+    L, C, h = lch(c); step = .01 if lum(bg) < .18 else -.01
+    while contrast(c, bg) < want and 0 < L < 1:
+        L += step; c = unlch(L, C, h)
+    return c
+
+class Palette:
+    def __init__(self, accent):
+        self.accent, self.default = rgb(accent[1:]), accent == DEFAULT
+        b, a = lch(rgb(DEFAULT[1:])), lch(self.accent); self.map = {}
+        for s in SHADES:
+            L, C, h = lch(rgb(s))
+            self.map[s] = hexs(self.accent) if s == DEFAULT[1:] else hexs(unlch(a[0] + (L - b[0]) * (1 if L > b[0] else min(1, a[0] / b[0])), a[1] * C / b[1], a[2] + h - b[2]))
+        # Text on the accent: whichever of near-black and near-white reads better
+        self.on = (20, 20, 20) if contrast(self.accent, (20, 20, 20)) >= contrast(self.accent, (246, 246, 246)) else (246, 246, 246)
+        # A straight colour change that leaves greys alone, for pictures
+        self.pic = (rgb(DEFAULT[1:]), self.accent)
+    def shade(self, s): return self.map[s]
+    def picture(self, c):
+        """Split a pixel into grey and orange, then swap the orange."""
+        O, A = self.pic; mn = min(c); chroma = max(c) - mn; full = max(O) - min(O)
+        if chroma == 0: return c
+        t = chroma / full                           # how much of the accent is in it
+        rest = [x - t * o for x, o in zip(c, O)]    # what's left is grey (or white glow)
+        return tuple(round(min(255, max(0, r + t * a))) for r, a in zip(rest, A))
+
+# ---- recolouring ----
+HEX = re.compile("(?<![0-9a-fA-F])(" + "|".join(SHADES) + ")(?![0-9a-fA-F])", re.I)
+TRI = re.compile(r"(?<![\d.])(" + "|".join("[,;] ?".join(map(str, rgb(s))) for s in SHADES) + r")(?![\d.])")
+def triple(m, p):
+    n = re.findall(r"\d+", m[1]); sep = re.findall(r"\D+", m[1])
+    out = [str(x) for x in rgb(p.shade(hexs(map(int, n))))]
+    return out[0] + sep[0] + out[1] + sep[1] + out[2]
+def recolour(path, data, p):
+    if path.endswith(".png"): return recolour_png(data, p)
+    try: s = data.decode()
+    except UnicodeDecodeError: return data
+    if path.endswith(".colors"): return colours(s, p).encode()
+    on = "#" + hexs(p.on); dark_bg, light_bg = (26, 26, 26), (244, 244, 244)
+    def h(m):
+        c = p.shade(m[1].lower())
+        if m[1].lower() == "ff8052": c = hexs(readable(rgb(c), dark_bg, 4.5))       # links on dark
+        if m[1].lower() == "b83808": c = hexs(readable(rgb(c), light_bg, 4.5))      # links on light
+        return c
+    s = TRI.sub(lambda m: triple(m, p), HEX.sub(h, s))
+    # Text that sits on the accent
+    name = os.path.basename(path)
+    if "/kitty/" in path: s = re.sub(r"(?m)^((?:selection_foreground|cursor_text_color|active_tab_foreground)\s+)#141414", r"\g<1>" + on, s)
+    elif name.endswith(".theme"): s = re.sub(r'(theme\[selected_fg\]=")#141414', r"\g<1>" + on, s)
+    elif name.startswith("user") and name.endswith(".css"): s = s.replace("#141414", on)
+    elif path.endswith(("Tile.qml", "Accent.qml")): s = s.replace('"#141414"', '"' + on + '"')
+    return s.encode()
+def colours(s, p):
+    sec = bg = ""; out = []
+    bgs = dict(re.findall(r"(?ms)^\[(Colors:[^\n]+?)\]\n.*?^BackgroundNormal=([\d,]+)", s))
+    for line in s.split("\n"):
+        if line.startswith("["): sec = line[1:-1]
+        k, _, v = line.partition("=")
+        if sec == "Colors:Selection" and k.startswith("Foreground"):
+            fg = p.on
+            if k == "ForegroundInactive": fg = readable(rgb(p.shade("3c190a")), p.accent, 3) if p.on[0] < 99 else (225, 225, 225)
+            v = ",".join(map(str, fg)); line = f"{k}={v}"
+        elif TRI.fullmatch(v):
+            c = rgb(p.shade(hexs(map(int, v.split(",")))))
+            if k.startswith("Foreground") and sec in bgs: c = readable(c, tuple(map(int, bgs[sec].split(","))), 3.5)
+            line = f"{k}={','.join(map(str, c))}"
+        out.append(line)
+    return "\n".join(out)
+def undo(path, data, p):
+    """A file edited while recoloured: turn the accent's shades back into the originals, keeping the edits."""
+    if p.default or path.endswith((".png", ".colors")): return None
+    try: s = data.decode()
+    except UnicodeDecodeError: return None
+    back = {}
+    for k in SHADES:
+        for v in (p.shade(k), hexs(readable(rgb(p.shade(k)), (26, 26, 26), 4.5)), hexs(readable(rgb(p.shade(k)), (244, 244, 244), 4.5))): back.setdefault(v, k)
+    n = re.sub("(?<![0-9a-fA-F])(" + "|".join(back) + ")(?![0-9a-fA-F])", lambda m: back[m[1].lower()], s, flags=re.I)
+    n = re.sub(r"(?<![\d.])(" + "|".join("[,;] ?".join(map(str, rgb(v))) for v in back) + r")(?![\d.])", lambda m: re.sub(r"^\d+(\D+)\d+(\D+)\d+$", lambda q: str(rgb(back[hexs(map(int, re.findall(r"\d+", m[1])))])[0]) + q[1] + str(rgb(back[hexs(map(int, re.findall(r"\d+", m[1])))])[1]) + q[2] + str(rgb(back[hexs(map(int, re.findall(r"\d+", m[1])))])[2]), m[1]), n)
+    on = "#" + hexs(p.on)
+    if "/kitty/" in path: n = re.sub(r"(?m)^((?:selection_foreground|cursor_text_color|active_tab_foreground)\s+)" + on, r"\g<1>#141414", n)
+    return n.encode() if n != s else None
+def recolour_png(data, p):
+    """Palette pictures only: the colours are a short list, so the pixels stay as they are."""
+    if data[:8] != b"\x89PNG\r\n\x1a\n" or data[25] != 3: return data
+    out, i = data[:8], 8
+    while i + 8 <= len(data):
+        n, t = struct.unpack(">I4s", data[i:i + 8]); body = data[i + 8:i + 8 + n]
+        if t == b"PLTE": body = b"".join(bytes(p.picture(tuple(body[j:j + 3]))) for j in range(0, n, 3))
+        out += struct.pack(">I4s", n, t) + body + struct.pack(">I", zlib.crc32(t + body)); i += 12 + n
+    return out
+
+# ---- files ----
+def sha(b): return hashlib.sha256(b).hexdigest()
+def wanted(path, data):
+    if path.endswith(".png"): return data[25:26] == b"\x03"
+    if path.endswith(".css") and b"Graphite / orange dot theme" not in data: return False
+    try: s = data.decode()
+    except UnicodeDecodeError: return False
+    return bool(HEX.search(s) or TRI.search(s))
+def write(path, data):
+    mode = os.stat(path).st_mode & 0o777; tmp = f"{path}.fdtmp"
+    with open(tmp, "wb") as f: f.write(data)
+    os.chmod(tmp, mode); os.replace(tmp, path)
+def apply_files(accent):
+    """Recolours every file. Returns (changed, skipped)."""
+    os.makedirs(STATE + "/base", exist_ok=True)
+    try: db = json.load(open(STATE + "/files.json"))
+    except (OSError, ValueError): db = {}
+    p, new, changed, skipped, seen = Palette(accent), {}, 0, [], set()
+    for pat in BASE_FILES:
+        for path in sorted(glob.glob(pat, recursive=True)):
+            real = os.path.realpath(path)
+            if real in seen or not os.path.isfile(real) or not real.startswith(HOME + "/") or real.endswith(".fdtmp"): continue
+            seen.add(real); rel = os.path.relpath(real, HOME); data = open(real, "rb").read(); old = db.get(rel); base = None
+            store = f"{STATE}/base/{sha(rel.encode())[:24]}"
+            if old and sha(data) == old["out"]:
+                try: base = open(store, "rb").read()
+                except OSError: base = None
+                if base is not None and sha(base) != old["base"]: base = None
+            if base is None:
+                if old and not wanted(real, data):
+                    data0 = undo(real, data, Palette(old.get("accent", DEFAULT)))
+                    if data0 is None or not wanted(real, data0): skipped.append(rel); new[rel] = old; continue
+                    base = data0
+                elif not wanted(real, data): continue
+                else: base = data
+                with open(store, "wb") as f: f.write(base)
+            out = base if p.default else recolour(real, base, p)
+            if out != data:
+                if not os.access(os.path.dirname(real), os.W_OK): skipped.append(rel); continue
+                write(real, out); changed += 1
+            new[rel] = dict(base=sha(base), out=sha(out), accent=accent)
+    with open(STATE + "/files.json.tmp", "w") as f: json.dump(new, f)
+    os.replace(STATE + "/files.json.tmp", STATE + "/files.json")
+    if p.default: shutil.rmtree(STATE, ignore_errors=True)
+    return changed, skipped
+
+# ---- making the desktop notice ----
+def run(*a, **k): return subprocess.run(a, stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL, **k).returncode if shutil.which(a[0]) or os.path.isabs(a[0]) else 127
+def read(file, group, key):
+    try: return subprocess.run(["kreadconfig6", "--file", file, "--group", group, "--key", key], capture_output=True, text=True).stdout.strip()
+    except OSError: return ""
+def refresh():
+    cs = read("kdeglobals", "General", "ColorScheme")
+    if cs.startswith("FrameworkGraphite"):          # KDE ignores a scheme it thinks is already in use
+        run("plasma-apply-colorscheme", "BreezeLight" if cs.endswith("Light") else "BreezeDark"); run("plasma-apply-colorscheme", cs)
+    ic = read("kdeglobals", "Icons", "Theme")
+    if ic.startswith("nothing-dots"):
+        ci = next((f for d in ("/usr/lib", "/usr/lib64", "/usr/libexec") for f in glob.glob(d + "/**/plasma-changeicons", recursive=True)), None)
+        if ci: run(ci, "breeze" if ic.endswith("light") else "breeze-dark"); time.sleep(1); run(ci, ic)
+    th = read("kwinrc", "org.kde.kdecoration2", "theme")
+    if th.startswith("__aurorae__svg__framework-dots"):
+        lib = read("kwinrc", "org.kde.kdecoration2", "library")
+        own = subprocess.run(["kreadconfig6", "--file", CONF + "/kwinrc", "--group", "org.kde.kdecoration2", "--key", "theme"], capture_output=True, text=True).stdout.strip()
+        kw = ["kwriteconfig6", "--file", "kwinrc", "--group", "org.kde.kdecoration2", "--key"]
+        rc = ["busctl", "--user", "call", "org.kde.KWin", "/KWin", "org.kde.KWin", "reconfigure"]
+        run(*kw, "library", "org.kde.breeze"); run(*kw, "theme", "Breeze"); run(*rc); time.sleep(1)
+        run(*kw, "library", lib); run(*kw, "theme", th); run(*rc)
+    for f in glob.glob(HOME + "/.cache/plasma_theme_breeze-rounded-dock*") + [HOME + "/.cache/ksvg-elements"]:
+        try: os.remove(f)
+        except OSError: pass
+    run("pkill", "-USR1", "-u", str(os.getuid()), "-x", "kitty")      # kitty reloads its settings
+    run(HOME + "/.local/bin/framework-dots-mode", timeout=20) if os.access(HOME + "/.local/bin/framework-dots-mode", os.X_OK) else None
+    run("systemctl", "--user", "restart", "plasma-plasmashell")
+
+def current():
+    try: c = open(CHOICE).read().split()[0].lower()
+    except (OSError, IndexError): return DEFAULT
+    return c if re.fullmatch(r"#[0-9a-f]{6}", c) else DEFAULT
+def parse(s):
+    s = s.strip().lower()
+    if s in PRESETS: return PRESETS[s]
+    s = s if s.startswith("#") else "#" + s
+    if re.fullmatch(r"#[0-9a-f]{3}", s): s = "#" + "".join(x * 2 for x in s[1:])
+    return s if re.fullmatch(r"#[0-9a-f]{6}", s) else None
+
+def main(a):
+    quiet, files_only = "--quiet" in a, "--files-only" in a
+    keep = "--keep-choice" in a                      # used by the installer: put files back, remember the colour
+    a = [x for x in a if x not in ("--quiet", "--files-only", "--keep-choice")]
+    say = (lambda *x: None) if quiet else print
+    if len(a) != 1 or a[0] in ("-h", "--help"): print(__doc__.strip()); return 0 if a else 2
+    if os.getuid() == 0: print("Run this as yourself, not with sudo."); return 1
+    if a[0] == "show": print(current()); return 0
+    if a[0] == "colours": print(json.dumps(wall(current()))); return 0
+    if a[0] == "pick":
+        if not shutil.which("kdialog"): print("The colour window needs kdialog. Or run: framework-dots-accent '#rrggbb'"); return 1
+        r = subprocess.run(["kdialog", "--title", "Accent colour", "--getcolor", "--default", current()], capture_output=True, text=True)
+        if r.returncode: say("Nothing was changed."); return 0
+        a = [r.stdout.strip()]
+    c = DEFAULT if a[0] == "reset" else current() if a[0] == "reapply" else parse(a[0])
+    if not c: print(f"'{a[0]}' isn't a colour. Use #rrggbb, or one of: {' '.join(PRESETS)}"); return 2
+    L, C, h = lch(rgb(c[1:])); note = ""
+    if L < .5: c = "#" + hexs(unlch(.5, C, h)); note = f"That colour is too dark to see on black, so it was lightened to {c}."
+    if not keep:
+        if c == DEFAULT:
+            try: os.remove(CHOICE)
+            except OSError: pass
+        else:
+            os.makedirs(os.path.dirname(CHOICE), exist_ok=True)
+            with open(CHOICE, "w") as f: f.write(c + "\n")
+    changed, skipped = apply_files(c)
+    if not files_only: refresh()
+    say(f"Accent colour: {c} ({changed} files changed)")
+    if note: say(note)
+    if contrast(rgb(c[1:]), (244, 244, 244)) < 1.6: say("This is a very light colour, so parts will be hard to see in light mode.")
+    if skipped: say("Left alone, because you've edited them: " + ", ".join("~/" + s for s in skipped[:8]))
+    if not files_only: say("Open apps such as Floorp and btop need restarting.")
+    return 0
+def wall(c):
+    """The moving wallpaper's colours: dots, bright dots, and bright dots in light mode."""
+    p = Palette(c); f = lambda t: [round(x / 255, 3) for x in t]; b, a = lch(rgb(DEFAULT[1:])), lch(p.accent)
+    if p.default: return None
+    s = lambda t: unlch(min(a[0] + lch(t)[0] - b[0], max(a[0], .9)), a[1] * min(1, lch(t)[1] / b[1]), a[2] + lch(t)[2] - b[2])
+    return [f(p.accent), f(s((255, 143, 87))), f(s((191, 51, 5)))]
+sys.exit(main(sys.argv[1:]))

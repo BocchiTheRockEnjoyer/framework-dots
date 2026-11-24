@@ -2,7 +2,7 @@
 <style>html,body{margin:0;height:100%;background:#090909;overflow:hidden}canvas{display:block;width:100vw;height:100vh}</style></head>
 <body><canvas id="c"></canvas><script>
 "use strict";
-const o={schemecolor:[.953,.325,.102],hotcolor:[1,.56,.34],bgcolor:[.035,.035,.035],pattern:"swirl",density:180,dotsize:90,shape:"round",unlit:35,brightness:100,speed:100,reverse:false,particles:2600,trail:60,centerx:27,centery:50,hole:35,spread:130,flat:38,tilt:-18,fade:60,audio:false,audioamt:100,mouse:false};
+const o={schemecolor:[.953,.325,.102],hotcolor:[1,.56,.34],bgcolor:[.035,.035,.035],pattern:"swirl",accentfollow:true,density:180,dotsize:90,shape:"round",unlit:35,brightness:100,speed:100,reverse:false,particles:2600,trail:60,centerx:27,centery:50,hole:35,spread:130,flat:38,tilt:-18,fade:60,audio:false,audioamt:100,mouse:false};
 const cv=document.getElementById("c"),gl=cv.getContext("webgl",{alpha:false,antialias:false,powerPreference:"low-power"});
 const sh=(t,s)=>{const x=gl.createShader(t);gl.shaderSource(x,s);gl.compileShader(x);if(!gl.getShaderParameter(x,gl.COMPILE_STATUS))console.error(gl.getShaderInfoLog(x));return x};
 const pr=gl.createProgram();
@@ -50,6 +50,10 @@ let drops=[];
 function rain(dt){const want=Math.round(o.particles/26);while(drops.length<want)drops.push({x:Math.random(),y:Math.random()*1.3-.3,v:.1+Math.random()*.35,a:.4+.6*Math.random()});drops.length=want;
  for(const d of drops){d.y+=(o.reverse?-1:1)*d.v*dt*(1+bass);if(d.y>1.1||d.y<-.3){d.x=Math.random();d.y=o.reverse?1.05:-.1}splat(Math.floor(d.x*GW),d.y*GH,d.a*1.6)}}
 function ripples(){const cx=o.centerx/100*GW,cy=o.centery/100*GH,d=o.reverse?1:-1,q=1-o.flat/100,ho=o.hole/100*.24*GW;for(let y=0;y<GH;y++)for(let x=0;x<GW;x++){const r=Math.hypot(x-cx,(y-cy)/q),f=Math.sin(r*.32/(o.spread/100)+d*T*2.2);if(r>ho)set(x,y,Math.pow(Math.max(0,f),3)*1.6*Math.exp(-r/GW*2.2)*(1+bass*2))}}
+// Follows the Framework Dots accent colour: mode.js sits beside this page
+let acc=null;window.__mode=()=>{};window.__accent=a=>{acc=Array.isArray(a)&&a.length===3?a:null};
+function pollAccent(){if(!o.accentfollow||paused)return;const e=document.createElement("script");e.src="mode.js?"+Date.now();e.onload=e.onerror=()=>e.remove();document.body.appendChild(e)}
+setTimeout(pollAccent,0);setInterval(pollAccent,3000);
 let last=0,paused=false;
 function draw(now){requestAnimationFrame(draw);if(paused)return;let dt=Math.min(.1,(now-last)/1000||0);last=now;
  const a=o.audioamt/100;if(!o.audio)bass=level=0;const sd=dt*o.speed/100*(1+level*a*1.2);T+=sd;
@@ -63,7 +67,7 @@ function draw(now){requestAnimationFrame(draw);if(paused)return;let dt=Math.min(
  for(let y=0,i=0;y<GH;y++)for(let x=0;x<GW;x++,i++)B[i]=255*(1-Math.exp(-br*E[i]*fadeCol[x]));
  gl.viewport(0,0,W,H);gl.texImage2D(gl.TEXTURE_2D,0,gl.LUMINANCE,GW,GH,0,gl.LUMINANCE,gl.UNSIGNED_BYTE,B);
  gl.uniform1i(U.t,0);gl.uniform2f(U.g,GW,GH);gl.uniform2f(U.res,W,H);gl.uniform1f(U.pitch,pitch);gl.uniform1f(U.size,o.dotsize/100);gl.uniform1f(U.unlit,o.unlit/100);gl.uniform1f(U.sq,o.shape==="square"?1:0);
- gl.uniform3fv(U.col,o.schemecolor);gl.uniform3fv(U.hot,o.hotcolor);gl.uniform3fv(U.bg,o.bgcolor);gl.drawArrays(gl.TRIANGLES,0,3)}
+ const ac=o.accentfollow?acc:null;gl.uniform3fv(U.col,ac?ac[0]:o.schemecolor);gl.uniform3fv(U.hot,ac?ac[1]:o.hotcolor);gl.uniform3fv(U.bg,o.bgcolor);gl.drawArrays(gl.TRIANGLES,0,3)}
 let tb=null;function tmp(){if(!tb||tb.length!==GW*GH)tb=new Float32Array(GW*GH);else tb.fill(0);return tb}
 const val=(k,v)=>{if(Array.isArray(o[k])){const a=(Array.isArray(v)?v:String(v).trim().split(/[\s,]+/)).map(Number);return a.length>=3&&a.slice(0,3).every(isFinite)?a.slice(0,3):o[k]}
  if(typeof o[k]==="number"){v=Number(v);return isFinite(v)?v:o[k]}if(typeof o[k]==="boolean")return v===true||v==="true"||v===1||v==="1";return String(v)};

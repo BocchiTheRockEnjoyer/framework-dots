@@ -2,7 +2,7 @@
 <style>html,body{margin:0;height:100%;background:#090909;overflow:hidden}canvas{display:block;width:100vw;height:100vh}</style></head>
 <body><canvas id="c"></canvas><script>
 "use strict";
-const o={schemecolor:[.953,.325,.102],hotcolor:[1,.56,.34],bgcolor:[.035,.035,.035],pattern:"blackhole",automode:true,holesize:81,bend:100,doppler:0,ring:100,stars:50,density:224,dotsize:50,shape:"round",unlit:35,brightness:100,speed:100,reverse:false,particles:8000,trail:58,centerx:50,centery:52,hole:45,spread:100,flat:65,tilt:12,fade:1,audio:true,audioamt:100,mouse:false};
+const o={schemecolor:[.953,.325,.102],hotcolor:[1,.56,.34],bgcolor:[.035,.035,.035],pattern:"blackhole",automode:true,accentfollow:true,holesize:81,bend:100,doppler:0,ring:100,stars:50,density:224,dotsize:50,shape:"round",unlit:35,brightness:100,speed:100,reverse:false,particles:8000,trail:58,centerx:50,centery:52,hole:45,spread:100,flat:65,tilt:12,fade:1,audio:true,audioamt:100,mouse:false};
 const cv=document.getElementById("c"),gl=cv.getContext("webgl",{alpha:false,antialias:false,powerPreference:"low-power"});
 const sh=(t,s)=>{const x=gl.createShader(t);gl.shaderSource(x,s);gl.compileShader(x);if(!gl.getShaderParameter(x,gl.COMPILE_STATUS))console.error(gl.getShaderInfoLog(x));return x};
 const pr=gl.createProgram();
@@ -83,8 +83,8 @@ function rain(dt){const want=Math.round(o.particles/26);while(drops.length<want)
 function ripples(){const cx=o.centerx/100*GW,cy=o.centery/100*GH,d=o.reverse?1:-1,q=1-o.flat/100,ho=o.hole/100*.24*GW;for(let y=0;y<GH;y++)for(let x=0;x<GW;x++){const r=Math.hypot(x-cx,(y-cy)/q),f=Math.sin(r*.32/(o.spread/100)+d*T*2.2);if(r>ho)set(x,y,Math.pow(Math.max(0,f),3)*1.6*Math.exp(-r/GW*2.2)*(1+bass*2))}}
 const EN=4096,tE=new Uint8Array(EN+1);let tbr=-1,txW=0,txH=0,dts=.033;
 // Follows KDE's light/dark mode: mode.js sits beside this page and is rewritten when the mode changes
-let modeT=0,modeM=-1;window.__mode=l=>{modeT=l?1:0;if(modeM<0)modeM=modeT};
-function pollMode(){if(!o.automode||paused)return;const e=document.createElement("script");e.src="mode.js?"+Date.now();e.onload=e.onerror=()=>e.remove();document.body.appendChild(e)}
+let modeT=0,modeM=-1;let acc=null;window.__accent=a=>{acc=Array.isArray(a)&&a.length===3?a:null};window.__mode=l=>{modeT=l?1:0;if(modeM<0)modeM=modeT};
+function pollMode(){if(!(o.automode||o.accentfollow)||paused)return;const e=document.createElement("script");e.src="mode.js?"+Date.now();e.onload=e.onerror=()=>e.remove();document.body.appendChild(e)}
 setTimeout(pollMode,0);setInterval(pollMode,3000);
 const LBG=[.93,.93,.93],LHOT=[.75,.2,.02],mx3=(a,b,t)=>[a[0]+(b[0]-a[0])*t,a[1]+(b[1]-a[1])*t,a[2]+(b[2]-a[2])*t];
 let last=0,paused=false;
@@ -101,7 +101,7 @@ function draw(now){requestAnimationFrame(draw);if(paused)return;let dt=Math.max(
  for(let y=0,i=0;y<GH;y++)for(let x=0;x<GW;x++,i++){const q=E[i]*fadeCol[x]*qs;B[i]=q>=EN?255:tE[q|0]}
  gl.viewport(0,0,W,H);if(txW!==GW||txH!==GH){gl.texImage2D(gl.TEXTURE_2D,0,gl.LUMINANCE,GW,GH,0,gl.LUMINANCE,gl.UNSIGNED_BYTE,B);txW=GW;txH=GH}else gl.texSubImage2D(gl.TEXTURE_2D,0,0,0,GW,GH,gl.LUMINANCE,gl.UNSIGNED_BYTE,B);
  gl.uniform1i(U.t,0);gl.uniform2f(U.g,GW,GH);gl.uniform2f(U.res,W,H);gl.uniform1f(U.pitch,pitch);{const g=o.automode?modeT:0;if(modeM<0)modeM=g;modeM+=(g-modeM)*Math.min(1,dt*2.2)}const lm=modeM<.004?0:modeM>.996?1:modeM;gl.uniform1f(U.size,Math.min(1,o.dotsize/100*(1+.24*lm)));gl.uniform1f(U.unlit,Math.min(1,o.unlit/100+.1*lm));gl.uniform1f(U.sq,o.shape==="square"?1:0);
- gl.uniform3fv(U.col,o.schemecolor);gl.uniform3fv(U.hot,mx3(o.hotcolor,LHOT,lm));gl.uniform3fv(U.bg,mx3(o.bgcolor,LBG,lm));gl.drawArrays(gl.TRIANGLES,0,3)}
+ const ac=o.accentfollow?acc:null;gl.uniform3fv(U.col,ac?ac[0]:o.schemecolor);gl.uniform3fv(U.hot,mx3(ac?ac[1]:o.hotcolor,ac?ac[2]:LHOT,lm));gl.uniform3fv(U.bg,mx3(o.bgcolor,LBG,lm));gl.drawArrays(gl.TRIANGLES,0,3)}
 let tb=null;function tmp(){if(!tb||tb.length!==GW*GH)tb=new Float32Array(GW*GH);else tb.fill(0);return tb}
 const val=(k,v)=>{if(Array.isArray(o[k])){const a=(Array.isArray(v)?v:String(v).trim().split(/[\s,]+/)).map(Number);return a.length>=3&&a.slice(0,3).every(isFinite)?a.slice(0,3):o[k]}
  if(typeof o[k]==="number"){v=Number(v);return isFinite(v)?v:o[k]}if(typeof o[k]==="boolean")return v===true||v==="true"||v===1||v==="1";return String(v)};

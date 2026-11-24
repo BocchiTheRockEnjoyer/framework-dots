@@ -1,295 +1,302 @@
 {
-  "title": "Dot Matrix Swirl",
-  "type": "web",
-  "file": "index.html",
-  "preview": "preview.jpg",
-  "description": "Original dot-matrix particle field",
-  "tags": [
-    "Abstract"
-  ],
-  "contentrating": "Everyone",
-  "general": {
-    "supportsaudioprocessing": true,
-    "properties": {
-      "schemecolor": {
-        "order": 1,
-        "index": 1,
-        "text": "Dot colour",
-        "type": "color",
-        "value": "0.953 0.325 0.102"
-      },
-      "hotcolor": {
-        "order": 2,
-        "index": 2,
-        "text": "Bright dot colour",
-        "type": "color",
-        "value": "1 0.56 0.34"
-      },
-      "bgcolor": {
-        "order": 3,
-        "index": 3,
-        "text": "Background colour",
-        "type": "color",
-        "value": "0.035 0.035 0.035"
-      },
-      "pattern": {
-        "order": 4,
-        "index": 4,
-        "text": "Pattern",
-        "type": "combo",
-        "value": "swirl",
-        "options": [
-          {
-            "label": "Swirl",
-            "value": "swirl"
-          },
-          {
-            "label": "Waves",
-            "value": "waves"
-          },
-          {
-            "label": "Rain",
-            "value": "rain"
-          },
-          {
-            "label": "Ripples",
-            "value": "ripples"
-          }
-        ]
-      },
-      "density": {
-        "order": 5,
-        "index": 5,
-        "text": "Dots across the screen",
-        "type": "slider",
-        "value": 180,
-        "min": 40,
-        "max": 360,
-        "step": 1,
-        "fraction": false,
-        "precision": 0,
-        "editable": true
-      },
-      "dotsize": {
-        "order": 6,
-        "index": 6,
-        "text": "Dot size %",
-        "type": "slider",
-        "value": 90,
-        "min": 30,
-        "max": 100,
-        "step": 1,
-        "fraction": false,
-        "precision": 0,
-        "editable": true
-      },
-      "shape": {
-        "order": 7,
-        "index": 7,
-        "text": "Dot shape",
-        "type": "combo",
-        "value": "round",
-        "options": [
-          {
-            "label": "Round",
-            "value": "round"
-          },
-          {
-            "label": "Square",
-            "value": "square"
-          }
-        ]
-      },
-      "unlit": {
-        "order": 8,
-        "index": 8,
-        "text": "Unlit dots %",
-        "type": "slider",
-        "value": 35,
-        "min": 0,
-        "max": 100,
-        "step": 1,
-        "fraction": false,
-        "precision": 0,
-        "editable": true
-      },
-      "brightness": {
-        "order": 9,
-        "index": 9,
-        "text": "Brightness %",
-        "type": "slider",
-        "value": 100,
-        "min": 20,
-        "max": 250,
-        "step": 1,
-        "fraction": false,
-        "precision": 0,
-        "editable": true
-      },
-      "speed": {
-        "order": 10,
-        "index": 10,
-        "text": "Speed %",
-        "type": "slider",
-        "value": 100,
-        "min": 0,
-        "max": 400,
-        "step": 1,
-        "fraction": false,
-        "precision": 0,
-        "editable": true
-      },
-      "reverse": {
-        "order": 11,
-        "index": 11,
-        "text": "Reverse direction",
-        "type": "bool",
-        "value": false
-      },
-      "particles": {
-        "order": 12,
-        "index": 12,
-        "text": "Particles",
-        "type": "slider",
-        "value": 2600,
-        "min": 200,
-        "max": 8000,
-        "step": 100,
-        "fraction": false,
-        "precision": 0,
-        "editable": true
-      },
-      "trail": {
-        "order": 13,
-        "index": 13,
-        "text": "Trail length %",
-        "type": "slider",
-        "value": 60,
-        "min": 0,
-        "max": 97,
-        "step": 1,
-        "fraction": false,
-        "precision": 0,
-        "editable": true
-      },
-      "centerx": {
-        "order": 14,
-        "index": 14,
-        "text": "Centre X %",
-        "type": "slider",
-        "value": 27,
-        "min": 0,
-        "max": 100,
-        "step": 1,
-        "fraction": false,
-        "precision": 0,
-        "editable": true
-      },
-      "centery": {
-        "order": 15,
-        "index": 15,
-        "text": "Centre Y %",
-        "type": "slider",
-        "value": 50,
-        "min": 0,
-        "max": 100,
-        "step": 1,
-        "fraction": false,
-        "precision": 0,
-        "editable": true
-      },
-      "hole": {
-        "order": 16,
-        "index": 16,
-        "text": "Centre hole %",
-        "type": "slider",
-        "value": 35,
-        "min": 0,
-        "max": 100,
-        "step": 1,
-        "fraction": false,
-        "precision": 0,
-        "editable": true
-      },
-      "spread": {
-        "order": 17,
-        "index": 17,
-        "text": "Spread %",
-        "type": "slider",
-        "value": 130,
-        "min": 30,
-        "max": 200,
-        "step": 1,
-        "fraction": false,
-        "precision": 0,
-        "editable": true
-      },
-      "flat": {
-        "order": 18,
-        "index": 18,
-        "text": "Flatten %",
-        "type": "slider",
-        "value": 38,
-        "min": 0,
-        "max": 80,
-        "step": 1,
-        "fraction": false,
-        "precision": 0,
-        "editable": true
-      },
-      "tilt": {
-        "order": 19,
-        "index": 19,
-        "text": "Tilt (degrees)",
-        "type": "slider",
-        "value": -18,
-        "min": -90,
-        "max": 90,
-        "step": 1,
-        "fraction": false,
-        "precision": 0,
-        "editable": true
-      },
-      "fade": {
-        "order": 20,
-        "index": 20,
-        "text": "Fade to the right %",
-        "type": "slider",
-        "value": 60,
-        "min": 0,
-        "max": 100,
-        "step": 1,
-        "fraction": false,
-        "precision": 0,
-        "editable": true
-      },
-      "audio": {
-        "order": 21,
-        "index": 21,
-        "text": "React to music",
-        "type": "bool",
-        "value": false
-      },
-      "audioamt": {
-        "order": 22,
-        "index": 22,
-        "text": "Music strength %",
-        "type": "slider",
-        "value": 100,
-        "min": 10,
-        "max": 300,
-        "step": 1,
-        "fraction": false,
-        "precision": 0,
-        "editable": true
-      },
-      "mouse": {
-        "order": 23,
-        "index": 23,
-        "text": "Push dots with the mouse",
-        "type": "bool",
-        "value": false
-      }
-    }
+ "title": "Dot Matrix Swirl",
+ "type": "web",
+ "file": "index.html",
+ "preview": "preview.jpg",
+ "description": "Original dot-matrix particle field",
+ "tags": [
+  "Abstract"
+ ],
+ "contentrating": "Everyone",
+ "general": {
+  "supportsaudioprocessing": true,
+  "properties": {
+   "schemecolor": {
+    "order": 1,
+    "index": 1,
+    "text": "Dot colour",
+    "type": "color",
+    "value": "0.953 0.325 0.102"
+   },
+   "hotcolor": {
+    "order": 2,
+    "index": 2,
+    "text": "Bright dot colour",
+    "type": "color",
+    "value": "1 0.56 0.34"
+   },
+   "bgcolor": {
+    "order": 3,
+    "index": 3,
+    "text": "Background colour",
+    "type": "color",
+    "value": "0.035 0.035 0.035"
+   },
+   "pattern": {
+    "order": 4,
+    "index": 4,
+    "text": "Pattern",
+    "type": "combo",
+    "value": "swirl",
+    "options": [
+     {
+      "label": "Swirl",
+      "value": "swirl"
+     },
+     {
+      "label": "Waves",
+      "value": "waves"
+     },
+     {
+      "label": "Rain",
+      "value": "rain"
+     },
+     {
+      "label": "Ripples",
+      "value": "ripples"
+     }
+    ]
+   },
+   "density": {
+    "order": 5,
+    "index": 5,
+    "text": "Dots across the screen",
+    "type": "slider",
+    "value": 180,
+    "min": 40,
+    "max": 360,
+    "step": 1,
+    "fraction": false,
+    "precision": 0,
+    "editable": true
+   },
+   "dotsize": {
+    "order": 6,
+    "index": 6,
+    "text": "Dot size %",
+    "type": "slider",
+    "value": 90,
+    "min": 30,
+    "max": 100,
+    "step": 1,
+    "fraction": false,
+    "precision": 0,
+    "editable": true
+   },
+   "shape": {
+    "order": 7,
+    "index": 7,
+    "text": "Dot shape",
+    "type": "combo",
+    "value": "round",
+    "options": [
+     {
+      "label": "Round",
+      "value": "round"
+     },
+     {
+      "label": "Square",
+      "value": "square"
+     }
+    ]
+   },
+   "unlit": {
+    "order": 8,
+    "index": 8,
+    "text": "Unlit dots %",
+    "type": "slider",
+    "value": 35,
+    "min": 0,
+    "max": 100,
+    "step": 1,
+    "fraction": false,
+    "precision": 0,
+    "editable": true
+   },
+   "brightness": {
+    "order": 9,
+    "index": 9,
+    "text": "Brightness %",
+    "type": "slider",
+    "value": 100,
+    "min": 20,
+    "max": 250,
+    "step": 1,
+    "fraction": false,
+    "precision": 0,
+    "editable": true
+   },
+   "speed": {
+    "order": 10,
+    "index": 10,
+    "text": "Speed %",
+    "type": "slider",
+    "value": 100,
+    "min": 0,
+    "max": 400,
+    "step": 1,
+    "fraction": false,
+    "precision": 0,
+    "editable": true
+   },
+   "reverse": {
+    "order": 11,
+    "index": 11,
+    "text": "Reverse direction",
+    "type": "bool",
+    "value": false
+   },
+   "particles": {
+    "order": 12,
+    "index": 12,
+    "text": "Particles",
+    "type": "slider",
+    "value": 2600,
+    "min": 200,
+    "max": 8000,
+    "step": 100,
+    "fraction": false,
+    "precision": 0,
+    "editable": true
+   },
+   "trail": {
+    "order": 13,
+    "index": 13,
+    "text": "Trail length %",
+    "type": "slider",
+    "value": 60,
+    "min": 0,
+    "max": 97,
+    "step": 1,
+    "fraction": false,
+    "precision": 0,
+    "editable": true
+   },
+   "centerx": {
+    "order": 14,
+    "index": 14,
+    "text": "Centre X %",
+    "type": "slider",
+    "value": 27,
+    "min": 0,
+    "max": 100,
+    "step": 1,
+    "fraction": false,
+    "precision": 0,
+    "editable": true
+   },
+   "centery": {
+    "order": 15,
+    "index": 15,
+    "text": "Centre Y %",
+    "type": "slider",
+    "value": 50,
+    "min": 0,
+    "max": 100,
+    "step": 1,
+    "fraction": false,
+    "precision": 0,
+    "editable": true
+   },
+   "hole": {
+    "order": 16,
+    "index": 16,
+    "text": "Centre hole %",
+    "type": "slider",
+    "value": 35,
+    "min": 0,
+    "max": 100,
+    "step": 1,
+    "fraction": false,
+    "precision": 0,
+    "editable": true
+   },
+   "spread": {
+    "order": 17,
+    "index": 17,
+    "text": "Spread %",
+    "type": "slider",
+    "value": 130,
+    "min": 30,
+    "max": 200,
+    "step": 1,
+    "fraction": false,
+    "precision": 0,
+    "editable": true
+   },
+   "flat": {
+    "order": 18,
+    "index": 18,
+    "text": "Flatten %",
+    "type": "slider",
+    "value": 38,
+    "min": 0,
+    "max": 80,
+    "step": 1,
+    "fraction": false,
+    "precision": 0,
+    "editable": true
+   },
+   "tilt": {
+    "order": 19,
+    "index": 19,
+    "text": "Tilt (degrees)",
+    "type": "slider",
+    "value": -18,
+    "min": -90,
+    "max": 90,
+    "step": 1,
+    "fraction": false,
+    "precision": 0,
+    "editable": true
+   },
+   "fade": {
+    "order": 20,
+    "index": 20,
+    "text": "Fade to the right %",
+    "type": "slider",
+    "value": 60,
+    "min": 0,
+    "max": 100,
+    "step": 1,
+    "fraction": false,
+    "precision": 0,
+    "editable": true
+   },
+   "audio": {
+    "order": 21,
+    "index": 21,
+    "text": "React to music",
+    "type": "bool",
+    "value": false
+   },
+   "audioamt": {
+    "order": 22,
+    "index": 22,
+    "text": "Music strength %",
+    "type": "slider",
+    "value": 100,
+    "min": 10,
+    "max": 300,
+    "step": 1,
+    "fraction": false,
+    "precision": 0,
+    "editable": true
+   },
+   "mouse": {
+    "order": 23,
+    "index": 23,
+    "text": "Push dots with the mouse",
+    "type": "bool",
+    "value": false
+   },
+   "accentfollow": {
+    "order": 24,
+    "index": 24,
+    "text": "Follow the accent colour",
+    "type": "bool",
+    "value": true
+   }
   }
+ }
 }

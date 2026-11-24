@@ -147,6 +147,20 @@ System Settings → **Global Theme** (leave the layout option unticked).
 The moving black hole switches too (turn off **Follow light/dark mode** in its settings to stop that).
 Still pictures don't; there's a light one called `dot-matrix-blackhole-light.png`.
 
+### Accent colour
+
+Don't want orange? Click the bell and pick a colour, or **+** for any other. You can also open **Accent Colour** from the app menu,
+or use a terminal:
+
+```
+~/.local/bin/framework-dots-accent '#39ff14'
+~/.local/bin/framework-dots-accent purple
+~/.local/bin/framework-dots-accent reset
+```
+
+It recolours the icons, widgets, windows, terminal looks, wallpapers and Floorp theme. The taskbar restarts, and open apps such as
+Floorp and btop need reopening. Very dark colours are lightened so you can see them on black.
+
 ## 4. Set the wallpaper
 
 The installer can set the still picture for you. The moving one takes a few more steps.

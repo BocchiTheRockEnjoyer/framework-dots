@@ -365,6 +365,13 @@
     "text": "Follow light/dark mode",
     "type": "bool",
     "value": true
+   },
+   "accentfollow": {
+    "order": 30,
+    "index": 30,
+    "text": "Follow the accent colour",
+    "type": "bool",
+    "value": true
    }
   }
  }

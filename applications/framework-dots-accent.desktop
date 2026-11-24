@@ -1,0 +1,7 @@
+[Desktop Entry]
+Type=Application
+Name=Accent Colour
+Comment=Change the Framework Dots accent colour
+Exec=sh -c "exec \\"\\$HOME/.local/bin/framework-dots-accent\\" pick"
+Icon=preferences-desktop-color
+Categories=Settings;

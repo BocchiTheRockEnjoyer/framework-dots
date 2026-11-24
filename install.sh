@@ -121,6 +121,10 @@ if [ ! -d "$state/original" ]; then
   mv "$state/original.new" "$state/original"
 fi
 
+# A changed accent colour goes back to orange while files are compared and copied, and is put back after
+accent="$HOME/.local/bin/framework-dots-accent"
+if [ -e "$C/framework-dots/accent" ] && [ -x "$accent" ]; then "$accent" reset --files-only --keep-choice --quiet || true; fi
+
 # ---- files ----
 echo "Copying files ..."
 put() { mkdir -p "$2"; rm -rf "${2:?}/$(basename "$1")"; cp -a "$1" "$2/"; }
@@ -138,7 +142,7 @@ for f in "$here"/wallpapers/still/*; do
   if [ ! -e "$t" ]; then cp "$f" "$t"; fi
   ! cmp -s "$f" "$t" || (cd "$HOME" && sha256sum "Pictures/Wallpapers/$(basename "$f")")
 done > "$state/pictures.sha256"
-put "$here/bin/claude-usage" "$HOME/.local/bin"; put "$here/bin/framework-dots-mode" "$HOME/.local/bin"
+for f in claude-usage framework-dots-mode framework-dots-accent; do put "$here/bin/$f" "$HOME/.local/bin"; done; put "$here/applications/framework-dots-accent.desktop" "$S/applications"
 mkdir -p "$C/systemd/user"; cp "$here"/systemd/* "$C/systemd/user/"
 if [ "$kitty" = y ]; then mkdir -p "$C/kitty"; rm -f "$C/kitty/kitty.conf"; cp "$here/kitty/kitty.conf" "$C/kitty/kitty.conf"; cp "$here/kitty/kitty.conf" "$state/kitty.conf.ours"
   # kitty switches between these by itself
@@ -180,6 +184,8 @@ else
   echo "Skipping the dotted volume pop-up: KDE keeps its files somewhere else on this system."
 fi
 fc-cache -f "$S/fonts" 2>/dev/null || true
+
+if [ -e "$C/framework-dots/accent" ]; then "$accent" reapply --files-only --quiet || echo "Couldn't put your accent colour back. Run: framework-dots-accent reapply"; fi
 
 # ---- settings (uninstall.sh has the same list) ----
 echo "Changing settings ..."

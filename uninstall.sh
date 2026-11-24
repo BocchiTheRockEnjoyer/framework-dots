@@ -62,6 +62,10 @@ ways=0; if [ -e "$state/waywallen" ] && ask "Also remove the Waywallen app and i
 bak="$S/framework-dots-backup-$(date +%Y%m%d-%H%M%S)-uninstall"; mkdir -p "$bak" || exit 1
 for f in kdeglobals kwinrc breezerc dolphinrc ksplashrc plasmarc plasmashellrc plasma-org.kde.plasma.desktop-appletsrc; do [ ! -e "$C/$f" ] || cp -a "$C/$f" "$bak/"; done
 
+# Back to the original files, so everything below recognises them
+if [ -x "$HOME/.local/bin/framework-dots-accent" ]; then "$HOME/.local/bin/framework-dots-accent" reset --files-only --quiet; fi
+rm -f "$C/framework-dots/accent"; rmdir "$C/framework-dots" 2>/dev/null
+
 ours_cs() { case "$1" in FrameworkGraphite|FrameworkGraphiteLight) return 0 ;; esac; return 1; }
 if [ -z "${FD_TEST:-}" ]; then
   # ---- wallpaper: only if it's still one of ours ----
@@ -190,6 +194,7 @@ if [ -s "$state/terminal.sha256" ]; then
   [ ! -f "$C/btop/btop.conf" ] || sed -i -E 's/^color_theme = "framework-dots(-light)?"$/color_theme = "Default"/' "$C/btop/btop.conf"
   (cd "$C" && rmdir fastfetch fish/functions btop/themes btop cava 2>/dev/null)
 fi
+rm -f "$HOME/.local/bin/framework-dots-accent" "$S/applications/framework-dots-accent.desktop"
 rm -f "$HOME/.local/bin/framework-dots-mode" "$HOME/.local/bin/claude-usage"
 if grep -qs 'claude-usage' "$HOME/.claude/settings.json"; then echo "Note: ~/.claude/settings.json still mentions claude-usage. Remove that statusLine yourself."; fi
 if [ "$ways" = 1 ]; then

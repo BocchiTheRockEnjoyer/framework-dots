@@ -68,6 +68,11 @@ PlasmoidItem {
                 Loader { Layout.fillWidth: true; source: "Volume.qml"; visible: status === Loader.Ready && item.available; onLoaded: { item.width = Qt.binding(() => width); item.ink = Qt.binding(() => root.ink) } }
                 Loader { Layout.fillWidth: true; source: "Brightness.qml"; visible: status === Loader.Ready && item.available; onLoaded: { item.width = Qt.binding(() => width); item.ink = Qt.binding(() => root.ink) } }
             }
+            Accent {
+                Layout.fillWidth: true; ink: root.ink
+                // Started outside the taskbar, which restarts while the colour changes
+                onChosen: c => { root.expanded = false; sh.run("systemd-run --user --collect --quiet \"$HOME/.local/bin/framework-dots-accent\" " + c) }
+            }
             Rectangle { Layout.fillWidth: true; implicitHeight: 1; color: root.ink; opacity: 0.14 }
             RowLayout {
                 PC.Label { text: "Notifications"; opacity: 0.7; Layout.fillWidth: true }
