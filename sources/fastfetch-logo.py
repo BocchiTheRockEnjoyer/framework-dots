@@ -19,7 +19,7 @@ for j in range(G+2*pad):
         if c>=.5:
             t=j/(G+2*pad); a,b=(255,122,72),(243,83,26); k=min(1,t*1.6)
             col='#%02x%02x%02x'%tuple(round(a[q]+(b[q]-a[q])*k) for q in range(3)); r=.43
-        else: col,r='#343434',.24
+        else: col,r='#808080" fill-opacity=".28',.24
         o.append(f'<circle cx="{(i+.5)*P}" cy="{(j+.5)*P}" r="{r*P}" fill="{col}"/>')
 # a 36x15-cell box in Space Mono is this shape, so the logo isn't stretched
 H=round(W*(15*1.481)/(36*.612)); dy=(H-W)/2

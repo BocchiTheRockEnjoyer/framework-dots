@@ -7,7 +7,7 @@ grey and orange. Made with help from [Claude Code](https://claude.com/claude-cod
 
 ![Full desktop in dark mode](preview/desktop-dark.png)
 
-**Light (beta)**
+**Light**
 
 ![Full desktop in light mode](preview/desktop-light.png)
 
@@ -141,10 +141,8 @@ You can also add single widgets: right-click the desktop, **Add Widgets**, and s
 
 ### Light and dark mode
 
-> **Light mode is in beta.** It works, but expect rough edges: some parts stay dark (such as the Floorp theme) and bugs are
-> likely. Please open an **Issue** if you find one.
-
-Both are included and follow KDE's light/dark switch. You can also pick **Framework Dots** or **Framework Dots Light** in
+Both are included and follow KDE's light/dark switch. That includes kitty, btop, the terminal looks and the Floorp
+theme; btop changes the next time you open it. You can also pick **Framework Dots** or **Framework Dots Light** in
 System Settings → **Global Theme** (leave the layout option unticked).
 The moving black hole switches too (turn off **Follow light/dark mode** in its settings to stop that).
 Still pictures don't; there's a light one called `dot-matrix-blackhole-light.png`.

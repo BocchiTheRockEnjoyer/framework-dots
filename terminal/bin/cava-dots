@@ -5,7 +5,8 @@ if not shutil.which("cava"):
     sys.exit("cava-dots needs cava. Install it with your package manager, e.g. sudo pacman -S cava")
 if not (sys.stdin.isatty() and sys.stdout.isatty()):
     sys.exit("Run cava-dots in a terminal.")
-OFF, ON, TOP = "\x1b[38;2;46;46;46m", "\x1b[38;2;240;240;240m", "\x1b[38;2;243;83;26m"
+# Plain terminal colours, so it works on light and dark backgrounds
+OFF, ON, TOP = "\x1b[0;2;90m", "\x1b[0m", "\x1b[0;38;2;243;83;26m"
 proc = conf = None
 def stop():
     if proc and proc.poll() is None:

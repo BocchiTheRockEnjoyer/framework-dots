@@ -4,14 +4,14 @@
   "logo": { "type": "file", "source": "~/.config/fastfetch/framework-dots.txt", "color": { "1": "38;2;243;83;26" }, "padding": { "top": 1, "left": 2, "right": 4 } },
   "display": {
     "separator": " ",
-    "color": { "keys": "38;2;138;138;138", "output": "38;2;240;240;240" },
+    "color": { "keys": "90" },
     "key": { "width": 11 },
-    "percent": { "type": 3, "color": { "green": "38;2;240;240;240", "yellow": "38;2;240;240;240", "red": "38;2;237;70;70" } },
-    "bar": { "width": 24, "char": { "elapsed": "●", "total": "●" }, "border": { "left": "", "right": "" }, "color": { "elapsed": "38;2;243;83;26", "total": "38;2;58;58;58" } }
+    "percent": { "type": 3, "color": { "green": "39", "yellow": "39", "red": "31" } },
+    "bar": { "width": 24, "char": { "elapsed": "●", "total": "●" }, "border": { "left": "", "right": "" }, "color": { "elapsed": "38;2;243;83;26", "total": "2;90" } }
   },
   "modules": [
     "break",
-    { "type": "title", "color": { "user": "1;38;2;243;83;26", "at": "38;2;90;90;90", "host": "1;38;2;240;240;240" } },
+    { "type": "title", "color": { "user": "1;38;2;243;83;26", "at": "90", "host": "1" } },
     "break",
     { "type": "host", "key": "machine", "format": "{name}" },
     { "type": "os", "key": "system", "format": "{pretty-name}" },

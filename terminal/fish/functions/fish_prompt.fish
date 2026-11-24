@@ -1,10 +1,10 @@
 function fish_prompt --description 'Framework Dots: path and git on one line, a dot to type after'
     set -l last $status
     set -l orange f3531a
-    set -l grey 9a9a9a
-    set -l dim 5a5a5a
+    set -l grey brblack
+    set -l dim brblack
     set -l dot $orange
-    test $last -ne 0; and set dot ed4646
+    test $last -ne 0; and set dot red
 
     # Older prompts in the scrollback shrink to just the dot (fish 4.1+)
     if contains -- --final-rendering $argv
@@ -31,9 +31,9 @@ function fish_prompt --description 'Framework Dots: path and git on one line, a 
             end
         end
         test "$s$c$n" != 000; and printf ' '
-        test $s = 1; and set_color f0f0f0; and printf '●'
+        test $s = 1; and set_color normal; and printf '●'
         test $c = 1; and set_color $orange; and printf '●'
-        test $n = 1; and set_color 7a7a7a; and printf '●'
+        test $n = 1; and set_color brblack; and printf '●'
     end
     if set -q VIRTUAL_ENV
         set_color $dim; printf '  ·  '; set_color $grey; printf '%s' (path basename $VIRTUAL_ENV)

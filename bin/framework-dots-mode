@@ -1,10 +1,13 @@
 #!/bin/sh
-# Tells the Dot Matrix Black Hole wallpaper whether KDE is in light or dark mode.
+# Tells the Dot Matrix Black Hole wallpaper and btop whether KDE is in light or dark mode.
 conf="${XDG_CONFIG_HOME:-$HOME/.config}/kdeglobals"
 update() {
   bg=$(kreadconfig6 --file kdeglobals --group Colors:Window --key BackgroundNormal)
   l=$(printf '%s' "$bg" | awk -F, 'NF>=3{print (($1*299+$2*587+$3*114)/1000>128)?1:0}')
   [ -n "$l" ] || return 0
+  b="${XDG_CONFIG_HOME:-$HOME/.config}/btop/btop.conf"; t=framework-dots; [ "$l" = 0 ] || t=framework-dots-light
+  # btop picks this up the next time it starts; other btop themes are left alone
+  if grep -qsE '^color_theme = "framework-dots(-light)?"$' "$b" && ! grep -qs "^color_theme = \"$t\"$" "$b"; then sed -i "s/^color_theme = .*/color_theme = \"$t\"/" "$b"; fi
   new="window.__mode&&__mode($l)"
   for d in "$HOME/.local/share/Steam/steamapps/common/wallpaper_engine/projects/myprojects/dot-matrix-blackhole" \
            "$HOME/FrameworkDots-Wallpapers/steamapps/common/wallpaper_engine/projects/myprojects/dot-matrix-blackhole"; do

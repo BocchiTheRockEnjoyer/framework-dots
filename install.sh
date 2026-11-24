@@ -140,7 +140,12 @@ for f in "$here"/wallpapers/still/*; do
 done > "$state/pictures.sha256"
 put "$here/bin/claude-usage" "$HOME/.local/bin"; put "$here/bin/framework-dots-mode" "$HOME/.local/bin"
 mkdir -p "$C/systemd/user"; cp "$here"/systemd/* "$C/systemd/user/"
-if [ "$kitty" = y ]; then mkdir -p "$C/kitty"; rm -f "$C/kitty/kitty.conf"; cp "$here/kitty/kitty.conf" "$C/kitty/kitty.conf"; cp "$here/kitty/kitty.conf" "$state/kitty.conf.ours"; fi
+if [ "$kitty" = y ]; then mkdir -p "$C/kitty"; rm -f "$C/kitty/kitty.conf"; cp "$here/kitty/kitty.conf" "$C/kitty/kitty.conf"; cp "$here/kitty/kitty.conf" "$state/kitty.conf.ours"
+  # kitty switches between these by itself
+  for f in "$here"/kitty/*-theme.auto.conf; do
+    t="$C/kitty/$(basename "$f")"; if [ ! -e "$t" ] || cmp -s "$t" "$state/$(basename "$f")"; then cp "$f" "$t"; cp "$f" "$state/"; else echo "Kept your own: $t"; fi
+  done
+fi
 # Terminal looks: only where nothing exists yet, or where it's an unedited copy from an earlier run
 if [ "$term" = y ]; then
   skipped=""; new="$state/terminal.new"; : > "$new"

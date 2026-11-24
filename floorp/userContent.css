@@ -8,3 +8,13 @@
   :root { color-scheme: dark !important; accent-color: #f3531a; --color-accent-primary: #f3531a !important; --color-accent-primary-hover: #ff6a35 !important; --in-content-primary-button-background: #f3531a !important; --in-content-primary-button-text-color: #141414 !important; --in-content-accent-color: #f3531a !important; --in-content-page-background: #1a1a1a !important; --in-content-box-background: #252525 !important; --background-color-canvas: #1a1a1a !important; --background-color-box: #252525 !important; --card-background-color: #252525 !important; --text-color: #f0f0f0 !important; --border-color-card: #3a3a3a !important; --link-color: #ff8052 !important; }
   ::selection { background: #f3531a; color: #141414; }
 }
+/* Light mode */
+@media (prefers-color-scheme: light) {
+@-moz-document url-prefix("about:newtab"), url-prefix("about:home"), url-prefix("about:privatebrowsing"), url("about:blank") {
+  :root { --newtab-background-color: #f4f4f4 !important; --newtab-background-color-secondary: #ffffff !important; --newtab-text-primary-color: #252525 !important; }
+  body { background-color: #f4f4f4 !important; background-image: radial-gradient(circle, rgba(0,0,0,.09) 2.2px, transparent 2.9px) !important; }
+}
+@-moz-document url-prefix("about:") {
+  :root { color-scheme: light !important; --in-content-page-background: #f4f4f4 !important; --in-content-box-background: #ffffff !important; --background-color-canvas: #f4f4f4 !important; --background-color-box: #ffffff !important; --card-background-color: #ffffff !important; --text-color: #252525 !important; --border-color-card: #cfcfcf !important; --link-color: #b83808 !important; }
+}
+}

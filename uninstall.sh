@@ -167,6 +167,7 @@ else
       rm -f "$C/kitty/kitty.conf"; if [ -e "$orig/kitty/kitty.conf" ]; then cp -a "$orig/kitty/kitty.conf" "$C/kitty/kitty.conf"; fi ;;
   esac
 fi
+for f in "$state"/*-theme.auto.conf; do if [ -e "$f" ] && cmp -s "$f" "$C/kitty/$(basename "$f")"; then rm -f "$C/kitty/$(basename "$f")"; fi; done
 for w in dotboard dotmedia dotclock dotsysmon dotplaying dottimer dotkeys dotdesktops dotbatterypercent dotcenter claudeusage; do rm -rf "$S/plasma/plasmoids/local.$w"; done
 rm -rf "$S/icons/nothing-dots" "$S/icons/nothing-dots-light" "$S/plasma/desktoptheme/breeze-rounded-dock" "$S/plasma/desktoptheme/breeze-rounded-dock-light"
 rm -rf "$S/plasma/look-and-feel/$D" "$S/plasma/look-and-feel/$L" "$S/fonts/fd-dots" "$S/plasma-qml/org/kde/plasma/workspace/osd"
@@ -185,6 +186,8 @@ if [ -s "$state/terminal.sha256" ]; then
     case "$p" in .config/*|.local/bin/*) ;; *) continue ;; esac
     if [ "$(sha256sum "$HOME/$p" 2>/dev/null | cut -d' ' -f1)" = "$h" ]; then rm -f "$HOME/$p"; elif [ -e "$HOME/$p" ]; then echo "Left ~/$p alone, because it has changed."; fi
   done < "$state/terminal.sha256"
+  # btop rewrites its own settings, so that file usually counts as changed
+  [ ! -f "$C/btop/btop.conf" ] || sed -i -E 's/^color_theme = "framework-dots(-light)?"$/color_theme = "Default"/' "$C/btop/btop.conf"
   (cd "$C" && rmdir fastfetch fish/functions btop/themes btop cava 2>/dev/null)
 fi
 rm -f "$HOME/.local/bin/framework-dots-mode" "$HOME/.local/bin/claude-usage"
