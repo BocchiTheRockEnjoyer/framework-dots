@@ -46,7 +46,8 @@ I built this on **one computer**, and that's the only one it has been used on:
 | NVIDIA or AMD graphics | The theme should be fine. For the moving wallpaper, see Waywallen's notes on NVIDIA |
 | Plasma 5, GNOME, XFCE, Hyprland and others | Won't work, though the still wallpapers are just pictures |
 
-The installer itself was tested in an empty home folder. `--layout` hasn't been tried on a fresh desktop yet.
+The installer and `--layout` were also tested in a fresh, hidden Plasma session on the same computer, but not yet by a real
+new user.
 If you try it on something else, please open an **Issue** and say how it went.
 
 ## 2. Install the theme

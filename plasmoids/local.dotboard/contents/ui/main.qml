@@ -77,8 +77,8 @@ PlasmoidItem {
 
     fullRepresentation: Item {
         id: full
-        Layout.preferredWidth: 560
-        Layout.preferredHeight: 288
+        Layout.preferredWidth: 416
+        Layout.preferredHeight: 208
         Layout.minimumWidth: 200
         Layout.minimumHeight: 100
         readonly property real pitch: Math.min(width / root.cols, height / root.rows)

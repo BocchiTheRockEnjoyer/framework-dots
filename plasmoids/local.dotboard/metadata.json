@@ -1,1 +1,1 @@
-{"KPackageStructure":"Plasma/Applet","KPlugin":{"Id":"local.dotboard","Name":"Dot Board Clock","Description":"LED-matrix clock with a seconds track","Category":"Date and Time","Icon":"clock","License":"GPL-3.0","Version":"2.0","EnabledByDefault":true},"X-Plasma-API-Minimum-Version":"6.0"}
+{"KPackageStructure":"Plasma/Applet","KPlugin":{"Id":"local.dotboard","Name":"Dot Board Clock","Description":"LED-matrix clock with a seconds track","Category":"Date and Time","Icon":"clock","License":"GPL-3.0","Version":"2.1","EnabledByDefault":true},"X-Plasma-API-Minimum-Version":"6.0"}
