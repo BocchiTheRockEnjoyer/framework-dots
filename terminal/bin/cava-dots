@@ -1,0 +1,59 @@
+#!/usr/bin/env -S python3 -I
+"""Music visualiser made of dots. Needs cava for the sound. Press q or Ctrl+C to leave."""
+import os, select, shutil, signal, subprocess, sys, tempfile, termios, tty
+if not shutil.which("cava"):
+    sys.exit("cava-dots needs cava. Install it with your package manager, e.g. sudo pacman -S cava")
+if not (sys.stdin.isatty() and sys.stdout.isatty()):
+    sys.exit("Run cava-dots in a terminal.")
+OFF, ON, TOP = "\x1b[38;2;46;46;46m", "\x1b[38;2;240;240;240m", "\x1b[38;2;243;83;26m"
+proc = conf = None
+def stop():
+    if proc and proc.poll() is None:
+        proc.terminate(); proc.wait()
+    if conf: conf.close()
+def start():
+    """(Re)start cava with one bar for every two columns."""
+    global proc, conf, cols, rows
+    stop()
+    size = shutil.get_terminal_size()
+    cols, rows = max(2, min(200, (size.columns - 2) // 2)) // 2 * 2, max(2, size.lines - 2)
+    conf = tempfile.NamedTemporaryFile("w", suffix=".conf")
+    conf.write(f"[general]\nbars={cols}\nframerate=30\n[output]\nmethod=raw\nraw_target=/dev/stdout\ndata_format=ascii\nascii_max_range=1000\n[smoothing]\nnoise_reduction=77\n")
+    conf.flush()
+    proc = subprocess.Popen(["cava", "-p", conf.name], stdin=subprocess.DEVNULL, stdout=subprocess.PIPE, stderr=subprocess.DEVNULL)
+resized = False
+def on_resize(*_):
+    global resized
+    resized = True
+signal.signal(signal.SIGWINCH, on_resize)
+signal.signal(signal.SIGTERM, lambda *_: sys.exit(0))
+old = termios.tcgetattr(0)
+sys.stdout.write("\x1b[?1049h\x1b[?25l\x1b[2J")
+try:
+    tty.setcbreak(0); start(); buf, prev = b"", None
+    while True:
+        if resized:
+            resized = False; start(); buf, prev = b"", None; sys.stdout.write("\x1b[2J")
+        ready, _, _ = select.select([0, proc.stdout], [], [], 1)
+        if 0 in ready and os.read(0, 16)[:1] in (b"q", b"Q", b"\x1b", b""): break
+        if proc.stdout in ready:
+            data = os.read(proc.stdout.fileno(), 65536)
+            if not data: sys.exit("cava stopped. Is any sound device available?")
+            buf += data
+            *lines, buf = buf.split(b"\n")
+            if not lines: continue
+            h = [min(rows, round(int(v) * rows / 1000)) for v in lines[-1].split(b";") if v.isdigit()]
+            if len(h) != cols or h == prev: continue
+            prev, out = h, []
+            for y in range(rows):
+                lvl, line, last = rows - y, " ", None
+                for v in h:
+                    c = TOP if v == lvl else ON if v > lvl else OFF
+                    line += (c if c != last else "") + "● "; last = c
+                out.append(f"\x1b[{y + 2};1H{line}")
+            sys.stdout.write("".join(out)); sys.stdout.flush()
+except KeyboardInterrupt:
+    pass
+finally:
+    stop(); termios.tcsetattr(0, termios.TCSADRAIN, old)
+    sys.stdout.write("\x1b[0m\x1b[?25h\x1b[?1049l"); sys.stdout.flush()

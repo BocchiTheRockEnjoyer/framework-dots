@@ -1,0 +1,9 @@
+{
+ "KPlugin": {
+  "Id": "framework-dots-light",
+  "Name": "Framework Dots Light",
+  "Description": "Dot-matrix title bar buttons",
+  "License": "GPL-3.0-or-later",
+  "Version": "1.0"
+ }
+}

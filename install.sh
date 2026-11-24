@@ -5,14 +5,16 @@
 #   --layout / --no-layout       add (or don't add) the top bar, dock and desktop widgets
 #   --wallpaper still|moving|none
 #   --kitty / --no-kitty         use (or don't use) the kitty terminal colours
+#   --terminal / --no-terminal   add (or don't add) the fastfetch, fish, btop and cava looks
 set -euo pipefail
 
-yes=0 layout="" wall="" kitty=""
-usage() { sed -n '2,8s/^# \{0,1\}//p' "${BASH_SOURCE[0]}"; }
+yes=0 layout="" wall="" kitty="" term=""
+usage() { sed -n '2,9s/^# \{0,1\}//p' "${BASH_SOURCE[0]}"; }
 while [ $# -gt 0 ]; do
   case "$1" in
     -y|--yes) yes=1 ;;
     --layout) layout=y ;; --no-layout) layout=n ;;
+    --terminal) term=y ;; --no-terminal) term=n ;;
     --kitty) kitty=y ;; --no-kitty) kitty=n ;;
     --wallpaper) wall="${2:-}"; case "$wall" in still|moving|none) shift ;; *) echo "--wallpaper needs still, moving or none."; exit 2 ;; esac ;;
     -h|--help) usage; exit 0 ;;
@@ -82,6 +84,10 @@ if [ -z "$kitty" ]; then
     ! ask "Use the kitty terminal colours? (replaces kitty.conf)" "$d" || kitty=y
   fi
 fi
+if [ -z "$term" ]; then
+  term=n
+  if [ "$yes" = 0 ] && ask "Add the fastfetch, fish prompt, btop and cava looks? (your own configs are never replaced)" y; then term=y; fi
+fi
 if [ -z "$wall" ]; then
   wall=none
   if [ "$yes" = 0 ]; then
@@ -94,6 +100,7 @@ if [ "$yes" = 0 ]; then
   echo; echo "  Theme:      yes"
   echo "  Bar, dock:  $([ "$layout" = y ] && echo yes || { [ "$has_layout" = 1 ] && echo "already there" || echo no; })"
   echo "  Kitty:      $([ "$kitty" = y ] && echo yes || echo no)"
+  echo "  Terminal:   $([ "$term" = y ] && echo yes || echo no)"
   case "$wall" in none) w=no ;; still) w=picture ;; none+moving) w="moving wallpaper app" ;; *) w="picture, and the moving wallpaper app" ;; esac
   echo "  Wallpaper:  $w"; echo
   ask "Install now?" y || { echo "Nothing was changed."; exit 0; }
@@ -134,6 +141,28 @@ done > "$state/pictures.sha256"
 put "$here/bin/claude-usage" "$HOME/.local/bin"; put "$here/bin/framework-dots-mode" "$HOME/.local/bin"
 mkdir -p "$C/systemd/user"; cp "$here"/systemd/* "$C/systemd/user/"
 if [ "$kitty" = y ]; then mkdir -p "$C/kitty"; rm -f "$C/kitty/kitty.conf"; cp "$here/kitty/kitty.conf" "$C/kitty/kitty.conf"; cp "$here/kitty/kitty.conf" "$state/kitty.conf.ours"; fi
+# Terminal looks: only where nothing exists yet, or where it's an unedited copy from an earlier run
+if [ "$term" = y ]; then
+  skipped=""; new="$state/terminal.new"; : > "$new"
+  while IFS= read -r f; do
+    case "$f" in bin/*) t=".local/$f" ;; *) t=".config/$f" ;; esac
+    if [ -e "$HOME/$t" ] && ! cmp -s "$here/terminal/$f" "$HOME/$t"; then
+      h="$(sha256sum < "$HOME/$t" | cut -d' ' -f1)"
+      if ! grep -qsF "$h  $t" "$state/terminal.sha256"; then skipped="$skipped ~/$t"; continue; fi
+    fi
+    if [ ! -e "$HOME/$t" ] || grep -qsF "  $t" "$state/terminal.sha256"; then
+      mkdir -p "$(dirname "$HOME/$t")"; cp "$here/terminal/$f" "$HOME/$t"; (cd "$HOME" && sha256sum "$t") >> "$new"
+    fi
+  done < <(cd "$here/terminal" && find . -type f | sed 's#^\./##' | sort)
+  mv "$new" "$state/terminal.sha256"
+  [ -z "$skipped" ] || echo "Kept your own:$skipped"
+fi
+# Title bars: need KDE's Aurorae engine, which some systems don't install
+for x in "" -light; do put "$here/aurorae/framework-dots$x" "$S/aurorae/themes"; done
+deco=y; if [ -z "$(find /usr/lib /usr/lib64 -name 'org.kde.kwin.aurorae.so' 2>/dev/null | head -1)" ]; then
+  deco=n; echo "Skipping the dotted title bars: KDE's Aurorae engine isn't installed."
+  for x in "" light.; do sed -i 's/^library=org.kde.kwin.aurorae$/library=org.kde.breeze/; s/^theme=__aurorae__svg__framework-dots.*$/theme=Breeze/' "$S/plasma/look-and-feel/framework.dots.${x}desktop/contents/defaults"; done
+fi
 # Waywallen looks for this folder layout; Steam itself is not needed
 we="$HOME/FrameworkDots-Wallpapers/steamapps/common/wallpaper_engine/projects/myprojects"; mkdir -p "$we"; cp -a "$here"/wallpapers/live/* "$we/"
 # Dotted volume/brightness pop-up: overrides one QML module for plasmashell only
@@ -156,11 +185,13 @@ k kdeglobals KDE frameContrast 0.1; k breezerc Windeco TitleAlignment AlignCente
 k dolphinrc General ShowStatusBar Small; k dolphinrc General ShowZoomSlider false; k dolphinrc IconsMode IconSize 80; k dolphinrc IconsMode PreviewSize 96
 k ksplashrc KSplash Engine KSplashQML; k ksplashrc KSplash Theme framework.dots.desktop; k plasmarc Theme name breeze-rounded-dock
 k kdeglobals KDE LookAndFeelPackage framework.dots.desktop; k kdeglobals KDE DefaultDarkLookAndFeel framework.dots.desktop; k kdeglobals KDE DefaultLightLookAndFeel framework.dots.light.desktop
+if [ "$deco" = y ]; then g=org.kde.kdecoration2; k kwinrc $g library org.kde.kwin.aurorae; k kwinrc $g theme __aurorae__svg__framework-dots; k kwinrc $g BorderSize Tiny; k kwinrc $g BorderSizeAuto false; fi
 if [ -n "${FD_TEST:-}" ]; then k kdeglobals General ColorScheme FrameworkGraphite; k kdeglobals Icons Theme nothing-dots; echo "Done (test mode)."; exit 0; fi
 
 plasma-apply-colorscheme FrameworkGraphite >/dev/null || true
 ci="$(find /usr/lib /usr/lib64 /usr/libexec -name plasma-changeicons 2>/dev/null | head -1 || true)"
 if [ -n "$ci" ]; then "$ci" nothing-dots >/dev/null 2>&1 || k kdeglobals Icons Theme nothing-dots; else k kdeglobals Icons Theme nothing-dots; fi
+busctl --user call org.kde.KWin /KWin org.kde.KWin reconfigure >/dev/null 2>&1 || true
 rm -f "$HOME"/.cache/plasma_theme_breeze-rounded-dock* "$HOME/.cache/ksvg-elements"
 systemctl --user daemon-reload 2>/dev/null || true
 systemctl --user enable --now framework-dots-mode.path framework-dots-mode.service >/dev/null 2>&1 || true

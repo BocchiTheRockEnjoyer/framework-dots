@@ -1,0 +1,7 @@
+[Desktop Entry]
+Name=Framework Dots
+Comment=Dot-matrix title bar buttons
+X-KDE-PluginInfo-Name=framework-dots
+X-KDE-PluginInfo-Version=1.0
+X-KDE-PluginInfo-License=GPL-3.0-or-later
+Type=Service

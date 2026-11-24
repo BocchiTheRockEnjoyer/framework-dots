@@ -118,7 +118,7 @@ cd framework-dots
 
 </details>
 
-> **What it changes:** KDE colours, icons, fonts, splash screen, the volume pop-up and some Dolphin (file manager) settings,
+> **What it changes:** KDE colours, icons, fonts, title bars, splash screen, the volume pop-up and some Dolphin (file manager) settings,
 > plus your **kitty** terminal settings if you say yes. It saves your old ones first, in
 > `~/.local/share/framework-dots-backup-…`, so you can [undo it](#5-undo-everything).
 > `~` means your home folder.
@@ -132,6 +132,10 @@ Optional. The installer asks about this. If you said no, run it again and say ye
 - **Turn on weather:** right-click the clock in the top bar, choose **Configure**, and type your city.
   Your city is sent to [open-meteo.com](https://open-meteo.com); without one, nothing is sent.
 - **Move the desktop widgets:** right-click the desktop, choose **Enter Edit Mode**, and drag them.
+
+The bell opens the **notification center**: Wi-Fi, Bluetooth, quiet mode, night light and dark mode, plus volume and
+brightness. Middle-click it for quiet mode. To hide KDE's own bell, right-click the tray arrow, choose
+**Configure System Tray**, then **Entries**, and set **Notifications** to **Always hidden**. Pop-ups still appear.
 
 You can also add single widgets: right-click the desktop, **Add Widgets**, and search for **Dot**.
 
@@ -250,6 +254,9 @@ Still stuck? Open an **Issue** at the top of this page. Say which system and Pla
 
 - **Floorp browser:** copy the two files in `floorp` into the `chrome` folder of your Floorp profile, and restart it.
   If nothing changes, open `about:config` and set `toolkit.legacyUserProfileCustomizations.stylesheets` to true.
+- **Terminal looks:** the installer can add a fastfetch logo, a [fish](https://fishshell.com) prompt, a
+  [btop](https://github.com/aristocratos/btop) theme and a [cava](https://github.com/karlstav/cava) theme. It doesn't install
+  those programs, and never replaces your own configs. Run `cava-dots` for a dotted music visualiser.
 - **Claude Code usage widget:** shows tokens by itself. For plan limits, set `statusLine` in `~/.claude/settings.json` to
   `{"type": "command", "command": "~/.local/bin/claude-usage --record"}`. It only reads files on your computer.
 - **Colours:** orange `#F3531A`, boards `#0C0C0C`, outline `#4A4A4A`, graphite `#252525` and `#1A1A1A`.

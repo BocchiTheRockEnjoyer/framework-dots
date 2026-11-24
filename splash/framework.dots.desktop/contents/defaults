@@ -12,8 +12,8 @@ Theme=nothing-dots
 name=breeze-rounded-dock
 
 [kwinrc][org.kde.kdecoration2]
-library=org.kde.breeze
-theme=Breeze
+library=org.kde.kwin.aurorae
+theme=__aurorae__svg__framework-dots
 
 [ksplashrc][KSplash]
 Theme=framework.dots.desktop

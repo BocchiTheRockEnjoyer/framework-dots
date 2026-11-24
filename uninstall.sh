@@ -81,7 +81,7 @@ if [ -z "${FD_TEST:-}" ]; then
     if (!o || o[0] == "org.kde.image") d.writeConfig("Image", o ? o[1] : ""); d.reloadConfig() })' >/dev/null
   # ---- bar, dock and widgets ----
   ids="$(tr -cs '0-9' ',' < "$state/panels" 2>/dev/null | sed 's/^,*//; s/,*$//')"
-  plasma "var ids = [$ids];"' var mine = ["dotboard", "dotmedia", "dotclock", "dotsysmon", "dotplaying", "dottimer", "dotkeys", "dotdesktops", "dotbatterypercent", "claudeusage"].map(function(x) { return "local." + x });
+  plasma "var ids = [$ids];"' var mine = ["dotboard", "dotmedia", "dotclock", "dotsysmon", "dotplaying", "dottimer", "dotkeys", "dotdesktops", "dotbatterypercent", "dotcenter", "claudeusage"].map(function(x) { return "local." + x });
     function clear(c) { mine.forEach(function(t) { c.widgets(t).forEach(function(w) { w.remove() }) }) }
     panels().forEach(function(p) {
       var bar = p.widgets("local.dotdesktops").length > 0 && p.widgets("local.dotclock").length > 0, dock = ids.indexOf(p.id) >= 0;
@@ -115,7 +115,7 @@ back() {
   for x in "$@"; do
     [ "$cur" = "$x" ] || continue
     if old="$(ini "$orig/$f" "$g" "$key")"; then
-      for x in "$@"; do if [ "$old" = "$x" ]; then case "$x" in *framework.dots*|breeze-rounded-dock*|nothing-dots*|FrameworkGraphite*) old="" ;; esac; fi; done
+      for x in "$@"; do if [ "$old" = "$x" ]; then case "$x" in *framework.dots*|*framework-dots*|breeze-rounded-dock*|nothing-dots*|FrameworkGraphite*) old="" ;; esac; fi; done
     else old=""; fi
     if [ -n "$old" ]; then kwriteconfig6 --file "$f" --group "$g" --key "$key" "$old"
     else
@@ -132,12 +132,17 @@ back kdeglobals General ColorScheme FrameworkGraphite FrameworkGraphiteLight; ba
 back kdeglobals KDE frameContrast 0.1; back breezerc Windeco TitleAlignment AlignCenter; back breezerc Windeco DrawBackgroundGradient false; back breezerc Common OutlineIntensity OutlineLow
 back dolphinrc General ShowStatusBar Small; back dolphinrc General ShowZoomSlider false; back dolphinrc IconsMode IconSize 80; back dolphinrc IconsMode PreviewSize 96
 D=framework.dots.desktop L=framework.dots.light.desktop
+g=org.kde.kdecoration2
+case "$(now kwinrc $g theme || true)" in __aurorae__svg__framework-dots*)
+  back kwinrc $g library org.kde.kwin.aurorae; back kwinrc $g BorderSize Tiny; back kwinrc $g BorderSizeAuto false
+  back kwinrc $g theme __aurorae__svg__framework-dots __aurorae__svg__framework-dots-light ;;
+esac
 back ksplashrc KSplash Theme $D $L
 if ! ini "$C/ksplashrc" KSplash Theme >/dev/null; then back ksplashrc KSplash Engine KSplashQML; fi
 back plasmarc Theme name breeze-rounded-dock breeze-rounded-dock-light
 for x in LookAndFeelPackage DefaultDarkLookAndFeel DefaultLightLookAndFeel; do back kdeglobals KDE $x $D $L; done
 # Switching light/dark mode makes KDE keep its own copy of the theme's choices
-T='=(framework\.dots\.(light\.)?desktop|breeze-rounded-dock(-light)?|nothing-dots(-light)?|FrameworkGraphite(Light)?)$'
+T='=(framework\.dots\.(light\.)?desktop|breeze-rounded-dock(-light)?|nothing-dots(-light)?|FrameworkGraphite(Light)?|__aurorae__svg__framework-dots(-light)?)$'
 if grep -rqsE "$T|^framework\.dots\." "$C/kdedefaults" && [ -d "$orig/kdedefaults" ] && ! grep -rqsE "$T|^framework\.dots\." "$orig/kdedefaults"; then
   cp -a "$orig/kdedefaults/." "$C/kdedefaults/"
 elif [ -d "$C/kdedefaults" ]; then
@@ -145,7 +150,7 @@ elif [ -d "$C/kdedefaults" ]; then
     [ -f "$f" ] || continue
     if [ "$(basename "$f")" = package ]; then
       if grep -qE '^framework\.dots\.' "$f"; then lf="$(ini "$orig/kdeglobals" KDE LookAndFeelPackage || true)"; case "$lf" in ""|framework.dots.*) lf=org.kde.breeze.desktop ;; esac; printf '%s' "$lf" > "$f"; fi
-    elif grep -qE "$T" "$f"; then sed -i -E "/$T/d" "$f"
+    elif grep -qE "$T" "$f"; then sed -i -E "/$T/d; /^library=org\.kde\.kwin\.aurorae\$/d" "$f"
     fi
   done
 fi
@@ -162,7 +167,7 @@ else
       rm -f "$C/kitty/kitty.conf"; if [ -e "$orig/kitty/kitty.conf" ]; then cp -a "$orig/kitty/kitty.conf" "$C/kitty/kitty.conf"; fi ;;
   esac
 fi
-for w in dotboard dotmedia dotclock dotsysmon dotplaying dottimer dotkeys dotdesktops dotbatterypercent claudeusage; do rm -rf "$S/plasma/plasmoids/local.$w"; done
+for w in dotboard dotmedia dotclock dotsysmon dotplaying dottimer dotkeys dotdesktops dotbatterypercent dotcenter claudeusage; do rm -rf "$S/plasma/plasmoids/local.$w"; done
 rm -rf "$S/icons/nothing-dots" "$S/icons/nothing-dots-light" "$S/plasma/desktoptheme/breeze-rounded-dock" "$S/plasma/desktoptheme/breeze-rounded-dock-light"
 rm -rf "$S/plasma/look-and-feel/$D" "$S/plasma/look-and-feel/$L" "$S/fonts/fd-dots" "$S/plasma-qml/org/kde/plasma/workspace/osd"
 rm -f "$S/icons/hicolor/scalable/apps"/framework-logo-dots*.svg
@@ -174,6 +179,14 @@ if [ -s "$state/pictures.sha256" ]; then
 fi
 rm -f "$C/systemd/user/plasma-plasmashell.service.d/dot-osd.conf" "$C"/systemd/user/framework-dots-mode.path "$C"/systemd/user/framework-dots-mode.service
 rmdir "$C/systemd/user/plasma-plasmashell.service.d" 2>/dev/null
+rm -rf "$S/aurorae/themes/framework-dots" "$S/aurorae/themes/framework-dots-light"
+if [ -s "$state/terminal.sha256" ]; then
+  while read -r h p; do
+    case "$p" in .config/*|.local/bin/*) ;; *) continue ;; esac
+    if [ "$(sha256sum "$HOME/$p" 2>/dev/null | cut -d' ' -f1)" = "$h" ]; then rm -f "$HOME/$p"; elif [ -e "$HOME/$p" ]; then echo "Left ~/$p alone, because it has changed."; fi
+  done < "$state/terminal.sha256"
+  (cd "$C" && rmdir fastfetch fish/functions btop/themes btop cava 2>/dev/null)
+fi
 rm -f "$HOME/.local/bin/framework-dots-mode" "$HOME/.local/bin/claude-usage"
 if grep -qs 'claude-usage' "$HOME/.claude/settings.json"; then echo "Note: ~/.claude/settings.json still mentions claude-usage. Remove that statusLine yourself."; fi
 if [ "$ways" = 1 ]; then
@@ -190,7 +203,7 @@ fc-cache -f "$S/fonts" 2>/dev/null
 rm -f "$HOME"/.cache/plasma_theme_*.kcache "$HOME/.cache/ksvg-elements"
 [ -z "$orig" ] || [ "$orig" != "$state/original" ] || cp -a "$orig" "$bak/original-settings"
 if [ -e "$state/waywallen" ] && [ "$ways" = 0 ]; then find "$state" -mindepth 1 -maxdepth 1 ! -name waywallen -exec rm -rf {} +; else rm -rf "$state"; fi
-if [ -z "${FD_TEST:-}" ]; then systemctl --user daemon-reload 2>/dev/null; systemctl --user restart plasma-plasmashell 2>/dev/null; fi
+if [ -z "${FD_TEST:-}" ]; then busctl --user call org.kde.KWin /KWin org.kde.KWin reconfigure >/dev/null 2>&1; systemctl --user daemon-reload 2>/dev/null; systemctl --user restart plasma-plasmashell 2>/dev/null; fi
 echo
 echo "Framework Dots is removed. Log out and back in to finish."
 echo "Backups were kept in ~/.local/share/framework-dots-backup-… (safe to delete)."
