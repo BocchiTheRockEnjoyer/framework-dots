@@ -91,8 +91,18 @@ PlasmoidItem {
             visible: root.track !== ""
             anchors.centerIn: parent
             spacing: 8
-            Art { visible: ready; width: 22; height: 22; radius: 4; anchors.verticalCenter: parent.verticalCenter }
-            Vis { anchors.verticalCenter: parent.verticalCenter }
+            Art { id: thumb; visible: ready; width: 22; height: 22; radius: 4; anchors.verticalCenter: parent.verticalCenter }
+            Item {    // level meter: slides in while playing, away when paused
+                anchors.verticalCenter: parent.verticalCenter
+                width: root.playing ? meter.width : 0
+                height: meter.height
+                visible: width > 0.5
+                clip: true
+                opacity: root.playing ? 1 : 0
+                Behavior on width { NumberAnimation { duration: 260; easing.type: Easing.OutCubic } }
+                Behavior on opacity { NumberAnimation { duration: 200 } }
+                Vis { id: meter }
+            }
             Text {
                 anchors.verticalCenter: parent.verticalCenter
                 width: Math.min(implicitWidth, 170)
