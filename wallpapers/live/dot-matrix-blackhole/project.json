@@ -358,6 +358,13 @@
     "fraction": false,
     "precision": 0,
     "editable": true
+   },
+   "automode": {
+    "order": 29,
+    "index": 29,
+    "text": "Follow light/dark mode",
+    "type": "bool",
+    "value": true
    }
   }
  }

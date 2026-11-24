@@ -1,0 +1,12 @@
+#!/bin/sh
+# Tells the Dot Matrix Black Hole wallpaper whether KDE is in light or dark mode.
+bg=$(kreadconfig6 --file kdeglobals --group Colors:Window --key BackgroundNormal)
+l=$(printf '%s' "$bg" | awk -F, 'NF>=3{print (($1*299+$2*587+$3*114)/1000>128)?1:0}')
+[ -n "$l" ] || exit 0
+new="window.__mode&&__mode($l)"
+for d in "$HOME/.local/share/Steam/steamapps/common/wallpaper_engine/projects/myprojects/dot-matrix-blackhole" \
+         "$HOME/FrameworkDots-Wallpapers/steamapps/common/wallpaper_engine/projects/myprojects/dot-matrix-blackhole"; do
+  [ -d "$d" ] || continue
+  [ "$(cat "$d/mode.js" 2>/dev/null)" = "$new" ] && continue
+  printf '%s\n' "$new" > "$d/.mode.tmp" && mv "$d/.mode.tmp" "$d/mode.js"
+done

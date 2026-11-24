@@ -1,1 +1,1 @@
-{"KPackageStructure":"Plasma/LookAndFeel","KPlugin":{"Id":"framework.dots.desktop","Name":"Framework Dots (splash)","Description":"Dotted Framework splash screen","License":"GPL-2.0+","Version":"1.0","Category":"Plasma Look And Feel"},"X-Plasma-APIVersion":"2"}
+{"KPackageStructure":"Plasma/LookAndFeel","KPlugin":{"Id":"framework.dots.desktop","Name":"Framework Dots","Description":"Dot-matrix look in black, grey and orange","License":"GPL-3.0-or-later","Version":"2.0","Category":"Plasma Look And Feel"},"X-Plasma-APIVersion":"2"}

@@ -1,0 +1,10 @@
+[Unit]
+Description=Update the wallpaper light/dark mode
+StartLimitIntervalSec=0
+
+[Service]
+Type=oneshot
+ExecStart=%h/.local/bin/framework-dots-mode
+
+[Install]
+WantedBy=default.target

@@ -1,0 +1,43 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="460" height="300" viewBox="0 0 460 300">
+<defs><style id="current-color-scheme" type="text/css">.ColorScheme-Background{color:#eff0f1;}</style></defs>
+<path id="topleft" class="ColorScheme-Background" fill="currentColor" fill-opacity="0.9" d="M0,15A15,15 0 0 1 15,0V15Z"/>
+<path id="topright" class="ColorScheme-Background" fill="currentColor" fill-opacity="0.9" d="M35,0A15,15 0 0 1 50,15H35Z"/>
+<path id="bottomleft" class="ColorScheme-Background" fill="currentColor" fill-opacity="0.9" d="M0,35A15,15 0 0 0 15,50V35Z"/>
+<path id="bottomright" class="ColorScheme-Background" fill="currentColor" fill-opacity="0.9" d="M35,50A15,15 0 0 0 50,35H35Z"/>
+<rect id="top" class="ColorScheme-Background" fill="currentColor" fill-opacity="0.9" x="15" y="0" width="20" height="15"/>
+<rect id="bottom" class="ColorScheme-Background" fill="currentColor" fill-opacity="0.9" x="15" y="35" width="20" height="15"/>
+<rect id="left" class="ColorScheme-Background" fill="currentColor" fill-opacity="0.9" x="0" y="15" width="15" height="20"/>
+<rect id="right" class="ColorScheme-Background" fill="currentColor" fill-opacity="0.9" x="35" y="15" width="15" height="20"/>
+<rect id="center" class="ColorScheme-Background" fill="currentColor" fill-opacity="0.9" x="15" y="15" width="20" height="20"/>
+<path id="mask-topleft" fill="#000" d="M80,15A15,15 0 0 1 95,0V15Z"/>
+<path id="mask-topright" fill="#000" d="M115,0A15,15 0 0 1 130,15H115Z"/>
+<path id="mask-bottomleft" fill="#000" d="M80,35A15,15 0 0 0 95,50V35Z"/>
+<path id="mask-bottomright" fill="#000" d="M115,50A15,15 0 0 0 130,35H115Z"/>
+<rect id="mask-top" fill="#000" x="95" y="0" width="20" height="15"/>
+<rect id="mask-bottom" fill="#000" x="95" y="35" width="20" height="15"/>
+<rect id="mask-left" fill="#000" x="80" y="15" width="15" height="20"/>
+<rect id="mask-right" fill="#000" x="115" y="15" width="15" height="20"/>
+<rect id="mask-center" fill="#000" x="95" y="15" width="20" height="20"/>
+<radialGradient id="gtopleft" gradientUnits="userSpaceOnUse" cx="35" cy="135" r="35"><stop offset="0.42857142857142855" stop-color="#000" stop-opacity=".28"/><stop offset="0.6571428571428571" stop-color="#000" stop-opacity=".1"/><stop offset="1" stop-color="#000" stop-opacity="0"/></radialGradient><g id="shadow-topleft"><rect x="0" y="100" width="35" height="35" fill="#000" fill-opacity="0"/><path d="M0,135A35,35 0 0 1 35,100V120A15,15 0 0 0 20,135Z" fill="url(#gtopleft)"/></g>
+<radialGradient id="gtopright" gradientUnits="userSpaceOnUse" cx="55" cy="135" r="35"><stop offset="0.42857142857142855" stop-color="#000" stop-opacity=".28"/><stop offset="0.6571428571428571" stop-color="#000" stop-opacity=".1"/><stop offset="1" stop-color="#000" stop-opacity="0"/></radialGradient><g id="shadow-topright"><rect x="55" y="100" width="35" height="35" fill="#000" fill-opacity="0"/><path d="M90,135A35,35 0 0 0 55,100V120A15,15 0 0 1 70,135Z" fill="url(#gtopright)"/></g>
+<radialGradient id="gbottomleft" gradientUnits="userSpaceOnUse" cx="35" cy="155" r="35"><stop offset="0.42857142857142855" stop-color="#000" stop-opacity=".28"/><stop offset="0.6571428571428571" stop-color="#000" stop-opacity=".1"/><stop offset="1" stop-color="#000" stop-opacity="0"/></radialGradient><g id="shadow-bottomleft"><rect x="0" y="155" width="35" height="35" fill="#000" fill-opacity="0"/><path d="M0,155A35,35 0 0 0 35,190V170A15,15 0 0 1 20,155Z" fill="url(#gbottomleft)"/></g>
+<radialGradient id="gbottomright" gradientUnits="userSpaceOnUse" cx="55" cy="155" r="35"><stop offset="0.42857142857142855" stop-color="#000" stop-opacity=".28"/><stop offset="0.6571428571428571" stop-color="#000" stop-opacity=".1"/><stop offset="1" stop-color="#000" stop-opacity="0"/></radialGradient><g id="shadow-bottomright"><rect x="55" y="155" width="35" height="35" fill="#000" fill-opacity="0"/><path d="M90,155A35,35 0 0 1 55,190V170A15,15 0 0 0 70,155Z" fill="url(#gbottomright)"/></g>
+<linearGradient id="gtop" gradientUnits="userSpaceOnUse" x1="0" x2="0" y1="120" y2="100"><stop offset="0" stop-color="#000" stop-opacity=".28"/><stop offset=".4" stop-color="#000" stop-opacity=".1"/><stop offset="1" stop-color="#000" stop-opacity="0"/></linearGradient><g id="shadow-top"><rect x="35" y="100" width="20" height="35" fill="#000" fill-opacity="0"/><rect x="35" y="100" width="20" height="20" fill="url(#gtop)"/></g>
+<linearGradient id="gbottom" gradientUnits="userSpaceOnUse" x1="0" x2="0" y1="170" y2="190"><stop offset="0" stop-color="#000" stop-opacity=".28"/><stop offset=".4" stop-color="#000" stop-opacity=".1"/><stop offset="1" stop-color="#000" stop-opacity="0"/></linearGradient><g id="shadow-bottom"><rect x="35" y="155" width="20" height="35" fill="#000" fill-opacity="0"/><rect x="35" y="170" width="20" height="20" fill="url(#gbottom)"/></g>
+<linearGradient id="gleft" gradientUnits="userSpaceOnUse" y1="0" y2="0" x1="20" x2="0"><stop offset="0" stop-color="#000" stop-opacity=".28"/><stop offset=".4" stop-color="#000" stop-opacity=".1"/><stop offset="1" stop-color="#000" stop-opacity="0"/></linearGradient><g id="shadow-left"><rect x="0" y="135" width="35" height="20" fill="#000" fill-opacity="0"/><rect x="0" y="135" width="20" height="20" fill="url(#gleft)"/></g>
+<linearGradient id="gright" gradientUnits="userSpaceOnUse" y1="0" y2="0" x1="70" x2="90"><stop offset="0" stop-color="#000" stop-opacity=".28"/><stop offset=".4" stop-color="#000" stop-opacity=".1"/><stop offset="1" stop-color="#000" stop-opacity="0"/></linearGradient><g id="shadow-right"><rect x="55" y="135" width="35" height="20" fill="#000" fill-opacity="0"/><rect x="70" y="135" width="20" height="20" fill="url(#gright)"/></g>
+<rect id="shadow-center" x="35" y="135" width="20" height="20" fill="#000" fill-opacity="0"/>
+<rect id="hint-top-margin" x="300" y="0" width="4" height="4" fill="#f0f"/>
+<rect id="hint-bottom-margin" x="330" y="0" width="4" height="4" fill="#f0f"/>
+<rect id="hint-left-margin" x="360" y="0" width="4" height="4" fill="#f0f"/>
+<rect id="hint-right-margin" x="390" y="0" width="4" height="4" fill="#f0f"/>
+<rect id="thick-hint-top-margin" x="300" y="30" width="8" height="8" fill="#f0f"/>
+<rect id="thick-hint-bottom-margin" x="330" y="30" width="8" height="8" fill="#f0f"/>
+<rect id="thick-hint-left-margin" x="360" y="30" width="8" height="8" fill="#f0f"/>
+<rect id="thick-hint-right-margin" x="390" y="30" width="8" height="8" fill="#f0f"/>
+<rect id="shadow-hint-top-margin" x="300" y="60" width="20" height="20" fill="#f0f"/>
+<rect id="shadow-hint-bottom-margin" x="330" y="60" width="20" height="20" fill="#f0f"/>
+<rect id="shadow-hint-left-margin" x="360" y="60" width="20" height="20" fill="#f0f"/>
+<rect id="shadow-hint-right-margin" x="390" y="60" width="20" height="20" fill="#f0f"/>
+<rect id="hint-tile-center" x="300" y="100" width="4" height="4" fill="#f0f"/>
+</svg>

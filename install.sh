@@ -7,12 +7,12 @@ bak="$S/framework-dots-backup-$(date +%Y%m%d-%H%M%S)"; mkdir -p "$bak"
 for f in kdeglobals kwinrc breezerc dolphinrc ksplashrc plasmarc kitty/kitty.conf plasmashellrc plasma-org.kde.plasma.desktop-appletsrc; do
   [ -e "$C/$f" ] && { mkdir -p "$bak/$(dirname "$f")"; cp -a "$C/$f" "$bak/$f"; }; done
 put() { mkdir -p "$2"; cp -a "$1" "$2/"; }
-put "$here/icons/nothing-dots" "$S/icons"; mkdir -p "$S/icons/hicolor/scalable/apps"; cp "$here"/icons/hicolor/*.svg "$S/icons/hicolor/scalable/apps/"
+put "$here/icons/nothing-dots" "$S/icons"; put "$here/icons/nothing-dots-light" "$S/icons"; mkdir -p "$S/icons/hicolor/scalable/apps"; cp "$here"/icons/hicolor/*.svg "$S/icons/hicolor/scalable/apps/"
 for p in "$here"/plasmoids/*; do put "$p" "$S/plasma/plasmoids"; done
-put "$here/theme/breeze-rounded-dock" "$S/plasma/desktoptheme"; put "$here/splash/framework.dots.desktop" "$S/plasma/look-and-feel"
-put "$here/colors/FrameworkGraphite.colors" "$S/color-schemes"; put "$here/fonts/space-mono" "$S/fonts"
+for x in "" -light; do put "$here/theme/breeze-rounded-dock$x" "$S/plasma/desktoptheme"; done; for x in "" light.; do put "$here/splash/framework.dots.${x}desktop" "$S/plasma/look-and-feel"; done
+put "$here/colors/FrameworkGraphite.colors" "$S/color-schemes"; put "$here/colors/FrameworkGraphiteLight.colors" "$S/color-schemes"; put "$here/fonts/space-mono" "$S/fonts"
 mkdir -p "$HOME/Pictures/Wallpapers"; cp "$here"/wallpapers/still/* "$HOME/Pictures/Wallpapers/"
-put "$here/bin/claude-usage" "$HOME/.local/bin"; mkdir -p "$C/kitty"; cp "$here/kitty/kitty.conf" "$C/kitty/kitty.conf"
+put "$here/bin/claude-usage" "$HOME/.local/bin"; put "$here/bin/framework-dots-mode" "$HOME/.local/bin"; mkdir -p "$C/systemd/user"; cp "$here"/systemd/* "$C/systemd/user/"; mkdir -p "$C/kitty"; cp "$here/kitty/kitty.conf" "$C/kitty/kitty.conf"
 # Waywallen looks for this folder layout; Steam itself is not needed
 we="$HOME/FrameworkDots-Wallpapers/steamapps/common/wallpaper_engine/projects/myprojects"; mkdir -p "$we"; cp -a "$here"/wallpapers/live/* "$we/"
 # Dotted volume/brightness pop-up: overrides one QML module for plasmashell only
@@ -26,11 +26,12 @@ k kdeglobals General smallestReadableFont "Space Mono,8,-1,5,400,0,0,0,0,0,0,0,0
 k kdeglobals KDE frameContrast 0.1; k breezerc Windeco TitleAlignment AlignCenter; k breezerc Windeco DrawBackgroundGradient false; k breezerc Common OutlineIntensity OutlineLow
 k dolphinrc General ShowStatusBar Small; k dolphinrc General ShowZoomSlider false; k dolphinrc IconsMode IconSize 80; k dolphinrc IconsMode PreviewSize 96
 k ksplashrc KSplash Engine KSplashQML; k ksplashrc KSplash Theme framework.dots.desktop; k plasmarc Theme name breeze-rounded-dock
+k kdeglobals KDE LookAndFeelPackage framework.dots.desktop; k kdeglobals KDE DefaultDarkLookAndFeel framework.dots.desktop; k kdeglobals KDE DefaultLightLookAndFeel framework.dots.light.desktop
 fc-cache -f "$S/fonts" 2>/dev/null || true
 if [ -z "${FD_TEST:-}" ]; then
   plasma-apply-colorscheme FrameworkGraphite || true
   ci="$(find /usr/lib /usr/libexec -name plasma-changeicons 2>/dev/null | head -1 || true)"; if [ -n "$ci" ]; then "$ci" nothing-dots; else k kdeglobals Icons Theme nothing-dots; fi
-  rm -f "$HOME"/.cache/plasma_theme_breeze-rounded-dock* "$HOME/.cache/ksvg-elements"; systemctl --user daemon-reload; systemctl --user restart plasma-plasmashell; sleep 8
+  rm -f "$HOME"/.cache/plasma_theme_breeze-rounded-dock* "$HOME/.cache/ksvg-elements"; systemctl --user daemon-reload; systemctl --user enable --now framework-dots-mode.path framework-dots-mode.service >/dev/null 2>&1 || true; systemctl --user restart plasma-plasmashell; sleep 8
   if [ "${1:-}" = "--layout" ]; then qdbus6 org.kde.plasmashell /PlasmaShell org.kde.PlasmaShell.evaluateScript "$(cat "$here/layout.js")"; fi
 fi
 echo "Done. Log out and back in. Your previous settings are in $bak"

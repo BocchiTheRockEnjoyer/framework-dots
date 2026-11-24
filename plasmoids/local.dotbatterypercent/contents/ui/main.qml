@@ -7,6 +7,33 @@ import org.kde.kirigami as Kirigami
 
 PlasmoidItem {
     id: root
+
+    // KDE underlines the whole tray while its hidden-icons popup is open; underline just the arrow
+    property Item trayLine: null
+    property Item trayArrow: null
+    function findItem(item, test) {
+        if (!item) return null
+        if (test(item)) return item
+        for (var i = 0; i < item.children.length; i++) { var r = findItem(item.children[i], test); if (r) return r }
+        return null
+    }
+    function fixTrayLine() {
+        if (trayLine && trayArrow && trayArrow.visible && trayLine.highlightedItem && trayLine.highlightedItem === trayLine.parent)
+            trayLine.changeHighlightedItem(trayArrow, true)
+    }
+    Timer {
+        property int tries: 0
+        interval: 2000; repeat: true; running: !root.trayLine && tries < 30
+        onTriggered: {
+            tries++
+            var w = root.Window.window; if (!w) return
+            var line = root.findItem(w.contentItem, i => typeof i.changeHighlightedItem === "function" && i.highlightedItem !== undefined)
+            if (!line) return
+            var arrow = root.findItem(line.parent, i => i.arrowAnimationDuration !== undefined)
+            if (arrow) { root.trayArrow = arrow; root.trayLine = line; root.fixTrayLine() }
+        }
+    }
+    Connections { target: root.trayLine; function onHighlightedItemChanged() { root.fixTrayLine() } }
     readonly property var bat: source.data["Battery"]
     readonly property bool present: !!bat && bat["Has Battery"] !== false && bat["Percent"] !== undefined
     readonly property int percent: present ? bat["Percent"] : 0

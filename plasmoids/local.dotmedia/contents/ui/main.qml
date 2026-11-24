@@ -1,11 +1,23 @@
 import QtQuick
 import QtQuick.Layouts
+import org.kde.kirigami as Kirigami
 import org.kde.plasma.plasmoid
 import org.kde.plasma.core as PlasmaCore
 import org.kde.plasma.private.mpris as Mpris
 
 PlasmoidItem {
     id: root
+
+    // Boards follow the colour scheme: light text on dark, dark on light
+    Item { id: scheme; Kirigami.Theme.inherit: false; Kirigami.Theme.colorSet: Kirigami.Theme.Window
+        readonly property color bg: Kirigami.Theme.backgroundColor
+        readonly property bool dark: 0.299 * bg.r + 0.587 * bg.g + 0.114 * bg.b < 0.5 }
+    readonly property bool dark: scheme.dark
+    readonly property color ink: dark ? "#f6f6f6" : "#1c1c1c"
+    readonly property color dim: dark ? "#9a9a9a" : "#6a6a6a"
+    readonly property color edge: dark ? "#4a4a4a" : "#b8b8b8"
+    readonly property color gridInk: dark ? Qt.rgba(1, 1, 1, 0.07) : Qt.rgba(0, 0, 0, 0.09)
+    function boardColor(o) { return dark ? Qt.rgba(0.047, 0.047, 0.047, o) : Qt.rgba(0.95, 0.95, 0.95, Math.min(1, o + 0.12)) }
     Plasmoid.backgroundHints: PlasmaCore.Types.NoBackground
     preferredRepresentation: fullRepresentation
     readonly property int cols: 71          // same grid as Dot Board Clock
@@ -39,7 +51,7 @@ PlasmoidItem {
         id: gl
         property var rows7: []
         property real pitch: 4
-        property color tint: "#f6f6f6"
+        property color tint: root.ink
         width: 7 * pitch + 12; height: 7 * pitch + 12
         hoverEnabled: true
         cursorShape: Qt.PointingHandCursor
@@ -128,15 +140,16 @@ PlasmoidItem {
             anchors.centerIn: parent
             width: view.p * root.cols; height: view.p * root.rows
             radius: view.p * 2.2
-            border.width: 1.5; border.color: "#4a4a4a"
-            color: Qt.rgba(0.047, 0.047, 0.047, Plasmoid.configuration.backOpacity / 100)
+            border.width: 1.5; border.color: root.edge
+            color: root.boardColor(Plasmoid.configuration.backOpacity / 100)
             Canvas {
                 id: grid
+                Connections { target: root; function onDarkChanged() { grid.requestPaint() } }
                 anchors.fill: parent
                 visible: Plasmoid.configuration.grid
                 onWidthChanged: requestPaint()
                 onPaint: {
-                    var c = getContext("2d"), p = view.p; c.reset(); c.fillStyle = Qt.rgba(1, 1, 1, 0.07)
+                    var c = getContext("2d"), p = view.p; c.reset(); c.fillStyle = root.gridInk
                     for (var y = 1; y < root.rows - 1; y++) for (var x = 1; x < root.cols - 1; x++) {
                         if (x >= root.art0 && x < root.art0 + root.artN && y >= root.art0 && y < root.art0 + root.artN) continue
                         if (x >= root.col0 - 1 && x < root.cols - 1 && y >= 2 && y <= root.rows - 3) continue   // keep text and controls clear
@@ -149,7 +162,7 @@ PlasmoidItem {
                 x: view.p * root.art0; y: view.p * root.art0; width: view.p * root.artN; height: width
                 onWidthChanged: requestPaint()
                 NumberAnimation { id: appear; target: cover; property: "opacity"; to: 1; duration: 350 }
-                Connections { target: root; function onColourChanged() { cover.requestPaint() } }
+                Connections { target: root; function onColourChanged() { cover.requestPaint() } function onDarkChanged() { cover.requestPaint() } }
                 onPaint: {
                     var c = getContext("2d"), n = root.dense, q = width / n, a = probe.px, cr = n * 0.07; c.reset()
                     if (a.length === n * n) {
@@ -159,20 +172,20 @@ PlasmoidItem {
                             var ex = Math.max(cr - x - 0.5, x + 0.5 - (n - cr), 0), ey = Math.max(cr - y - 0.5, y + 0.5 - (n - cr), 0)
                             if (ex * ex + ey * ey > cr * cr) continue       // rounded corners
                             var b = (lum[i] - lo) / Math.max(1, hi - lo)
-                            c.fillStyle = root.colour ? Qt.rgba(a[i][0] / 255, a[i][1] / 255, a[i][2] / 255, 1) : Qt.rgba(0.96, 0.96, 0.96, 0.1 + 0.9 * b)
-                            c.beginPath(); c.arc((x + 0.5) * q, (y + 0.5) * q, q * (root.colour ? 0.47 : 0.2 + 0.28 * b), 0, 6.2832); c.fill()
+                            c.fillStyle = root.colour ? Qt.rgba(a[i][0] / 255, a[i][1] / 255, a[i][2] / 255, 1) : Qt.rgba(root.ink.r, root.ink.g, root.ink.b, 0.1 + 0.9 * (root.dark ? b : 1 - b))
+                            c.beginPath(); c.arc((x + 0.5) * q, (y + 0.5) * q, q * (root.colour ? 0.47 : 0.2 + 0.28 * (root.dark ? b : 1 - b)), 0, 6.2832); c.fill()
                         }
                     } else {
                         var p = view.p, note = ["....#######", "....#######", "....#.....#", "....#.....#", "....#.....#", "....#.....#", ".####..####", "#####.#####", "#####.#####", ".###...###."]
                         for (var gy = 0; gy < root.artN; gy++) for (var gx = 0; gx < root.artN; gx++) {
                             var on = gy >= 8 && gy < 18 && gx >= 8 && gx < 19 && note[gy - 8][gx - 8] === "#"
-                            c.fillStyle = on ? "#f3531a" : Qt.rgba(1, 1, 1, 0.07); c.beginPath(); c.arc((gx + 0.5) * p, (gy + 0.5) * p, p * (on ? 0.42 : 0.38), 0, 6.2832); c.fill()
+                            c.fillStyle = on ? "#f3531a" : root.gridInk; c.beginPath(); c.arc((gx + 0.5) * p, (gy + 0.5) * p, p * (on ? 0.42 : 0.38), 0, 6.2832); c.fill()
                         }
                     }
                 }
             }
-            Marquee { x: view.p * root.col0; y: view.p * 1.8; width: view.p * root.span; text: root.track || "Nothing playing"; color: root.track ? "#f6f6f6" : "#9a9a9a"; font.family: "Ndot55Caps"; font.pixelSize: view.p * 3.9 }
-            Marquee { x: view.p * root.col0; y: view.p * 6.9; width: view.p * root.span; text: root.artist; color: "#9a9a9a"; font.family: "Space Mono"; font.pixelSize: view.p * 2.1 }
+            Marquee { x: view.p * root.col0; y: view.p * 1.8; width: view.p * root.span; text: root.track || "Nothing playing"; color: root.track ? root.ink : root.dim; font.family: "Ndot55Caps"; font.pixelSize: view.p * 3.9 }
+            Marquee { x: view.p * root.col0; y: view.p * 6.9; width: view.p * root.span; text: root.artist; color: root.dim; font.family: "Space Mono"; font.pixelSize: view.p * 2.1 }
             Row {
                 x: view.p * root.col0 - 6; y: view.p * 15.5 - height / 2
                 spacing: view.p * 0.3
@@ -198,15 +211,15 @@ PlasmoidItem {
                                 readonly property int lv: root.playing ? root.levels[bar.index] : 1
                                 x: view.p * 0.08; y: index * view.p + view.p * 0.08
                                 width: view.p * 0.84; height: width; radius: width / 2
-                                color: index === 5 - lv && root.playing ? "#f3531a" : "#f6f6f6"
+                                color: index === 5 - lv && root.playing ? "#f3531a" : root.ink
                                 opacity: index >= 5 - lv ? (root.playing ? 1 : 0.4) : 0.07
                             }
                         }
                     }
                 }
             }
-            Text { x: view.p * root.col0; y: view.p * 23.4 - height / 2; text: root.track ? root.fmt(root.pos) : ""; color: "#c8c8c8"; font.family: "Ndot55Caps"; font.pixelSize: view.p * 2.4 }
-            Text { x: view.p * (root.cols - 2) - width; y: view.p * 23.4 - height / 2; text: root.length > 0 ? root.fmt(root.length) : ""; color: "#8a8a8a"; font.family: "Ndot55Caps"; font.pixelSize: view.p * 2.4 }
+            Text { x: view.p * root.col0; y: view.p * 23.4 - height / 2; text: root.track ? root.fmt(root.pos) : ""; color: root.dim; font.family: "Ndot55Caps"; font.pixelSize: view.p * 2.4 }
+            Text { x: view.p * (root.cols - 2) - width; y: view.p * 23.4 - height / 2; text: root.length > 0 ? root.fmt(root.length) : ""; color: root.dim; font.family: "Ndot55Caps"; font.pixelSize: view.p * 2.4 }
             Item {    // progress, click to seek
                 id: prog
                 x: view.p * root.col0; y: view.p * 27; width: view.p * root.span; height: view.p
@@ -217,7 +230,7 @@ PlasmoidItem {
                         required property int index
                         x: index * view.p + view.p * 0.08; y: view.p * 0.08
                         width: view.p * 0.84; height: width; radius: width / 2
-                        color: index === prog.lit - 1 ? "#f3531a" : "#f6f6f6"
+                        color: index === prog.lit - 1 ? "#f3531a" : root.ink
                         opacity: index < prog.lit ? 1 : 0.12
                     }
                 }

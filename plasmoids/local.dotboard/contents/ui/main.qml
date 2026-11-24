@@ -1,10 +1,22 @@
 import QtQuick
 import QtQuick.Layouts
+import org.kde.kirigami as Kirigami
 import org.kde.plasma.plasmoid
 import org.kde.plasma.core as PlasmaCore
 
 PlasmoidItem {
     id: root
+
+    // Boards follow the colour scheme: light text on dark, dark on light
+    Item { id: scheme; Kirigami.Theme.inherit: false; Kirigami.Theme.colorSet: Kirigami.Theme.Window
+        readonly property color bg: Kirigami.Theme.backgroundColor
+        readonly property bool dark: 0.299 * bg.r + 0.587 * bg.g + 0.114 * bg.b < 0.5 }
+    readonly property bool dark: scheme.dark
+    readonly property color ink: dark ? "#f6f6f6" : "#1c1c1c"
+    readonly property color dim: dark ? "#9a9a9a" : "#6a6a6a"
+    readonly property color edge: dark ? "#4a4a4a" : "#b8b8b8"
+    readonly property color gridInk: dark ? Qt.rgba(1, 1, 1, 0.07) : Qt.rgba(0, 0, 0, 0.09)
+    function boardColor(o) { return dark ? Qt.rgba(0.047, 0.047, 0.047, o) : Qt.rgba(0.95, 0.95, 0.95, Math.min(1, o + 0.12)) }
     Plasmoid.backgroundHints: PlasmaCore.Types.NoBackground
     preferredRepresentation: fullRepresentation
 
@@ -87,14 +99,15 @@ PlasmoidItem {
             anchors.centerIn: parent
             width: full.pitch * root.cols; height: full.pitch * root.rows
             radius: full.pitch * 2.2
-            border.width: 1.5; border.color: "#4a4a4a"
-            color: Qt.rgba(0.047, 0.047, 0.047, Plasmoid.configuration.backOpacity / 100)
+            border.width: 1.5; border.color: root.edge
+            color: root.boardColor(Plasmoid.configuration.backOpacity / 100)
             Canvas {
                 id: grid
+                Connections { target: root; function onDarkChanged() { grid.requestPaint() } }
                 anchors.fill: parent
                 visible: Plasmoid.configuration.grid
                 onPaint: {
-                    var c = getContext("2d"), p = full.pitch; c.reset(); c.fillStyle = Qt.rgba(1, 1, 1, 0.07)
+                    var c = getContext("2d"), p = full.pitch; c.reset(); c.fillStyle = root.gridInk
                     for (var y = 1; y < root.rows - 1; y++) for (var x = 1; x < root.cols - 1; x++) { c.beginPath(); c.arc((x + 0.5) * p, (y + 0.5) * p, p * 0.38, 0, 6.2832); c.fill() }
                 }
                 onWidthChanged: requestPaint()
@@ -105,7 +118,7 @@ PlasmoidItem {
                 property bool needAll: true
                 function dot(c, i, p) {
                     var v = root.shown[i]; if (v <= 0) return
-                    c.globalAlpha = v; c.fillStyle = root.tint[i] === 2 ? "#f3531a" : "#f6f6f6"
+                    c.globalAlpha = v; c.fillStyle = root.tint[i] === 2 ? "#f3531a" : root.ink
                     c.beginPath(); c.arc((i % root.cols + 0.5) * p, (Math.floor(i / root.cols) + 0.5) * p, p * 0.42, 0, 6.2832); c.fill()
                 }
                 onPaint: {
@@ -120,6 +133,7 @@ PlasmoidItem {
                 onAvailableChanged: lit.needAll = true
                 onWidthChanged: { lit.needAll = true; requestPaint() }
                 onVisibleChanged: { lit.needAll = true; requestPaint() }
+                Connections { target: root; function onDarkChanged() { lit.needAll = true; lit.requestPaint() } }
                 Connections { target: root; function onRepaint() { if (root.changed.length === 0) lit.needAll = true; lit.requestPaint() } }
             }
         }

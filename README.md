@@ -100,6 +100,13 @@ Run it **only once**, or you'll get two of everything. Then:
 
 You can also add single widgets: right-click the desktop, **Add Widgets**, and search for **Dot**.
 
+### Light and dark mode
+
+Both are included and follow KDE's light/dark switch. You can also pick **Framework Dots** or **Framework Dots Light** in
+System Settings → **Global Theme** (leave the layout option unticked).
+The moving black hole switches too (turn off **Follow light/dark mode** in its settings to stop that).
+Still pictures don't; there's a light one called `dot-matrix-blackhole-light.png`.
+
 ## 4. Get the dotted font
 
 Some text uses a font called **Ndot 55**. It belongs to Nothing, so I can't include it. Everything works without it,
@@ -175,8 +182,11 @@ Lowering **Particles** and **Dots across the screen** helps too.
 ```
 cd ~/.local/share
 rm -r plasma/plasmoids/local.dotboard plasma/plasmoids/local.dotmedia plasma/plasmoids/local.dotclock plasma/plasmoids/local.dotsysmon plasma/plasmoids/local.dotplaying plasma/plasmoids/local.dottimer plasma/plasmoids/local.dotkeys plasma/plasmoids/local.dotdesktops plasma/plasmoids/local.dotbatterypercent plasma/plasmoids/local.claudeusage
-rm -r icons/nothing-dots plasma/desktoptheme/breeze-rounded-dock plasma/look-and-feel/framework.dots.desktop plasma-qml color-schemes/FrameworkGraphite.colors
+rm -r icons/nothing-dots icons/nothing-dots-light plasma/desktoptheme/breeze-rounded-dock plasma/desktoptheme/breeze-rounded-dock-light
+rm -r plasma/look-and-feel/framework.dots.desktop plasma/look-and-feel/framework.dots.light.desktop plasma-qml color-schemes/FrameworkGraphite.colors color-schemes/FrameworkGraphiteLight.colors
 rm ~/.config/systemd/user/plasma-plasmashell.service.d/dot-osd.conf
+systemctl --user disable --now framework-dots-mode.path framework-dots-mode.service
+rm ~/.config/systemd/user/framework-dots-mode.* ~/.local/bin/framework-dots-mode ~/.local/bin/claude-usage
 ```
 
 4. If you set up the moving wallpaper, switch to a picture first, then:
@@ -197,6 +207,7 @@ rm -r ~/FrameworkDots-Wallpapers
 | `Permission denied` | Run `chmod +x install.sh wallpaper-setup.sh`, then try again |
 | `No such file or directory` | Run `cd ~/framework-dots` first |
 | Nothing looks different | Log out and back in |
+| I changed the Global Theme and lost the icons | System Settings → **Global Theme** → **Framework Dots** or **Framework Dots Light** (don't tick the layout option) |
 | The top bar or dock disappeared | Run `systemctl --user restart plasma-plasmashell` |
 | I have two bars or docks | Right-click one, **Show Panel Configuration**, and remove it |
 | Dots behind the top bar | In its panel configuration, set **Opacity** to **Opaque** |
