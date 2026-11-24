@@ -74,7 +74,7 @@ I built this on **one computer**, and that's the only one it has been used on:
 | NVIDIA or AMD graphics | The theme should be fine. For the moving wallpaper, see Waywallen's notes on NVIDIA |
 | Plasma 5, GNOME, XFCE, Hyprland and others | Won't work, though the still wallpapers are just pictures |
 
-The installer and `--layout` were also tested in a fresh, hidden Plasma session on the same computer, but not yet by a real
+The installer and uninstaller were also tested in a fresh, hidden Plasma session on the same computer, but not yet by a real
 new user.
 If you try it on something else, please open an **Issue** and say how it went.
 
@@ -82,7 +82,22 @@ If you try it on something else, please open an **Issue** and say how it went.
 
 **Open a terminal:** open the app menu, type `konsole`, and press Enter. Any terminal will do.
 
-**Install git**, which downloads the files. Pick your system:
+**Copy this in and press Enter:**
+
+```
+curl -fsSL https://raw.githubusercontent.com/BocchiTheRockEnjoyer/framework-dots/main/get.sh | bash
+```
+
+It downloads the theme and asks a few yes/no questions. Press Enter to accept the suggested answer. Nothing changes until you
+say yes to **Install now?** Don't put `sudo` in front. When it says **Done**, **log out and back in**.
+
+<details>
+<summary><b>Rather look before you run it?</b> Download it with git instead</summary>
+
+Running a script straight from the internet means trusting whoever wrote it. You can read [get.sh](get.sh) and
+[install.sh](install.sh) first, or download everything and run it yourself.
+
+Install git:
 
 | System | Command |
 |---|---|
@@ -90,9 +105,7 @@ If you try it on something else, please open an **Issue** and say how it went.
 | Fedora | `sudo dnf install git` |
 | Ubuntu, Kubuntu, KDE neon, Debian | `sudo apt install git` |
 
-It asks for your password. Nothing appears while you type it; that's normal.
-
-**Download and install the theme:**
+It asks for your password. Nothing appears while you type it; that's normal. Then:
 
 ```
 cd ~
@@ -101,22 +114,18 @@ cd framework-dots
 ./install.sh
 ```
 
-Don't put `sudo` in front of `./install.sh`. When it says **Done**, **log out and back in**.
+`./install.sh --help` lists options for skipping the questions.
+
+</details>
 
 > **What it changes:** KDE colours, icons, fonts, splash screen, the volume pop-up and some Dolphin (file manager) settings,
-> plus your **kitty** terminal settings. It saves your old ones first, in `~/.local/share/framework-dots-backup-…`.
+> plus your **kitty** terminal settings if you say yes. It saves your old ones first, in
+> `~/.local/share/framework-dots-backup-…`, so you can [undo it](#5-undo-everything).
 > `~` means your home folder.
 
 ## 3. Add the bar, dock and widgets
 
-Optional. This adds a top bar, a dock, and a clock and media player on the desktop:
-
-```
-cd ~/framework-dots
-./install.sh --layout
-```
-
-Run it **only once**, or you'll get two of everything. Then:
+Optional. The installer asks about this. If you said no, run it again and say yes; it won't add a second set. Afterwards:
 
 - **Remove your old panel:** right-click it, choose **Show Panel Configuration**, then **Remove** or **Delete**.
 - **Keep apps in the dock:** open an app, right-click it in the dock, choose **Pin to Task Manager**.
@@ -138,7 +147,7 @@ Still pictures don't; there's a light one called `dot-matrix-blackhole-light.png
 
 ## 4. Set the wallpaper
 
-Choose one. The still picture is much easier.
+The installer can set the still picture for you. The moving one takes a few more steps.
 
 ### Still picture (easy)
 
@@ -158,12 +167,8 @@ The black hole can spin, react to music, and change colour, speed and more. It n
 [Waywallen](https://github.com/waywallen/waywallen). You **don't** need Steam or Wallpaper Engine.
 It uses more battery than the still picture.
 
-**Step 1. Get the apps.** This downloads about 235 MB and checks that the files are genuine:
-
-```
-cd ~/framework-dots
-./wallpaper-setup.sh
-```
+**Step 1. Get the apps.** Run the installer again and say yes to the **moving wallpaper app**. It downloads about 235 MB and
+checks that the files are genuine. (If you used git, you can run `./wallpaper-setup.sh` instead.)
 
 The taskbar disappears for a moment. That's normal. (It's for ordinary Intel and AMD computers; on ARM, use Waywallen's own guide.)
 
@@ -196,36 +201,30 @@ Lowering **Particles** and **Dots across the screen** helps too.
 
 ## 5. Undo everything
 
-1. Open **System Settings** and pick another **Colors**, **Icons**, **Plasma Style**, **Splash Screen** and **Fonts**.
-2. Remove the bar, dock and widgets you don't want.
-3. Delete the files:
-
 ```
-cd ~/.local/share
-rm -r plasma/plasmoids/local.dotboard plasma/plasmoids/local.dotmedia plasma/plasmoids/local.dotclock plasma/plasmoids/local.dotsysmon plasma/plasmoids/local.dotplaying plasma/plasmoids/local.dottimer plasma/plasmoids/local.dotkeys plasma/plasmoids/local.dotdesktops plasma/plasmoids/local.dotbatterypercent plasma/plasmoids/local.claudeusage
-rm -r icons/nothing-dots icons/nothing-dots-light plasma/desktoptheme/breeze-rounded-dock plasma/desktoptheme/breeze-rounded-dock-light
-rm -r plasma/look-and-feel/framework.dots.desktop plasma/look-and-feel/framework.dots.light.desktop plasma-qml color-schemes/FrameworkGraphite.colors color-schemes/FrameworkGraphiteLight.colors
-rm ~/.config/systemd/user/plasma-plasmashell.service.d/dot-osd.conf
-systemctl --user disable --now framework-dots-mode.path framework-dots-mode.service
-rm ~/.config/systemd/user/framework-dots-mode.* ~/.local/bin/framework-dots-mode ~/.local/bin/claude-usage
+bash ~/.local/share/framework-dots/uninstall.sh
 ```
 
-4. If you set up the moving wallpaper, switch to a picture first, then:
+Then log out and back in. If it says **No such file**, you have an older version:
 
 ```
-rm ~/.config/autostart/waywallen.desktop ~/.local/share/applications/waywallen.desktop ~/Applications/waywallen.AppImage
-kpackagetool6 --type Plasma/Wallpaper -r org.waywallen.kde
-rm -r ~/FrameworkDots-Wallpapers
+curl -fsSL https://raw.githubusercontent.com/BocchiTheRockEnjoyer/framework-dots/main/uninstall.sh -o /tmp/fd-uninstall.sh && bash /tmp/fd-uninstall.sh
 ```
 
-5. Log out and back in. Your old settings are in the `framework-dots-backup-…` folder in `~/.local/share`.
+**What it does:** removes the theme, its widgets, and the bar and dock, and puts back the settings the theme changed.
+Anything you've changed yourself since installing stays as it is. If there'd be no panel left, it adds KDE's standard one.
+
+**What it can't do:** bring back a panel you removed yourself, or undo the optional Floorp theme. Copies of your old settings
+stay in `~/.local/share/framework-dots-backup-…`.
 
 ## 6. Something went wrong
 
 | Problem | Try this |
 |---|---|
-| `git: command not found` | Install git ([step 2](#2-install-the-theme)) |
-| `Permission denied` | Run `chmod +x install.sh wallpaper-setup.sh`, then try again |
+| `curl: command not found` or `git: command not found` | Install it the way [step 2](#2-install-the-theme) shows for git |
+| `This needs KDE Plasma 6` | See [Will it work on my computer?](#1-will-it-work-on-my-computer) |
+| It stopped partway | Run it again, or [undo it](#5-undo-everything) |
+| `Permission denied` | Run `chmod +x *.sh` in the theme's folder, then try again |
 | `No such file or directory` | Run `cd ~/framework-dots` first |
 | Nothing looks different | Log out and back in |
 | I changed the Global Theme and lost the icons | System Settings → **Global Theme** → **Framework Dots** or **Framework Dots Light** (don't tick the layout option) |

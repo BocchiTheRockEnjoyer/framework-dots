@@ -11,6 +11,8 @@ get $G/waywallen/releases/download/v0.6.1/waywallen-0.6.1-x86_64.AppImage waywal
 get $G/waywallen-display/releases/download/v0.4.6/waywallen-kde-0.4.6-x86_64.zip waywallen-kde.zip f98647b301d16c00f711adc7dcbf8ca6d23f237fad1835f13916079ad9c032ce
 get $G/open-wallpaper-engine/releases/download/v0.3.4/org.waywallen.open-wallpaper-engine-0.3.4-linux-x86_64.zip web-wallpaper-plugin.zip 94db107147c62ca29a1b44ca99a32d809ed9f0f889f381ca268f66e9cd087ae2
 mkdir -p "$HOME/Applications" "$HOME/Downloads" "$HOME/.local/share/applications" "$HOME/.config/autostart"
+# Lets the uninstaller know Waywallen came from here
+if [ ! -e "$HOME/Applications/waywallen.AppImage" ]; then mkdir -p "$HOME/.local/share/framework-dots"; touch "$HOME/.local/share/framework-dots/waywallen"; fi
 install -m 755 "$t/waywallen.AppImage" "$HOME/Applications/waywallen.AppImage"; cp "$t/web-wallpaper-plugin.zip" "$HOME/Downloads/"
 unzip -q "$t/waywallen-kde.zip" -d "$t/kde"
 kpackagetool6 --type Plasma/Wallpaper -i "$t/kde/org.waywallen.kde" 2>/dev/null || kpackagetool6 --type Plasma/Wallpaper -u "$t/kde/org.waywallen.kde"
