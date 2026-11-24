@@ -98,40 +98,46 @@ PlasmoidItem {
         readonly property real p: Math.min(width / root.cols, height / root.rows)
 
         // Cover sampled at 3x3 pixels per dot, hidden behind the board
-        Image { id: img; source: root.art; asynchronous: true; visible: false; sourceSize.width: 240; onStatusChanged: if (status === Image.Ready) probe.fetch(); else if (root.art === "") { probe.px = []; cover.requestPaint() } }
+        Image { id: img; source: root.art; asynchronous: true; visible: false; sourceSize.width: 240; onStatusChanged: if (status === Image.Ready) probe.fetch(); else if (root.art === "") { probe.px = []; probe.done = ""; cover.requestPaint() } }
         Canvas {
             id: probe
             readonly property int n: root.dense
             property var px: []
-            property string held: ""
+            property string done: ""   // cover that px was read from
             width: n * 3; height: n * 3; opacity: 0.01
             renderTarget: Canvas.Image
             anchors.centerIn: board
-            function fetch() {
-                if (!available || img.status !== Image.Ready) return
-                var u = root.art
-                if (held && held !== u) unloadImage(held)
-                held = u
-                if (isImageLoaded(u)) requestPaint(); else loadImage(u)
+            function fetch() { if (available && img.status === Image.Ready) requestPaint() }
+            // Try again if the cover file wasn't ready yet, or a repaint got lost
+            Timer {
+                interval: 1000; repeat: true; running: root.art !== "" && probe.done !== root.art
+                property int tries: 0
+                property string last: ""
+                onTriggered: {
+                    if (last !== root.art) { last = root.art; tries = 0 }
+                    if (++tries > 20) return
+                    if (img.status === Image.Error) { img.source = ""; img.source = Qt.binding(() => root.art) }
+                    else probe.fetch()
+                }
             }
             onAvailableChanged: fetch()
-            onImageLoaded: requestPaint()
             onPaint: {
-                if (img.status !== Image.Ready || held === "" || !isImageLoaded(held)) return
+                if (img.status !== Image.Ready || root.art === "") return
                 var c = getContext("2d"), w = img.implicitWidth, h = img.implicitHeight, S = n * 3
                 // getImageData counts physical pixels on scaled screens: paint the right
                 // half and see whether a point in it can be read back
                 c.reset(); c.fillStyle = "#ffffff"; c.fillRect(S / 2, 0, S / 2, S)
                 var physical = c.getImageData(Math.floor(S * 0.55), 4, 1, 1).data[3] === 0
                 var D = physical ? S / Screen.devicePixelRatio : S, k = D / Math.min(w, h)
-                c.reset(); c.drawImage(held, (D - w * k) / 2, (D - h * k) / 2, w * k, h * k)
+                c.reset(); c.drawImage(img, (D - w * k) / 2, (D - h * k) / 2, w * k, h * k)
                 var d = c.getImageData(0, 0, S, S).data, o = []
                 for (var i = 0; i < n * n; i++) {
                     var bx = (i % n) * 3, by = Math.floor(i / n) * 3, t = [0, 0, 0]
                     for (var y = 0; y < 3; y++) for (var x = 0; x < 3; x++) { var j = ((by + y) * S + bx + x) * 4; t[0] += d[j]; t[1] += d[j + 1]; t[2] += d[j + 2] }
                     o.push([t[0] / 9, t[1] / 9, t[2] / 9])
                 }
-                px = o; cover.opacity = 0; cover.requestPaint(); appear.restart()
+                if (d[(Math.floor(S / 2) * S + Math.floor(S / 2)) * 4 + 3] === 0) return      // nothing drawn yet
+                px = o; done = root.art; cover.opacity = 0; cover.requestPaint(); appear.restart()
             }
         }
 

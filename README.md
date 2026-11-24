@@ -1,10 +1,15 @@
 # Framework Dots
 
-A black, grey and orange dot-matrix look for your Linux desktop (**KDE Plasma 6**).
+A **Nothing-inspired rice** for your Linux desktop (**KDE Plasma 6**): dot-matrix everything, in black or white, with
+grey and orange. Made with help from [Claude Code](https://claude.com/claude-code).
 
-![Black hole wallpaper](wallpapers/still/dot-matrix-blackhole.png)
+**Dark**
 
-![Clock and media player](preview/boards.png)
+![Full desktop in dark mode](preview/desktop-dark.png)
+
+**Light (beta)**
+
+![Full desktop in light mode](preview/desktop-light.png)
 
 New to Linux? This guide assumes no experience. Copy each grey box into a terminal and press Enter.
 
@@ -101,6 +106,9 @@ Run it **only once**, or you'll get two of everything. Then:
 You can also add single widgets: right-click the desktop, **Add Widgets**, and search for **Dot**.
 
 ### Light and dark mode
+
+> **Light mode is in beta.** It works, but expect rough edges: some parts stay dark (such as the Floorp theme) and bugs are
+> likely. Please open an **Issue** if you find one.
 
 Both are included and follow KDE's light/dark switch. You can also pick **Framework Dots** or **Framework Dots Light** in
 System Settings → **Global Theme** (leave the layout option unticked).
@@ -223,6 +231,7 @@ Still stuck? Open an **Issue** at the top of this page. Say which system and Pla
 
 ## More pictures
 
+![Clock and media player](preview/boards.png)
 ![Icons](preview/icons.png)
 ![Folders and file types](preview/files.png)
 
@@ -237,6 +246,9 @@ Still stuck? Open an **Issue** at the top of this page. Say which system and Pla
 
 ## Credits and licence
 
+- Design inspired by [Nothing](https://nothing.tech)'s dot-matrix style
+- Made with help from [Claude Code](https://claude.com/claude-code), Anthropic's AI coding tool, which helped write the
+  code, draw the icons and write this guide
 - [KDE](https://kde.org): Plasma and Breeze. `osd/OsdItem.qml` is modified from Plasma (GPL-2.0-or-later)
 - [Space Mono](https://fonts.google.com/specimen/Space+Mono): SIL Open Font License, in `fonts/space-mono/OFL.txt`
 - Framework logo shape from [Simple Icons](https://simpleicons.org)
