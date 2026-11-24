@@ -31,11 +31,11 @@ PlasmoidItem {
                     required property var modelData
                     spacing: 5
                     anchors.verticalCenter: parent ? parent.verticalCenter : undefined
-                    Text { text: modelData.t; font.family: "Ndot55Caps"; font.pointSize: 12; color: Kirigami.Theme.textColor; opacity: 0.6; anchors.verticalCenter: parent.verticalCenter }
+                    Text { text: modelData.t; font.family: "FD Dots"; font.capitalization: Font.AllUppercase; font.pointSize: 12; color: Kirigami.Theme.textColor; opacity: 0.6; anchors.verticalCenter: parent.verticalCenter }
                     DotBar { cols: 6; rows: 3; pitch: 5; value: modelData.v / 100; hot: modelData.v >= 85; anchors.verticalCenter: parent.verticalCenter }
                 }
             }
-            Text { text: Math.round(root.n(temp)) + "°"; font.family: "Ndot55Caps"; font.pointSize: 13; color: root.n(temp) >= 85 ? "#f3531a" : Kirigami.Theme.textColor; anchors.verticalCenter: parent.verticalCenter }
+            Text { text: Math.round(root.n(temp)) + "°"; font.family: "FD Dots"; font.capitalization: Font.AllUppercase; font.pointSize: 13; color: root.n(temp) >= 85 ? "#f3531a" : Kirigami.Theme.textColor; anchors.verticalCenter: parent.verticalCenter }
         }
     }
     fullRepresentation: Item {
@@ -93,7 +93,7 @@ PlasmoidItem {
             RowLayout {
                 PC.Label { text: t }
                 PC.Label { text: sub; opacity: 0.55; font: Kirigami.Theme.smallFont; Layout.fillWidth: true; horizontalAlignment: Text.AlignRight }
-                Text { text: Math.round(v) + "%"; font.family: "Ndot55Caps"; font.pointSize: 13; color: Kirigami.Theme.textColor; horizontalAlignment: Text.AlignRight; Layout.preferredWidth: 46 }
+                Text { text: Math.round(v) + "%"; font.family: "FD Dots"; font.capitalization: Font.AllUppercase; font.pointSize: 13; color: Kirigami.Theme.textColor; horizontalAlignment: Text.AlignRight; Layout.preferredWidth: 46 }
             }
             DotBar { cols: 34; rows: 2; pitch: 8; value: v / 100; hot: v >= 85 }
         }

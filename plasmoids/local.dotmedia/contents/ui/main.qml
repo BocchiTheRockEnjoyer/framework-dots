@@ -190,7 +190,7 @@ PlasmoidItem {
                     }
                 }
             }
-            Marquee { x: view.p * root.col0; y: view.p * 1.8; width: view.p * root.span; text: root.track || "Nothing playing"; color: root.track ? root.ink : root.dim; font.family: "Ndot55Caps"; font.pixelSize: view.p * 3.9 }
+            Marquee { x: view.p * root.col0; y: view.p * 1.8; width: view.p * root.span; text: root.track || "Nothing playing"; color: root.track ? root.ink : root.dim; font.family: "FD Dots"; font.capitalization: Font.AllUppercase; font.pixelSize: view.p * 3.9 }
             Marquee { x: view.p * root.col0; y: view.p * 6.9; width: view.p * root.span; text: root.artist; color: root.dim; font.family: "Space Mono"; font.pixelSize: view.p * 2.1 }
             Row {
                 x: view.p * root.col0 - 6; y: view.p * 15.5 - height / 2
@@ -224,8 +224,8 @@ PlasmoidItem {
                     }
                 }
             }
-            Text { x: view.p * root.col0; y: view.p * 23.4 - height / 2; text: root.track ? root.fmt(root.pos) : ""; color: root.dim; font.family: "Ndot55Caps"; font.pixelSize: view.p * 2.4 }
-            Text { x: view.p * (root.cols - 2) - width; y: view.p * 23.4 - height / 2; text: root.length > 0 ? root.fmt(root.length) : ""; color: root.dim; font.family: "Ndot55Caps"; font.pixelSize: view.p * 2.4 }
+            Text { x: view.p * root.col0; y: view.p * 23.4 - height / 2; text: root.track ? root.fmt(root.pos) : ""; color: root.dim; font.family: "FD Dots"; font.capitalization: Font.AllUppercase; font.pixelSize: view.p * 2.4 }
+            Text { x: view.p * (root.cols - 2) - width; y: view.p * 23.4 - height / 2; text: root.length > 0 ? root.fmt(root.length) : ""; color: root.dim; font.family: "FD Dots"; font.capitalization: Font.AllUppercase; font.pixelSize: view.p * 2.4 }
             Item {    // progress, click to seek
                 id: prog
                 x: view.p * root.col0; y: view.p * 27; width: view.p * root.span; height: view.p

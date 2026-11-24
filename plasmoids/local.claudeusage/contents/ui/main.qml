@@ -62,7 +62,7 @@ PlasmoidItem {
             Text {
                 anchors.verticalCenter: parent.verticalCenter
                 text: root.shortText
-                font.family: "Ndot55Caps"; font.pointSize: 13
+                font.family: "FD Dots"; font.capitalization: Font.AllUppercase; font.pointSize: 13
                 color: root.pct("five_hour") >= 80 ? "#f3531a" : Kirigami.Theme.textColor
             }
         }
@@ -76,7 +76,7 @@ PlasmoidItem {
         spacing: 4
         RowLayout {
             PC.Label { text: title; Layout.fillWidth: true }
-            Text { text: Math.round(value) + "%"; font.family: "Ndot55Caps"; font.pointSize: 16; color: Kirigami.Theme.textColor }
+            Text { text: Math.round(value) + "%"; font.family: "FD Dots"; font.capitalization: Font.AllUppercase; font.pointSize: 16; color: Kirigami.Theme.textColor }
         }
         Item {
             implicitWidth: 30 * 9; implicitHeight: 27

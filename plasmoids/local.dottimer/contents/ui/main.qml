@@ -40,7 +40,7 @@ PlasmoidItem {
             anchors.centerIn: parent
             spacing: 5
             DotIcon { rows: root.glyph; color: root.running ? "#f3531a" : Kirigami.Theme.textColor; anchors.verticalCenter: parent.verticalCenter }
-            Text { visible: root.running || root.remain < root.total; text: root.fmt(root.remain); font.family: "Ndot55Caps"; font.pointSize: 13; color: Kirigami.Theme.textColor; anchors.verticalCenter: parent.verticalCenter }
+            Text { visible: root.running || root.remain < root.total; text: root.fmt(root.remain); font.family: "FD Dots"; font.capitalization: Font.AllUppercase; font.pointSize: 13; color: Kirigami.Theme.textColor; anchors.verticalCenter: parent.verticalCenter }
         }
     }
     fullRepresentation: Item {
@@ -55,7 +55,7 @@ PlasmoidItem {
             anchors.centerIn: parent
             spacing: 8
             PC.Label { text: root.resting ? "Break" : "Focus"; opacity: 0.6; Layout.alignment: Qt.AlignHCenter }
-            Text { text: root.fmt(root.remain); font.family: "Ndot55Caps"; font.pointSize: 30; color: Kirigami.Theme.textColor; Layout.alignment: Qt.AlignHCenter }
+            Text { text: root.fmt(root.remain); font.family: "FD Dots"; font.capitalization: Font.AllUppercase; font.pointSize: 30; color: Kirigami.Theme.textColor; Layout.alignment: Qt.AlignHCenter }
             DotBar { cols: 26; rows: 4; pitch: 8; value: 1 - root.remain / root.total; Layout.alignment: Qt.AlignHCenter }
             RowLayout {
                 Layout.alignment: Qt.AlignHCenter

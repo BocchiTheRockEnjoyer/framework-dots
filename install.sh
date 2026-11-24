@@ -10,7 +10,7 @@ put() { mkdir -p "$2"; cp -a "$1" "$2/"; }
 put "$here/icons/nothing-dots" "$S/icons"; put "$here/icons/nothing-dots-light" "$S/icons"; mkdir -p "$S/icons/hicolor/scalable/apps"; cp "$here"/icons/hicolor/*.svg "$S/icons/hicolor/scalable/apps/"
 for p in "$here"/plasmoids/*; do put "$p" "$S/plasma/plasmoids"; done
 for x in "" -light; do put "$here/theme/breeze-rounded-dock$x" "$S/plasma/desktoptheme"; done; for x in "" light.; do put "$here/splash/framework.dots.${x}desktop" "$S/plasma/look-and-feel"; done
-put "$here/colors/FrameworkGraphite.colors" "$S/color-schemes"; put "$here/colors/FrameworkGraphiteLight.colors" "$S/color-schemes"; put "$here/fonts/space-mono" "$S/fonts"
+put "$here/colors/FrameworkGraphite.colors" "$S/color-schemes"; put "$here/colors/FrameworkGraphiteLight.colors" "$S/color-schemes"; put "$here/fonts/space-mono" "$S/fonts"; put "$here/fonts/fd-dots" "$S/fonts"
 mkdir -p "$HOME/Pictures/Wallpapers"; cp "$here"/wallpapers/still/* "$HOME/Pictures/Wallpapers/"
 put "$here/bin/claude-usage" "$HOME/.local/bin"; put "$here/bin/framework-dots-mode" "$HOME/.local/bin"; mkdir -p "$C/systemd/user"; cp "$here"/systemd/* "$C/systemd/user/"; mkdir -p "$C/kitty"; cp "$here/kitty/kitty.conf" "$C/kitty/kitty.conf"
 # Waywallen looks for this folder layout; Steam itself is not needed

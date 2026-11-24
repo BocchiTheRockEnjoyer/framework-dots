@@ -308,8 +308,8 @@ PlasmoidItem {
             RowLayout {
                 visible: root.length > 0
                 Layout.topMargin: -6
-                Text { text: root.fmt(root.pos); font.family: "Ndot55Caps"; font.pointSize: 11; color: Kirigami.Theme.textColor; Layout.fillWidth: true }
-                Text { text: root.fmt(root.length); font.family: "Ndot55Caps"; font.pointSize: 11; color: Kirigami.Theme.textColor; opacity: 0.6 }
+                Text { text: root.fmt(root.pos); font.family: "FD Dots"; font.capitalization: Font.AllUppercase; font.pointSize: 11; color: Kirigami.Theme.textColor; Layout.fillWidth: true }
+                Text { text: root.fmt(root.length); font.family: "FD Dots"; font.capitalization: Font.AllUppercase; font.pointSize: 11; color: Kirigami.Theme.textColor; opacity: 0.6 }
             }
             Row {
                 Layout.alignment: Qt.AlignHCenter

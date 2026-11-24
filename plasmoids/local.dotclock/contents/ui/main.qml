@@ -76,7 +76,7 @@ PlasmoidItem {
             id: row
             anchors.centerIn: parent
             text: root.now.toLocaleDateString(Qt.locale(), Locale.ShortFormat) + "  " + root.now.toLocaleTimeString(Qt.locale(), Locale.ShortFormat)
-            font.family: "Ndot55Caps"; font.pointSize: 13; color: Kirigami.Theme.textColor
+            font.family: "FD Dots"; font.capitalization: Font.AllUppercase; font.pointSize: 13; color: Kirigami.Theme.textColor
         }
     }
     fullRepresentation: Item {
@@ -102,7 +102,7 @@ PlasmoidItem {
                     DotIcon { pitch: 6; color: "#f3531a"; rows: root.icons[root.cur ? root.kind(root.cur.weather_code, root.cur.is_day) : "cloud"] }
                     ColumnLayout {
                         spacing: 2
-                        Text { text: root.cur ? Math.round(root.cur.temperature_2m) + "°" : ""; font.family: "Ndot55Caps"; font.pointSize: 38; color: Kirigami.Theme.textColor }
+                        Text { text: root.cur ? Math.round(root.cur.temperature_2m) + "°" : ""; font.family: "FD Dots"; font.capitalization: Font.AllUppercase; font.pointSize: 42; color: Kirigami.Theme.textColor }
                         PC.Label { text: root.cur ? root.words(root.cur.weather_code) : "" }
                         PC.Label { text: root.cur ? "Feels like " + Math.round(root.cur.apparent_temperature) + "°" : ""; opacity: 0.6; font: Kirigami.Theme.smallFont }
                     }

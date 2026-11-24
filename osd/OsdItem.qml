@@ -117,7 +117,7 @@ RowLayout {
                 Layout.preferredWidth: Math.ceil(widestLabelSize.advanceWidth)
                 Layout.alignment: Qt.AlignVCenter
                 level: 3
-                font.family: "Ndot55Caps"
+                font.family: "FD Dots"; font.capitalization: Font.AllUppercase
                 font.pointSize: 18
                 horizontalAlignment: Text.AlignHCenter
                 verticalAlignment: Text.AlignVCenter

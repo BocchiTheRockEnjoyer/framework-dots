@@ -40,10 +40,9 @@ New to Linux? This guide assumes no experience. Copy each grey box into a termin
 1. [Will it work on my computer?](#1-will-it-work-on-my-computer)
 2. [Install the theme](#2-install-the-theme)
 3. [Add the bar, dock and widgets](#3-add-the-bar-dock-and-widgets) (optional)
-4. [Get the dotted font](#4-get-the-dotted-font)
-5. [Set the wallpaper](#5-set-the-wallpaper)
-6. [Undo everything](#6-undo-everything)
-7. [Something went wrong](#7-something-went-wrong)
+4. [Set the wallpaper](#4-set-the-wallpaper)
+5. [Undo everything](#5-undo-everything)
+6. [Something went wrong](#6-something-went-wrong)
 
 ---
 
@@ -137,15 +136,7 @@ System Settings → **Global Theme** (leave the layout option unticked).
 The moving black hole switches too (turn off **Follow light/dark mode** in its settings to stop that).
 Still pictures don't; there's a light one called `dot-matrix-blackhole-light.png`.
 
-## 4. Get the dotted font
-
-Some text uses a font called **Ndot 55**. It belongs to Nothing, so I can't include it. Everything works without it,
-but that text won't be dotted.
-
-If you have the font file (`.otf` or `.ttf`), double-click it and choose **Install**, then log out and back in.
-The clock on the desktop doesn't need it.
-
-## 5. Set the wallpaper
+## 4. Set the wallpaper
 
 Choose one. The still picture is much easier.
 
@@ -203,7 +194,7 @@ Lowering **Particles** and **Dots across the screen** helps too.
 
 **To go back to a picture,** use the command under [Still picture](#still-picture-easy).
 
-## 6. Undo everything
+## 5. Undo everything
 
 1. Open **System Settings** and pick another **Colors**, **Icons**, **Plasma Style**, **Splash Screen** and **Fonts**.
 2. Remove the bar, dock and widgets you don't want.
@@ -229,7 +220,7 @@ rm -r ~/FrameworkDots-Wallpapers
 
 5. Log out and back in. Your old settings are in the `framework-dots-backup-…` folder in `~/.local/share`.
 
-## 7. Something went wrong
+## 6. Something went wrong
 
 | Problem | Try this |
 |---|---|
@@ -272,6 +263,8 @@ Still stuck? Open an **Issue** at the top of this page. Say which system and Pla
   code, draw the icons and write this guide
 - [KDE](https://kde.org): Plasma and Breeze. `osd/OsdItem.qml` is modified from Plasma (GPL-2.0-or-later)
 - [Space Mono](https://fonts.google.com/specimen/Space+Mono): SIL Open Font License, in `fonts/space-mono/OFL.txt`
+- **FD Dots**, the dotted font: a modified version of [Doto](https://github.com/oliverlalan/Doto) by Óliver Lalan, SIL Open
+  Font License, in `fonts/fd-dots/OFL.txt`
 - Framework logo shape from [Simple Icons](https://simpleicons.org)
 
 Licensed GPL-3.0-or-later, except where noted above. The moving wallpaper uses
