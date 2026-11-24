@@ -11,6 +11,30 @@ grey and orange. Made with help from [Claude Code](https://claude.com/claude-cod
 
 ![Full desktop in light mode](preview/desktop-light.png)
 
+### Widgets
+
+Pictures use demo music, London weather and sample Claude usage.
+
+**Clock, calendar and weather**
+
+<img src="preview/weather.png" width="760" alt="Weather and calendar popup">
+
+| Music player | System monitor |
+|:---:|:---:|
+| <img src="preview/music.png" width="330" alt="Music player popup"> | <img src="preview/system.png" width="330" alt="System monitor popup"> |
+
+| Desktop clock and player | Keyboard shortcuts |
+|:---:|:---:|
+| <img src="preview/boards.png" width="380" alt="Desktop clock and media player"> | <img src="preview/shortcuts.png" width="380" alt="Keyboard shortcuts popup"> |
+
+| Focus timer | Claude Code usage |
+|:---:|:---:|
+| <img src="preview/timer.png" width="310" alt="Focus timer popup"> | <img src="preview/claude.png" width="310" alt="Claude Code usage popup"> |
+
+**Volume pop-up**
+
+<img src="preview/volume.png" width="360" alt="Volume pop-up">
+
 New to Linux? This guide assumes no experience. Copy each grey box into a terminal and press Enter.
 
 1. [Will it work on my computer?](#1-will-it-work-on-my-computer)
@@ -100,8 +124,6 @@ Run it **only once**, or you'll get two of everything. Then:
 - **Turn on weather:** right-click the clock in the top bar, choose **Configure**, and type your city.
   Your city is sent to [open-meteo.com](https://open-meteo.com); without one, nothing is sent.
 - **Move the desktop widgets:** right-click the desktop, choose **Enter Edit Mode**, and drag them.
-
-![Widgets](preview/widgets.png)
 
 You can also add single widgets: right-click the desktop, **Add Widgets**, and search for **Dot**.
 
@@ -231,7 +253,6 @@ Still stuck? Open an **Issue** at the top of this page. Say which system and Pla
 
 ## More pictures
 
-![Clock and media player](preview/boards.png)
 ![Icons](preview/icons.png)
 ![Folders and file types](preview/files.png)
 
