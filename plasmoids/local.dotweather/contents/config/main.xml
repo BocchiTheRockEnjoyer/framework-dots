@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<kcfg xmlns="http://www.kde.org/standards/kcfg/1.0"><kcfgfile name=""/><group name="General">
+<entry name="city" type="String"><default></default></entry>
+<entry name="fahrenheit" type="Bool"><default>true</default></entry>
+<entry name="animate" type="Bool"><default>true</default></entry>
+<entry name="grid" type="Bool"><default>true</default></entry>
+<entry name="backOpacity" type="Int"><default>80</default></entry>
+</group></kcfg>

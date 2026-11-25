@@ -146,7 +146,8 @@ Optional. The installer asks about this. If you said no, run it again and say ye
 
 - **Remove your old panel:** right-click it, choose **Show Panel Configuration**, then **Remove** or **Delete**.
 - **Keep apps in the dock:** open an app, right-click it in the dock, choose **Pin to Task Manager**.
-- **Turn on weather:** right-click the clock in the top bar, choose **Configure**, and type your city.
+- **Turn on weather:** right-click the clock in the top bar, choose **Configure**, and type your city. Do the same for the
+  **weather board** on the desktop. Click the board to see the next five days.
   Your city is sent to [open-meteo.com](https://open-meteo.com); without one, nothing is sent.
 - **Move the desktop widgets:** right-click the desktop, choose **Enter Edit Mode**, and drag them.
 
