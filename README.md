@@ -1,7 +1,7 @@
 # Framework Dots
 
 A **Nothing-inspired rice** for your Linux desktop (**KDE Plasma 6**): dot-matrix everything, in black or white, with
-grey and orange. Made with help from [Claude Code](https://claude.com/claude-code).
+grey and orange.
 
 **Dark**
 
@@ -303,7 +303,7 @@ Still stuck? Open an **Issue** at the top of this page. Say which system and Pla
 ## Credits and licence
 
 - Design inspired by [Nothing](https://nothing.tech)'s dot-matrix style
-- Made with help from [Claude Code](https://claude.com/claude-code), Anthropic's AI coding tool, which helped write the
+- Made with help from [Claude Code](https://claude.com/claude-code), which helped write the
   code, draw the icons and write this guide
 - [KDE](https://kde.org): Plasma and Breeze. `osd/OsdItem.qml` is modified from Plasma (GPL-2.0-or-later)
 - [Space Mono](https://fonts.google.com/specimen/Space+Mono): SIL Open Font License, in `fonts/space-mono/OFL.txt`
