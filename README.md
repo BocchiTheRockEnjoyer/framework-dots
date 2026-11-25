@@ -182,6 +182,14 @@ or use a terminal:
 It recolours the icons, widgets, windows, terminal looks, wallpapers and Floorp theme. The taskbar restarts, and open apps such as
 Floorp and btop need reopening. Very dark colours are lightened so you can see them on black.
 
+### Alt-Tab and editors
+
+**Alt+Tab** shows your windows as cards. To change it, go to System Settings → **Window Management** → **Task Switcher**.
+Kate and KWrite pick up the matching editor theme by themselves, unless you've chosen one.
+
+To open the app launcher with the **Meta** (Windows) key: right-click its nine dots, choose **Configure**, then **Keyboard Shortcuts**,
+click the button and press Meta. Say yes to reassigning it. **Alt+F1** still opens KDE's menu.
+
 ### Window animation
 
 Windows form from dots when they open, and dissolve when they close. To change that, go to System Settings → **Window Management** →
@@ -292,8 +300,9 @@ Still stuck? Open an **Issue** at the top of this page. Say which system and Pla
 
 - **Floorp browser:** copy the two files in `floorp` into the `chrome` folder of your Floorp profile, and restart it.
   If nothing changes, open `about:config` and set `toolkit.legacyUserProfileCustomizations.stylesheets` to true.
-- **Terminal looks:** the installer can add a fastfetch logo, a [fish](https://fishshell.com) prompt, a
-  [btop](https://github.com/aristocratos/btop) theme and a [cava](https://github.com/karlstav/cava) theme. It doesn't install
+- **Terminal looks:** the installer can add a fastfetch logo, a [fish](https://fishshell.com) prompt, and themes for
+  [btop](https://github.com/aristocratos/btop), [cava](https://github.com/karlstav/cava), bat, delta, lazygit, fzf, eza, micro and
+  Neovim. For delta it adds one line to your git settings, which points to its colours. It doesn't install
   those programs, and never replaces your own configs. Run `cava-dots` for a dotted music visualiser.
 - **Claude Code usage widget:** shows tokens by itself. For plan limits, set `statusLine` in `~/.claude/settings.json` to
   `{"type": "command", "command": "~/.local/bin/claude-usage --record"}`. It only reads files on your computer.

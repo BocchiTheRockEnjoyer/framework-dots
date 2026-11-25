@@ -1,0 +1,17 @@
+# Framework Dots
+gui:
+  border: rounded
+  nerdFontsVersion: ""
+  theme:
+    activeBorderColor: ["#f3531a", bold]
+    inactiveBorderColor: ["#7a7a7a"]
+    searchingActiveBorderColor: ["#f3531a", bold]
+    optionsTextColor: ["#f3531a"]
+    selectedLineBgColor: [reverse]
+    inactiveViewSelectedLineBgColor: [bold]
+    cherryPickedCommitFgColor: ["#f3531a"]
+    cherryPickedCommitBgColor: [default]
+    markedBaseCommitFgColor: ["#f3531a"]
+    markedBaseCommitBgColor: [default]
+    unstagedChangesColor: ["#f3531a"]
+    defaultFgColor: [default]

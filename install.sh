@@ -5,7 +5,7 @@
 #   --layout / --no-layout       add (or don't add) the top bar, dock and desktop widgets
 #   --wallpaper still|moving|none
 #   --kitty / --no-kitty         use (or don't use) the kitty terminal colours
-#   --terminal / --no-terminal   add (or don't add) the fastfetch, fish, btop and cava looks
+#   --terminal / --no-terminal   add (or don't add) the looks for fastfetch, fish, btop, cava, bat, delta, lazygit, fzf, eza, micro and nvim
 set -euo pipefail
 
 yes=0 layout="" wall="" kitty="" term=""
@@ -86,7 +86,7 @@ if [ -z "$kitty" ]; then
 fi
 if [ -z "$term" ]; then
   term=n
-  if [ "$yes" = 0 ] && ask "Add the fastfetch, fish prompt, btop and cava looks? (your own configs are never replaced)" y; then term=y; fi
+  if [ "$yes" = 0 ] && ask "Add the terminal looks (fastfetch, fish, btop, cava, bat, delta, lazygit, fzf, eza, micro, nvim)? (your own configs are never replaced)" y; then term=y; fi
 fi
 if [ -z "$wall" ]; then
   wall=none
@@ -159,14 +159,23 @@ if [ "$term" = y ]; then
       h="$(sha256sum < "$HOME/$t" | cut -d' ' -f1)"
       if ! grep -qsF "$h  $t" "$state/terminal.sha256"; then skipped="$skipped ~/$t"; continue; fi
     fi
+    # A second Neovim config would clash with the first
+    if [ "$f" = nvim/init.lua ] && [ -e "$C/nvim/init.vim" ]; then skipped="$skipped ~/.config/nvim/init.vim"; continue; fi
     if [ ! -e "$HOME/$t" ] || grep -qsF "  $t" "$state/terminal.sha256"; then
       mkdir -p "$(dirname "$HOME/$t")"; cp "$here/terminal/$f" "$HOME/$t"; (cd "$HOME" && sha256sum "$t") >> "$new"
     fi
   done < <(cd "$here/terminal" && find . -type f | sed 's#^\./##' | sort)
   mv "$new" "$state/terminal.sha256"
   [ -z "$skipped" ] || echo "Kept your own:$skipped"
+  if command -v bat >/dev/null; then bat cache --build >/dev/null 2>&1 || true; fi
+  # Only a pointer to our colours is added to your git settings
+  if command -v delta >/dev/null && command -v git >/dev/null && ! git config --global --get-all include.path 2>/dev/null | grep -qx '~/.config/delta/framework-dots.gitconfig'; then
+    git config --global --add include.path '~/.config/delta/framework-dots.gitconfig' || true
+  fi
 fi
 put "$here/effects/framework_dots_dissolve" "$S/kwin/effects"
+put "$here/tabbox/framework_dots" "$S/kwin/tabbox"
+mkdir -p "$S/org.kde.syntax-highlighting/themes"; cp "$here"/kate/*.theme "$S/org.kde.syntax-highlighting/themes/"
 # Title bars: need KDE's Aurorae engine, which some systems don't install
 for x in "" -light; do put "$here/aurorae/framework-dots$x" "$S/aurorae/themes"; done
 deco=y; if [ -z "$(find /usr/lib /usr/lib64 -name 'org.kde.kwin.aurorae.so' 2>/dev/null | head -1)" ]; then
@@ -197,7 +206,7 @@ k kdeglobals KDE frameContrast 0.1; k breezerc Windeco TitleAlignment AlignCente
 k dolphinrc General ShowStatusBar Small; k dolphinrc General ShowZoomSlider false; k dolphinrc IconsMode IconSize 80; k dolphinrc IconsMode PreviewSize 96
 k ksplashrc KSplash Engine KSplashQML; k ksplashrc KSplash Theme framework.dots.desktop; k plasmarc Theme name breeze-rounded-dock
 k kdeglobals KDE LookAndFeelPackage framework.dots.desktop; k kdeglobals KDE DefaultDarkLookAndFeel framework.dots.desktop; k kdeglobals KDE DefaultLightLookAndFeel framework.dots.light.desktop
-k kwinrc Plugins framework_dots_dissolveEnabled true; for x in scale glide fade; do k kwinrc Plugins ${x}Enabled false; done
+k kwinrc TabBox LayoutName framework_dots; k kwinrc Plugins framework_dots_dissolveEnabled true; for x in scale glide fade; do k kwinrc Plugins ${x}Enabled false; done
 if [ "$deco" = y ]; then g=org.kde.kdecoration2; k kwinrc $g library org.kde.kwin.aurorae; k kwinrc $g theme __aurorae__svg__framework-dots; k kwinrc $g BorderSize Tiny; k kwinrc $g BorderSizeAuto false; fi
 if [ -n "${FD_TEST:-}" ]; then k kdeglobals General ColorScheme FrameworkGraphite; k kdeglobals Icons Theme nothing-dots; echo "Done (test mode)."; exit 0; fi
 

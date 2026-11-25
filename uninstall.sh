@@ -144,6 +144,7 @@ if [ "$(ini "$C/kwinrc" Plugins framework_dots_dissolveEnabled || true)" = true 
   fi
 fi
 back kwinrc Plugins framework_dots_dissolveEnabled true false
+back kwinrc TabBox LayoutName framework_dots
 g=org.kde.kdecoration2
 case "$(now kwinrc $g theme || true)" in __aurorae__svg__framework-dots*)
   back kwinrc $g library org.kde.kwin.aurorae; back kwinrc $g BorderSize Tiny; back kwinrc $g BorderSizeAuto false
@@ -192,7 +193,9 @@ if [ -s "$state/pictures.sha256" ]; then
 fi
 rm -f "$C/systemd/user/plasma-plasmashell.service.d/dot-osd.conf" "$C"/systemd/user/framework-dots-mode.path "$C"/systemd/user/framework-dots-mode.service "$C/systemd/user/framework-dots-wallpaper-fix.service"
 rmdir "$C/systemd/user/plasma-plasmashell.service.d" 2>/dev/null
-rm -rf "$S/kwin/effects/framework_dots_dissolve"
+rm -rf "$S/kwin/effects/framework_dots_dissolve" "$S/kwin/tabbox/framework_dots"
+rm -f "$S/org.kde.syntax-highlighting/themes/framework-dots.theme" "$S/org.kde.syntax-highlighting/themes/framework-dots-light.theme"
+if command -v git >/dev/null; then git config --global --fixed-value --unset-all include.path '~/.config/delta/framework-dots.gitconfig' 2>/dev/null; fi
 rm -rf "$S/aurorae/themes/framework-dots" "$S/aurorae/themes/framework-dots-light"
 if [ -s "$state/terminal.sha256" ]; then
   while read -r h p; do
@@ -201,7 +204,8 @@ if [ -s "$state/terminal.sha256" ]; then
   done < "$state/terminal.sha256"
   # btop rewrites its own settings, so that file usually counts as changed
   [ ! -f "$C/btop/btop.conf" ] || sed -i -E 's/^color_theme = "framework-dots(-light)?"$/color_theme = "Default"/' "$C/btop/btop.conf"
-  (cd "$C" && rmdir fastfetch fish/functions btop/themes btop cava 2>/dev/null)
+  (cd "$C" && rmdir fastfetch fish/functions fish/conf.d fish btop/themes btop cava bat/themes bat delta lazygit eza micro/colorschemes micro nvim/colors nvim 2>/dev/null)
+  if command -v bat >/dev/null; then bat cache --build >/dev/null 2>&1; fi
 fi
 rm -f "$HOME/.local/bin/framework-dots-wallpaper-fix" "$HOME/.local/bin/framework-dots-accent" "$S/applications/framework-dots-accent.desktop"
 rm -f "$HOME/.local/bin/framework-dots-mode" "$HOME/.local/bin/claude-usage"

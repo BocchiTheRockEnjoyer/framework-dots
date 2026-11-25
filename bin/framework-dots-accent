@@ -25,6 +25,9 @@ BASE_FILES = [
     SHARE + "/plasma/desktoptheme/breeze-rounded-dock*/**/*.svg", SHARE + "/plasma/look-and-feel/framework.dots.*/contents/splash/**/*",
     SHARE + "/plasma-qml/org/kde/plasma/workspace/osd/OsdItem.qml", SHARE + "/color-schemes/FrameworkGraphite*.colors",
     SHARE + "/aurorae/themes/framework-dots*/*.svg", SHARE + "/kwin/effects/framework_dots_dissolve/contents/code/main.js", SHARE + "/icons/hicolor/scalable/apps/framework-logo-dots*.svg",
+    SHARE + "/kwin/tabbox/framework_dots/contents/ui/main.qml", SHARE + "/org.kde.syntax-highlighting/themes/framework-dots*.theme",
+    CONF + "/bat/themes/Framework Dots.tmTheme", CONF + "/delta/framework-dots.gitconfig", CONF + "/lazygit/config.yml", CONF + "/eza/theme.yml",
+    CONF + "/micro/colorschemes/framework-dots.micro", CONF + "/nvim/colors/framework-dots.lua", CONF + "/fish/conf.d/framework-dots.fish",
     CONF + "/kitty/kitty.conf", CONF + "/kitty/*-theme.auto.conf", CONF + "/fastfetch/config.jsonc", CONF + "/fastfetch/framework-dots.png",
     CONF + "/fish/functions/fish_prompt.fish", CONF + "/btop/themes/framework-dots*.theme", CONF + "/cava/framework-dots", HOME + "/.local/bin/cava-dots",
     CONF + "/floorp/*/chrome/user*.css", HOME + "/.floorp/*/chrome/user*.css",
@@ -100,6 +103,8 @@ def recolour(path, data, p):
     # Text that sits on the accent
     name = os.path.basename(path)
     if "/kitty/" in path: s = re.sub(r"(?m)^((?:selection_foreground|cursor_text_color|active_tab_foreground)\s+)#141414", r"\g<1>" + on, s)
+    elif name.endswith(".micro"): s = s.replace("#141414,#", on + ",#")
+    elif path.endswith("/nvim/colors/framework-dots.lua"): s = s.replace('fg = "#141414", bg = acc', f'fg = "{on}", bg = acc')
     elif name.endswith(".theme"): s = re.sub(r'(theme\[selected_fg\]=")#141414', r"\g<1>" + on, s)
     elif name.startswith("user") and name.endswith(".css"): s = s.replace("#141414", on)
     elif "/plasma/plasmoids/local." in path and name.endswith(".qml"): s = s.replace('"#141414"', '"' + on + '"')
@@ -216,6 +221,7 @@ def refresh():
     for f in glob.glob(HOME + "/.cache/plasma_theme_breeze-rounded-dock*") + [HOME + "/.cache/ksvg-elements"]:
         try: os.remove(f)
         except OSError: pass
+    if os.path.exists(CONF + "/bat/themes/Framework Dots.tmTheme"): run("bat", "cache", "--build")
     run("pkill", "-USR1", "-u", str(os.getuid()), "-x", "kitty")      # kitty reloads its settings
     run(HOME + "/.local/bin/framework-dots-mode", timeout=20) if os.access(HOME + "/.local/bin/framework-dots-mode", os.X_OK) else None
     run("systemctl", "--user", "restart", "plasma-plasmashell")

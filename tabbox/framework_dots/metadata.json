@@ -1,0 +1,5 @@
+{
+    "KPackageStructure": "KWin/WindowSwitcher",
+    "KPlugin": { "Id": "framework_dots", "Name": "Framework Dots", "Description": "Window cards with dots for where you are", "License": "GPL-2.0-or-later", "Version": "1.0" },
+    "X-Plasma-API": "declarativeappletscript"
+}

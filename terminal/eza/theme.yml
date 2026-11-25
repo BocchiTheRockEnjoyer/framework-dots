@@ -1,0 +1,53 @@
+# Framework Dots
+filekinds:
+  normal: {foreground: Default}
+  directory: {foreground: "#f3531a", is_bold: true}
+  symlink: {foreground: Cyan}
+  executable: {foreground: Green, is_bold: true}
+  pipe: {foreground: DarkGray}
+  block_device: {foreground: Yellow}
+  char_device: {foreground: Yellow}
+  socket: {foreground: DarkGray}
+  special: {foreground: Yellow}
+  mount_point: {foreground: "#f3531a", is_underline: true}
+perms:
+  user_read: {foreground: Default}
+  user_write: {foreground: Default}
+  user_execute_file: {foreground: "#f3531a"}
+  user_execute_other: {foreground: "#f3531a"}
+  group_read: {foreground: DarkGray}
+  group_write: {foreground: DarkGray}
+  group_execute: {foreground: DarkGray}
+  other_read: {foreground: DarkGray}
+  other_write: {foreground: DarkGray}
+  other_execute: {foreground: DarkGray}
+size:
+  number_byte: {foreground: Default}
+  number_kilo: {foreground: Default}
+  number_mega: {foreground: Default, is_bold: true}
+  number_giga: {foreground: "#f3531a"}
+  number_huge: {foreground: "#f3531a", is_bold: true}
+  unit_byte: {foreground: DarkGray}
+  unit_kilo: {foreground: DarkGray}
+  unit_mega: {foreground: DarkGray}
+  unit_giga: {foreground: "#f3531a"}
+  unit_huge: {foreground: "#f3531a"}
+users:
+  user_you: {foreground: Default}
+  user_root: {foreground: Red}
+  user_other: {foreground: DarkGray}
+  group_yours: {foreground: DarkGray}
+  group_other: {foreground: DarkGray}
+git:
+  new: {foreground: DarkGray}
+  modified: {foreground: "#f3531a"}
+  deleted: {foreground: Red}
+  renamed: {foreground: Cyan}
+punctuation: {foreground: DarkGray}
+date: {foreground: DarkGray}
+inode: {foreground: DarkGray}
+blocks: {foreground: DarkGray}
+header: {foreground: DarkGray, is_underline: true}
+octal: {foreground: DarkGray}
+symlink_path: {foreground: Cyan}
+broken_symlink: {foreground: Red}

@@ -1,0 +1,22 @@
+# Framework Dots for delta. Uses the terminal's colours, so it follows light and dark mode.
+[delta]
+	syntax-theme = Framework Dots
+	file-style = "#f3531a" bold
+	file-decoration-style = none
+	file-modified-label = ●
+	file-added-label = + ●
+	file-removed-label = - ●
+	file-renamed-label = ● →
+	hunk-header-style = file line-number syntax
+	hunk-header-file-style = brightblack
+	hunk-header-line-number-style = "#f3531a"
+	hunk-header-decoration-style = brightblack box
+	minus-style = red
+	minus-emph-style = black red
+	plus-style = green
+	plus-emph-style = black green
+	line-numbers-minus-style = red
+	line-numbers-plus-style = green
+	line-numbers-zero-style = brightblack
+	commit-decoration-style = brightblack ul
+	commit-style = "#f3531a" bold

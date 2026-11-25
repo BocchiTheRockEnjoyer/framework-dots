@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0"><dict><key>name</key><string>Framework Dots</string><key>settings</key><array>
+<dict><key>settings</key><dict><key>foreground</key><string>#00000001</string><key>background</key><string>#00000001</string><key>gutterForeground</key><string>#08000000</string></dict></dict>
+<dict><key>name</key><string>Comment</string><key>scope</key><string>comment, punctuation.definition.comment</string><key>settings</key><dict><key>foreground</key><string>#08000000</string><key>fontStyle</key><string>italic</string></dict></dict>
+<dict><key>name</key><string>Keyword</string><key>scope</key><string>keyword, storage, keyword.control, storage.type, storage.modifier</string><key>settings</key><dict><key>foreground</key><string>#f3531a</string><key>fontStyle</key><string>bold</string></dict></dict>
+<dict><key>name</key><string>Operator</string><key>scope</key><string>keyword.operator, punctuation.separator, punctuation.terminator</string><key>settings</key><dict><key>foreground</key><string>#08000000</string></dict></dict>
+<dict><key>name</key><string>String</string><key>scope</key><string>string, constant.other.symbol</string><key>settings</key><dict><key>foreground</key><string>#03000000</string></dict></dict>
+<dict><key>name</key><string>Escape</string><key>scope</key><string>constant.character.escape, string.regexp</string><key>settings</key><dict><key>foreground</key><string>#f3531a</string></dict></dict>
+<dict><key>name</key><string>Number</string><key>scope</key><string>constant.numeric, constant.language, constant.character</string><key>settings</key><dict><key>foreground</key><string>#0b000000</string></dict></dict>
+<dict><key>name</key><string>Function</string><key>scope</key><string>entity.name.function, support.function, meta.function-call variable.function</string><key>settings</key><dict><key>foreground</key><string>#00000001</string><key>fontStyle</key><string>bold</string></dict></dict>
+<dict><key>name</key><string>Type</string><key>scope</key><string>entity.name.type, entity.name.class, support.type, support.class, entity.other.inherited-class</string><key>settings</key><dict><key>foreground</key><string>#07000000</string></dict></dict>
+<dict><key>name</key><string>Tag</string><key>scope</key><string>entity.name.tag, markup.heading, entity.name.section</string><key>settings</key><dict><key>foreground</key><string>#f3531a</string><key>fontStyle</key><string>bold</string></dict></dict>
+<dict><key>name</key><string>Attribute</string><key>scope</key><string>entity.other.attribute-name, variable.parameter</string><key>settings</key><dict><key>foreground</key><string>#03000000</string></dict></dict>
+<dict><key>name</key><string>Bold</string><key>scope</key><string>markup.bold</string><key>settings</key><dict><key>foreground</key><string>#00000001</string><key>fontStyle</key><string>bold</string></dict></dict>
+<dict><key>name</key><string>Italic</string><key>scope</key><string>markup.italic</string><key>settings</key><dict><key>foreground</key><string>#00000001</string><key>fontStyle</key><string>italic</string></dict></dict>
+<dict><key>name</key><string>Link</string><key>scope</key><string>markup.underline.link</string><key>settings</key><dict><key>foreground</key><string>#f3531a</string><key>fontStyle</key><string>underline</string></dict></dict>
+<dict><key>name</key><string>Inserted</string><key>scope</key><string>markup.inserted</string><key>settings</key><dict><key>foreground</key><string>#02000000</string></dict></dict>
+<dict><key>name</key><string>Deleted</string><key>scope</key><string>markup.deleted</string><key>settings</key><dict><key>foreground</key><string>#01000000</string></dict></dict>
+<dict><key>name</key><string>Changed</string><key>scope</key><string>markup.changed</string><key>settings</key><dict><key>foreground</key><string>#f3531a</string></dict></dict>
+<dict><key>name</key><string>Invalid</string><key>scope</key><string>invalid</string><key>settings</key><dict><key>foreground</key><string>#01000000</string></dict></dict>
+</array></dict></plist>
