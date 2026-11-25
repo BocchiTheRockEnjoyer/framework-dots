@@ -48,6 +48,8 @@ class DotWipe {
             const p = DotWipe.place(w, way), fixed = (uniform, v) => ({ type: Effect.ShaderUniform, fragmentShader: this.shader, uniform: uniform, from: v, to: v });
             a = [{ type: Effect.ShaderUniform, fragmentShader: this.shader, uniform: "wipe", from: 0, to: 1 },
                  fixed("arriving", arriving ? 1 : 0), fixed("start", p[0]), fixed("across", p[1]), fixed("down", p[2])];
+            // The shader ignores this, but it makes KWin treat the window as see-through and redraw what's behind it
+            a.push({ type: Effect.Opacity, from: arriving ? 0 : 1, to: arriving ? 1 : 0, curve: arriving ? QEasingCurve.InQuart : QEasingCurve.OutQuart });
         } else a = [{ type: Effect.Opacity, from: arriving ? 0 : 1, to: arriving ? 1 : 0 }];
         w[mine] = animate({ window: w, curve: QEasingCurve.InOutSine, duration: this.time, fullScreen: true, keepAlive: false, animations: a });
     }

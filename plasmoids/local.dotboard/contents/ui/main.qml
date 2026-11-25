@@ -33,6 +33,10 @@ PlasmoidItem {
     property var tint: []       // last lit state, so fading dots keep their colour
     property var changed: []    // indexes to redraw; empty = everything
     signal repaint()
+    // The colon and the seconds track change every second, so they are separate dots: the canvas is only redrawn once a minute
+    property int second: 0
+    property int colonX: 0
+    property string lastKey: ""
 
     readonly property var big: [
         [".###.", "#...#", "#...#", "#...#", "#...#", "#...#", ".###."], ["..#..", ".##..", "..#..", "..#..", "..#..", "..#..", ".###."],
@@ -61,11 +65,12 @@ PlasmoidItem {
         var hs = use24 ? String(h).padStart(2, "0") : String(h), ms = String(m).padStart(2, "0"), w = hs.length * 12 + 4 + 24 - 2 + 2, x = Math.round((cols - w) / 2), y0 = 10
         function digit(n) { var g = big[n]; for (var r = 0; r < 7; r++) for (var c = 0; c < 5; c++) if (g[r][c] === "#") for (var q = 0; q < 4; q++) put(x + c * 2 + q % 2, y0 + r * 2 + (q >> 1), 1); x += 12 }
         for (var a = 0; a < hs.length; a++) digit(Number(hs[a]))
-        if (!secs || d.getSeconds() % 2 === 0) for (var q = 0; q < 4; q++) { put(x + q % 2, y0 + 4 + (q >> 1), 2); put(x + q % 2, y0 + 8 + (q >> 1), 2) }
+        colonX = x; second = d.getSeconds()
         x += 4
         for (var b = 0; b < 2; b++) digit(Number(ms[b]))
-        if (secs) { var sec = d.getSeconds(); for (var i = 0; i < 60; i++) put(2 + i, 28, i === sec ? 2 : i < sec ? 1 : 0) }
-        target = t
+        var key = t.join("")
+        if (key === lastKey) return
+        lastKey = key; target = t
         if (shown.length !== t.length) { shown = t.map(v => v ? 1 : 0); tint = t.slice(); repaint() } else fade.start()
     }
     function step() {
@@ -135,6 +140,22 @@ PlasmoidItem {
                 onVisibleChanged: { lit.needAll = true; requestPaint() }
                 Connections { target: root; function onDarkChanged() { lit.needAll = true; lit.requestPaint() } }
                 Connections { target: root; function onRepaint() { if (root.changed.length === 0) lit.needAll = true; lit.requestPaint() } }
+            }
+            component Dot: Rectangle {
+                property int col: 0
+                property int row: 0
+                readonly property real p: full.pitch
+                width: p * 0.84; height: width; radius: width / 2
+                x: (col + 0.08) * p; y: (row + 0.08) * p
+            }
+            Item {
+                anchors.fill: parent
+                visible: !root.secs || root.second % 2 === 0
+                Repeater { model: 8; Dot { required property int index; col: root.colonX + index % 2; row: (index < 4 ? 14 : 18) + (index % 4 >> 1); color: "#f3531a" } }
+            }
+            Repeater {
+                model: root.secs ? 60 : 0
+                Dot { required property int index; col: 2 + index; row: 28; visible: index <= root.second; color: index === root.second ? "#f3531a" : root.ink }
             }
         }
     }

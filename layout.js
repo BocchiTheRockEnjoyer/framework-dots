@@ -7,5 +7,6 @@ var k2 = d.addWidget("org.kde.plasma.icontasks"); k2.currentConfigGroup = ["Gene
 d.addWidget("org.kde.plasma.marginsseparator");
 d.addWidget("local.dotlauncher");
 var desk = desktops()[0];
-if (desk) { desk.addWidget("local.dotboard", 64, 64, 416, 208); desk.addWidget("local.dotmedia", 64, 304, 464, 208); desk.addWidget("local.dotweather", 64, 544, 416, 208); }
+if (desk) { desk.addWidget("local.dotboard", 64, 64, 416, 208); desk.addWidget("local.dotmedia", 64, 304, 464, 208); var g = screenGeometry(desk.screen), low = g && g.height < 840;   // beside the clock on short screens, so it stays clear of the dock
+  desk.addWidget("local.dotweather", low ? 512 : 64, low ? 64 : 544, 416, 208); }
 print("FDIDS " + t.id + " " + d.id);

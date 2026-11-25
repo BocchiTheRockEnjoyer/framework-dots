@@ -216,7 +216,7 @@ def refresh():
         run(*kw, "library", "org.kde.breeze"); run(*kw, "theme", "Breeze"); run(*rc); time.sleep(1)
         run(*kw, "library", lib); run(*kw, "theme", th); run(*rc)
     fx = ["busctl", "--user", "call", "org.kde.KWin", "/Effects", "org.kde.kwin.Effects"]
-    for e in ("framework_dots_dissolve", "framework_dots_minimize"):
+    for e in ("framework_dots_dissolve", "framework_dots_minimize", "framework_dots_desktops"):
         if read("kwinrc", "Plugins", e + "Enabled") == "true": run(*fx, "unloadEffect", "s", e); run(*fx, "loadEffect", "s", e)
     for f in glob.glob(HOME + "/.cache/plasma_theme_breeze-rounded-dock*") + [HOME + "/.cache/ksvg-elements"]:
         try: os.remove(f)

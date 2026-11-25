@@ -10,7 +10,7 @@ import org.kde.plasma.plasma5support as P5Support
 PlasmoidItem {
     id: root
     function n(s) { var v = Number(s.value); return isNaN(v) ? 0 : v }
-    Sensors.Sensor { id: cpu; sensorId: "cpu/all/usage"; updateRateLimit: 2000 }
+    Sensors.Sensor { id: cpu; sensorId: "cpu/all/usage"; updateRateLimit: 3000 }
     Sensors.Sensor { id: mem; sensorId: "memory/physical/usedPercent"; updateRateLimit: 4000 }
     Sensors.Sensor { id: temp; sensorId: "cpu/all/averageTemperature"; updateRateLimit: 4000 }
     toolTipMainText: "System"
