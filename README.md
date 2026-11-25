@@ -134,7 +134,7 @@ cd framework-dots
 
 </details>
 
-> **What it changes:** KDE colours, icons, fonts, title bars, splash screen, the volume pop-up and some Dolphin (file manager) settings,
+> **What it changes:** KDE colours, icons, fonts, title bars, window animations, splash screen, the volume pop-up and some Dolphin (file manager) settings,
 > plus your **kitty** terminal settings if you say yes. It saves your old ones first, in
 > `~/.local/share/framework-dots-backup-…`, so you can [undo it](#5-undo-everything).
 > `~` means your home folder.
@@ -180,6 +180,11 @@ or use a terminal:
 
 It recolours the icons, widgets, windows, terminal looks, wallpapers and Floorp theme. The taskbar restarts, and open apps such as
 Floorp and btop need reopening. Very dark colours are lightened so you can see them on black.
+
+### Window animation
+
+Windows form from dots when they open, and dissolve when they close. To change that, go to System Settings → **Window Management** →
+**Desktop Effects**, and pick another under **Window Open/Close Animation**.
 
 ## 4. Set the wallpaper
 

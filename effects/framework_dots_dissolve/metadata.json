@@ -1,0 +1,8 @@
+{
+    "KPackageStructure": "KWin/Effect",
+    "KPlugin": { "Id": "framework_dots_dissolve", "Name": "Dot Dissolve", "Description": "Windows form from and dissolve into dots", "Category": "Window Open/Close Animation", "License": "GPL-3.0-or-later", "Version": "1.0", "EnabledByDefault": false },
+    "X-KDE-Ordering": 60,
+    "X-KWin-Exclusive-Category": "toplevel-open-close-animation",
+    "X-Plasma-API": "javascript",
+    "X-Plasma-MainScript": "code/main.js"
+}

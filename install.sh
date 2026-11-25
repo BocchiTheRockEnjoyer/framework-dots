@@ -166,6 +166,7 @@ if [ "$term" = y ]; then
   mv "$new" "$state/terminal.sha256"
   [ -z "$skipped" ] || echo "Kept your own:$skipped"
 fi
+put "$here/effects/framework_dots_dissolve" "$S/kwin/effects"
 # Title bars: need KDE's Aurorae engine, which some systems don't install
 for x in "" -light; do put "$here/aurorae/framework-dots$x" "$S/aurorae/themes"; done
 deco=y; if [ -z "$(find /usr/lib /usr/lib64 -name 'org.kde.kwin.aurorae.so' 2>/dev/null | head -1)" ]; then
@@ -196,6 +197,7 @@ k kdeglobals KDE frameContrast 0.1; k breezerc Windeco TitleAlignment AlignCente
 k dolphinrc General ShowStatusBar Small; k dolphinrc General ShowZoomSlider false; k dolphinrc IconsMode IconSize 80; k dolphinrc IconsMode PreviewSize 96
 k ksplashrc KSplash Engine KSplashQML; k ksplashrc KSplash Theme framework.dots.desktop; k plasmarc Theme name breeze-rounded-dock
 k kdeglobals KDE LookAndFeelPackage framework.dots.desktop; k kdeglobals KDE DefaultDarkLookAndFeel framework.dots.desktop; k kdeglobals KDE DefaultLightLookAndFeel framework.dots.light.desktop
+k kwinrc Plugins framework_dots_dissolveEnabled true; for x in scale glide fade; do k kwinrc Plugins ${x}Enabled false; done
 if [ "$deco" = y ]; then g=org.kde.kdecoration2; k kwinrc $g library org.kde.kwin.aurorae; k kwinrc $g theme __aurorae__svg__framework-dots; k kwinrc $g BorderSize Tiny; k kwinrc $g BorderSizeAuto false; fi
 if [ -n "${FD_TEST:-}" ]; then k kdeglobals General ColorScheme FrameworkGraphite; k kdeglobals Icons Theme nothing-dots; echo "Done (test mode)."; exit 0; fi
 
@@ -203,6 +205,8 @@ plasma-apply-colorscheme FrameworkGraphite >/dev/null || true
 ci="$(find /usr/lib /usr/lib64 /usr/libexec -name plasma-changeicons 2>/dev/null | head -1 || true)"
 if [ -n "$ci" ]; then "$ci" nothing-dots >/dev/null 2>&1 || k kdeglobals Icons Theme nothing-dots; else k kdeglobals Icons Theme nothing-dots; fi
 busctl --user call org.kde.KWin /KWin org.kde.KWin reconfigure >/dev/null 2>&1 || true
+fx() { busctl --user call org.kde.KWin /Effects org.kde.kwin.Effects "$1" s "$2" >/dev/null 2>&1 || true; }
+for x in scale glide fade; do fx unloadEffect $x; done; fx loadEffect framework_dots_dissolve
 rm -f "$HOME"/.cache/plasma_theme_breeze-rounded-dock* "$HOME/.cache/ksvg-elements"
 systemctl --user daemon-reload 2>/dev/null || true
 systemctl --user enable --now framework-dots-mode.path framework-dots-mode.service >/dev/null 2>&1 || true

@@ -136,6 +136,14 @@ back kdeglobals General ColorScheme FrameworkGraphite FrameworkGraphiteLight; ba
 back kdeglobals KDE frameContrast 0.1; back breezerc Windeco TitleAlignment AlignCenter; back breezerc Windeco DrawBackgroundGradient false; back breezerc Common OutlineIntensity OutlineLow
 back dolphinrc General ShowStatusBar Small; back dolphinrc General ShowZoomSlider false; back dolphinrc IconsMode IconSize 80; back dolphinrc IconsMode PreviewSize 96
 D=framework.dots.desktop L=framework.dots.light.desktop
+if [ "$(ini "$C/kwinrc" Plugins framework_dots_dissolveEnabled || true)" = true ]; then
+  for x in scale glide fade; do back kwinrc Plugins ${x}Enabled false; done
+  if [ -z "${FD_TEST:-}" ]; then
+    fx() { busctl --user call org.kde.KWin /Effects org.kde.kwin.Effects "$1" s "$2" >/dev/null 2>&1; }
+    fx unloadEffect framework_dots_dissolve; if [ "$(ini "$C/kwinrc" Plugins scaleEnabled || true)" != false ]; then fx loadEffect scale; fi
+  fi
+fi
+back kwinrc Plugins framework_dots_dissolveEnabled true false
 g=org.kde.kdecoration2
 case "$(now kwinrc $g theme || true)" in __aurorae__svg__framework-dots*)
   back kwinrc $g library org.kde.kwin.aurorae; back kwinrc $g BorderSize Tiny; back kwinrc $g BorderSizeAuto false
@@ -184,6 +192,7 @@ if [ -s "$state/pictures.sha256" ]; then
 fi
 rm -f "$C/systemd/user/plasma-plasmashell.service.d/dot-osd.conf" "$C"/systemd/user/framework-dots-mode.path "$C"/systemd/user/framework-dots-mode.service
 rmdir "$C/systemd/user/plasma-plasmashell.service.d" 2>/dev/null
+rm -rf "$S/kwin/effects/framework_dots_dissolve"
 rm -rf "$S/aurorae/themes/framework-dots" "$S/aurorae/themes/framework-dots-light"
 if [ -s "$state/terminal.sha256" ]; then
   while read -r h p; do
