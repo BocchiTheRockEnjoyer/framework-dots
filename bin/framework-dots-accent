@@ -24,7 +24,7 @@ BASE_FILES = [
     SHARE + "/icons/nothing-dots/*/*.svg", SHARE + "/plasma/plasmoids/local.*/contents/**/*.qml",
     SHARE + "/plasma/desktoptheme/breeze-rounded-dock*/**/*.svg", SHARE + "/plasma/look-and-feel/framework.dots.*/contents/splash/**/*",
     SHARE + "/plasma-qml/org/kde/plasma/workspace/osd/OsdItem.qml", SHARE + "/color-schemes/FrameworkGraphite*.colors",
-    SHARE + "/aurorae/themes/framework-dots*/*.svg", SHARE + "/kwin/effects/framework_dots_dissolve/contents/code/main.js", SHARE + "/icons/hicolor/scalable/apps/framework-logo-dots*.svg",
+    SHARE + "/aurorae/themes/framework-dots*/*.svg", SHARE + "/kwin/effects/framework_dots_*/contents/code/main.js", SHARE + "/icons/hicolor/scalable/apps/framework-logo-dots*.svg",
     SHARE + "/kwin/tabbox/framework_dots/contents/ui/main.qml", SHARE + "/org.kde.syntax-highlighting/themes/framework-dots*.theme",
     CONF + "/bat/themes/Framework Dots.tmTheme", CONF + "/delta/framework-dots.gitconfig", CONF + "/lazygit/config.yml", CONF + "/eza/theme.yml",
     CONF + "/micro/colorschemes/framework-dots.micro", CONF + "/nvim/colors/framework-dots.lua", CONF + "/fish/conf.d/framework-dots.fish",
@@ -216,8 +216,8 @@ def refresh():
         run(*kw, "library", "org.kde.breeze"); run(*kw, "theme", "Breeze"); run(*rc); time.sleep(1)
         run(*kw, "library", lib); run(*kw, "theme", th); run(*rc)
     fx = ["busctl", "--user", "call", "org.kde.KWin", "/Effects", "org.kde.kwin.Effects"]
-    if read("kwinrc", "Plugins", "framework_dots_dissolveEnabled") == "true":
-        run(*fx, "unloadEffect", "s", "framework_dots_dissolve"); run(*fx, "loadEffect", "s", "framework_dots_dissolve")
+    for e in ("framework_dots_dissolve", "framework_dots_minimize"):
+        if read("kwinrc", "Plugins", e + "Enabled") == "true": run(*fx, "unloadEffect", "s", e); run(*fx, "loadEffect", "s", e)
     for f in glob.glob(HOME + "/.cache/plasma_theme_breeze-rounded-dock*") + [HOME + "/.cache/ksvg-elements"]:
         try: os.remove(f)
         except OSError: pass

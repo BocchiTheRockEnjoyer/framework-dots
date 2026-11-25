@@ -143,7 +143,14 @@ if [ "$(ini "$C/kwinrc" Plugins framework_dots_dissolveEnabled || true)" = true 
     fx unloadEffect framework_dots_dissolve; if [ "$(ini "$C/kwinrc" Plugins scaleEnabled || true)" != false ]; then fx loadEffect scale; fi
   fi
 fi
-back kwinrc Plugins framework_dots_dissolveEnabled true false
+if [ "$(ini "$C/kwinrc" Plugins framework_dots_minimizeEnabled || true)" = true ]; then
+  for x in squash magiclamp; do back kwinrc Plugins ${x}Enabled false; done
+  if [ -z "${FD_TEST:-}" ]; then
+    fx() { busctl --user call org.kde.KWin /Effects org.kde.kwin.Effects "$1" s "$2" >/dev/null 2>&1; }
+    fx unloadEffect framework_dots_minimize; if [ "$(ini "$C/kwinrc" Plugins squashEnabled || true)" != false ]; then fx loadEffect squash; fi
+  fi
+fi
+for x in dissolve minimize; do back kwinrc Plugins framework_dots_${x}Enabled true false; done
 back kwinrc TabBox LayoutName framework_dots
 g=org.kde.kdecoration2
 case "$(now kwinrc $g theme || true)" in __aurorae__svg__framework-dots*)
@@ -193,7 +200,7 @@ if [ -s "$state/pictures.sha256" ]; then
 fi
 rm -f "$C/systemd/user/plasma-plasmashell.service.d/dot-osd.conf" "$C"/systemd/user/framework-dots-mode.path "$C"/systemd/user/framework-dots-mode.service "$C/systemd/user/framework-dots-wallpaper-fix.service"
 rmdir "$C/systemd/user/plasma-plasmashell.service.d" 2>/dev/null
-rm -rf "$S/kwin/effects/framework_dots_dissolve" "$S/kwin/tabbox/framework_dots"
+rm -rf "$S/kwin/effects/framework_dots_dissolve" "$S/kwin/effects/framework_dots_minimize" "$S/kwin/tabbox/framework_dots"
 rm -f "$S/org.kde.syntax-highlighting/themes/framework-dots.theme" "$S/org.kde.syntax-highlighting/themes/framework-dots-light.theme"
 if command -v git >/dev/null; then git config --global --fixed-value --unset-all include.path '~/.config/delta/framework-dots.gitconfig' 2>/dev/null; fi
 rm -rf "$S/aurorae/themes/framework-dots" "$S/aurorae/themes/framework-dots-light"

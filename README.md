@@ -192,8 +192,8 @@ click the button and press Meta. Say yes to reassigning it. **Alt+F1** still ope
 
 ### Window animation
 
-Windows form from dots when they open, and dissolve when they close. To change that, go to System Settings → **Window Management** →
-**Desktop Effects**, and pick another under **Window Open/Close Animation**.
+Windows form from dots when they open, dissolve when they close, and pour into the dock when minimized. To change that, go to System Settings → **Window Management** →
+**Desktop Effects**, and pick another under **Window Open/Close Animation**, or another minimize effect under **Appearance**.
 
 ## 4. Set the wallpaper
 

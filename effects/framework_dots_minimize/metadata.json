@@ -1,0 +1,8 @@
+{
+    "KPackageStructure": "KWin/Effect",
+    "KPlugin": { "Id": "framework_dots_minimize", "Name": "Dot Minimize", "Description": "Windows break into dots and pour into the task bar when minimized", "Category": "Appearance", "License": "GPL-3.0-or-later", "Version": "1.0", "EnabledByDefault": false },
+    "X-KDE-Ordering": 60,
+    "X-KWin-Exclusive-Category": "minimize",
+    "X-Plasma-API": "javascript",
+    "X-Plasma-MainScript": "code/main.js"
+}
