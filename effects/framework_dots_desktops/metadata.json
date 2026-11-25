@@ -1,0 +1,8 @@
+{
+    "KPackageStructure": "KWin/Effect",
+    "KPlugin": { "Id": "framework_dots_desktops", "Name": "Dot Wipe", "Description": "Windows sweep out and in as dots when switching virtual desktops", "Category": "Virtual Desktop Switching Animation", "License": "GPL-3.0-or-later", "Version": "1.0", "EnabledByDefault": false },
+    "X-KDE-Ordering": 60,
+    "X-KWin-Exclusive-Category": "desktop-animations",
+    "X-Plasma-API": "javascript",
+    "X-Plasma-MainScript": "code/main.js"
+}

@@ -84,7 +84,7 @@ Pictures use demo music and notifications, London weather, and sample Claude usa
 | **Notification center** | Quick toggles, volume and brightness sliders, accent colours and notification history |
 | **Pop-ups** | Matching notifications and a dotted volume/brightness pop-up |
 | **Windows** | Dotted title bars and Alt+Tab cards |
-| **Animations** | Windows form from dots, dissolve when closed, and pour into the dock when minimized |
+| **Animations** | Windows form from dots, dissolve when closed, and pour into the dock when minimized; switching desktops sweeps them out and in |
 | **KRunner** (Alt+Space) | Dotted search field and highlight |
 | **Pointer** | Black and white dots, with animated busy pointers |
 | **Icons** | Dotted system, tray, folder and file-type icons |
@@ -245,8 +245,10 @@ To change the pointer or its size, go to System Settings → **Cursors**. Switch
 
 ### Window animation
 
-Windows form from dots when they open, dissolve when they close, and pour into the dock when minimized. To change that, go to System Settings → **Window Management** →
-**Desktop Effects**, and pick another under **Window Open/Close Animation**, or another minimize effect under **Appearance**.
+Windows form from dots when they open, dissolve when they close, and pour into the dock when minimized. Switching desktops sweeps the old
+windows away as dots and forms the new ones behind. To change that, go to System Settings → **Window Management** →
+**Desktop Effects**, and pick another under **Window Open/Close Animation**, another minimize effect under **Appearance**,
+or another **Virtual Desktop Switching Animation**.
 
 ## 4. Set the wallpaper
 

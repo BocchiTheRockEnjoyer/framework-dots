@@ -179,7 +179,7 @@ if [ "$term" = y ]; then
     git config --global --add include.path '~/.config/delta/framework-dots.gitconfig' || true
   fi
 fi
-for x in dissolve minimize; do put "$here/effects/framework_dots_$x" "$S/kwin/effects"; done
+for x in dissolve minimize desktops; do put "$here/effects/framework_dots_$x" "$S/kwin/effects"; done
 put "$here/tabbox/framework_dots" "$S/kwin/tabbox"
 mkdir -p "$S/org.kde.syntax-highlighting/themes"; cp "$here"/kate/*.theme "$S/org.kde.syntax-highlighting/themes/"
 # Title bars: need KDE's Aurorae engine, which some systems don't install
@@ -212,7 +212,7 @@ k kdeglobals KDE frameContrast 0.1; k breezerc Windeco TitleAlignment AlignCente
 k dolphinrc General ShowStatusBar Small; k dolphinrc General ShowZoomSlider false; k dolphinrc IconsMode IconSize 80; k dolphinrc IconsMode PreviewSize 96
 k ksplashrc KSplash Engine KSplashQML; k ksplashrc KSplash Theme framework.dots.desktop; k plasmarc Theme name breeze-rounded-dock
 k kdeglobals KDE LookAndFeelPackage framework.dots.desktop; k kdeglobals KDE DefaultDarkLookAndFeel framework.dots.desktop; k kdeglobals KDE DefaultLightLookAndFeel framework.dots.light.desktop
-k kwinrc TabBox LayoutName framework_dots; for x in dissolve minimize; do k kwinrc Plugins framework_dots_${x}Enabled true; done; for x in scale glide fade squash magiclamp; do k kwinrc Plugins ${x}Enabled false; done
+k kwinrc TabBox LayoutName framework_dots; for x in dissolve minimize desktops; do k kwinrc Plugins framework_dots_${x}Enabled true; done; for x in scale glide fade squash magiclamp slide fadedesktop; do k kwinrc Plugins ${x}Enabled false; done
 if [ "$deco" = y ]; then g=org.kde.kdecoration2; k kwinrc $g library org.kde.kwin.aurorae; k kwinrc $g theme __aurorae__svg__framework-dots; k kwinrc $g BorderSize Tiny; k kwinrc $g BorderSizeAuto false; fi
 if [ -n "${FD_TEST:-}" ]; then k kdeglobals General ColorScheme FrameworkGraphite; k kdeglobals Icons Theme nothing-dots; k kcminputrc Mouse cursorTheme framework-dots; echo "Done (test mode)."; exit 0; fi
 
@@ -222,7 +222,7 @@ if [ -n "$ci" ]; then "$ci" nothing-dots >/dev/null 2>&1 || k kdeglobals Icons T
 plasma-apply-cursortheme framework-dots >/dev/null 2>&1 || k kcminputrc Mouse cursorTheme framework-dots
 busctl --user call org.kde.KWin /KWin org.kde.KWin reconfigure >/dev/null 2>&1 || true
 fx() { busctl --user call org.kde.KWin /Effects org.kde.kwin.Effects "$1" s "$2" >/dev/null 2>&1 || true; }
-for x in scale glide fade squash magiclamp; do fx unloadEffect $x; done; for x in dissolve minimize; do fx loadEffect framework_dots_$x; done
+for x in scale glide fade squash magiclamp slide fadedesktop; do fx unloadEffect $x; done; for x in dissolve minimize desktops; do fx loadEffect framework_dots_$x; done
 rm -f "$HOME"/.cache/plasma_theme_breeze-rounded-dock* "$HOME/.cache/ksvg-elements"
 systemctl --user daemon-reload 2>/dev/null || true
 systemctl --user enable --now framework-dots-mode.path framework-dots-mode.service >/dev/null 2>&1 || true

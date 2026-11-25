@@ -155,7 +155,15 @@ if [ "$(ini "$C/kwinrc" Plugins framework_dots_minimizeEnabled || true)" = true 
     fx unloadEffect framework_dots_minimize; if [ "$(ini "$C/kwinrc" Plugins squashEnabled || true)" != false ]; then fx loadEffect squash; fi
   fi
 fi
-for x in dissolve minimize; do back kwinrc Plugins framework_dots_${x}Enabled true false; done
+if [ "$(ini "$C/kwinrc" Plugins framework_dots_desktopsEnabled || true)" = true ]; then
+  for x in slide fadedesktop; do back kwinrc Plugins ${x}Enabled false; done
+  if [ -z "${FD_TEST:-}" ]; then
+    fx() { busctl --user call org.kde.KWin /Effects org.kde.kwin.Effects "$1" s "$2" >/dev/null 2>&1; }
+    fx unloadEffect framework_dots_desktops; if [ "$(ini "$C/kwinrc" Plugins slideEnabled || true)" != false ]; then fx loadEffect slide; fi
+    if [ "$(ini "$C/kwinrc" Plugins fadedesktopEnabled || true)" = true ]; then fx loadEffect fadedesktop; fi
+  fi
+fi
+for x in dissolve minimize desktops; do back kwinrc Plugins framework_dots_${x}Enabled true false; done
 back kwinrc TabBox LayoutName framework_dots
 back kcminputrc Mouse cursorTheme framework-dots
 g=org.kde.kdecoration2
@@ -207,7 +215,7 @@ if [ -s "$state/pictures.sha256" ]; then
 fi
 rm -f "$C/systemd/user/plasma-plasmashell.service.d/dot-osd.conf" "$C"/systemd/user/framework-dots-mode.path "$C"/systemd/user/framework-dots-mode.service "$C/systemd/user/framework-dots-wallpaper-fix.service"
 rmdir "$C/systemd/user/plasma-plasmashell.service.d" 2>/dev/null
-rm -rf "$S/kwin/effects/framework_dots_dissolve" "$S/kwin/effects/framework_dots_minimize" "$S/kwin/tabbox/framework_dots"
+rm -rf "$S/kwin/effects/framework_dots_dissolve" "$S/kwin/effects/framework_dots_minimize" "$S/kwin/effects/framework_dots_desktops" "$S/kwin/tabbox/framework_dots"
 rm -f "$S/org.kde.syntax-highlighting/themes/framework-dots.theme" "$S/org.kde.syntax-highlighting/themes/framework-dots-light.theme"
 if command -v git >/dev/null; then git config --global --fixed-value --unset-all include.path '~/.config/delta/framework-dots.gitconfig' 2>/dev/null; fi
 rm -rf "$S/aurorae/themes/framework-dots" "$S/aurorae/themes/framework-dots-light"
