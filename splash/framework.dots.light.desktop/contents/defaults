@@ -11,6 +11,9 @@ Theme=nothing-dots-light
 [plasmarc][Theme]
 name=breeze-rounded-dock-light
 
+[kcminputrc][Mouse]
+cursorTheme=framework-dots
+
 [kwinrc][org.kde.kdecoration2]
 library=org.kde.kwin.aurorae
 theme=__aurorae__svg__framework-dots-light

@@ -62,7 +62,7 @@ cat <<'T'
 
   Framework Dots
 
-  This changes your KDE colours, icons, fonts, splash screen, panel style, volume
+  This changes your KDE colours, icons, pointer, fonts, splash screen, panel style, volume
   pop-up and a few Dolphin settings. Your current settings are saved first, and
   the uninstaller can put them back. No password is needed.
 
@@ -108,7 +108,7 @@ fi
 
 # ---- save the original settings (only the first time, so a reinstall can't replace them) ----
 trap 'echo; echo "Something failed, so the install stopped partway. To go back, run:  bash $state/uninstall.sh"' ERR
-conf="kdeglobals kwinrc breezerc dolphinrc ksplashrc plasmarc kitty/kitty.conf plasmashellrc plasma-org.kde.plasma.desktop-appletsrc kdedefaults"
+conf="kdeglobals kwinrc breezerc dolphinrc ksplashrc plasmarc kcminputrc kitty/kitty.conf plasmashellrc plasma-org.kde.plasma.desktop-appletsrc kdedefaults"
 save() { local f; for f in $conf; do if [ -e "$C/$f" ]; then mkdir -p "$1/$(dirname "$f")"; cp -a "$C/$f" "$1/$f"; fi; done; }
 bak="$S/framework-dots-backup-$(date +%Y%m%d-%H%M%S)"; mkdir -p "$bak" "$state"; save "$bak"
 cp "$here/uninstall.sh" "$state/uninstall.sh"
@@ -121,6 +121,9 @@ if [ ! -d "$state/original" ]; then
   mv "$state/original.new" "$state/original"
 fi
 
+# Installed before the pointer was added? Then keep a note of the one in use now.
+if [ ! -e "$state/original/kcminputrc" ] && [ -e "$C/kcminputrc" ] && ! grep -qs '^cursorTheme=framework-dots$' "$C/kcminputrc"; then cp -a "$C/kcminputrc" "$state/original/kcminputrc"; fi
+
 # A changed accent colour goes back to orange while files are compared and copied, and is put back after
 accent="$HOME/.local/bin/framework-dots-accent"
 if [ -e "$C/framework-dots/accent" ] && [ -x "$accent" ]; then "$accent" reset --files-only --keep-choice --quiet || true; fi
@@ -129,6 +132,9 @@ if [ -e "$C/framework-dots/accent" ] && [ -x "$accent" ]; then "$accent" reset -
 echo "Copying files ..."
 put() { mkdir -p "$2"; rm -rf "${2:?}/$(basename "$1")"; cp -a "$1" "$2/"; }
 put "$here/icons/nothing-dots" "$S/icons"; put "$here/icons/nothing-dots-light" "$S/icons"
+put "$here/cursors/framework-dots" "$S/icons"
+# KDE looks for pointers in ~/.icons
+if [ ! -e "$HOME/.icons/framework-dots" ]; then mkdir -p "$HOME/.icons"; rm -f "$HOME/.icons/framework-dots"; ln -s "$S/icons/framework-dots" "$HOME/.icons/framework-dots"; fi
 mkdir -p "$S/icons/hicolor/scalable/apps"; cp "$here"/icons/hicolor/*.svg "$S/icons/hicolor/scalable/apps/"
 for p in "$here"/plasmoids/*; do put "$p" "$S/plasma/plasmoids"; done
 for x in "" -light; do put "$here/theme/breeze-rounded-dock$x" "$S/plasma/desktoptheme"; done
@@ -208,11 +214,12 @@ k ksplashrc KSplash Engine KSplashQML; k ksplashrc KSplash Theme framework.dots.
 k kdeglobals KDE LookAndFeelPackage framework.dots.desktop; k kdeglobals KDE DefaultDarkLookAndFeel framework.dots.desktop; k kdeglobals KDE DefaultLightLookAndFeel framework.dots.light.desktop
 k kwinrc TabBox LayoutName framework_dots; for x in dissolve minimize; do k kwinrc Plugins framework_dots_${x}Enabled true; done; for x in scale glide fade squash magiclamp; do k kwinrc Plugins ${x}Enabled false; done
 if [ "$deco" = y ]; then g=org.kde.kdecoration2; k kwinrc $g library org.kde.kwin.aurorae; k kwinrc $g theme __aurorae__svg__framework-dots; k kwinrc $g BorderSize Tiny; k kwinrc $g BorderSizeAuto false; fi
-if [ -n "${FD_TEST:-}" ]; then k kdeglobals General ColorScheme FrameworkGraphite; k kdeglobals Icons Theme nothing-dots; echo "Done (test mode)."; exit 0; fi
+if [ -n "${FD_TEST:-}" ]; then k kdeglobals General ColorScheme FrameworkGraphite; k kdeglobals Icons Theme nothing-dots; k kcminputrc Mouse cursorTheme framework-dots; echo "Done (test mode)."; exit 0; fi
 
 plasma-apply-colorscheme FrameworkGraphite >/dev/null || true
 ci="$(find /usr/lib /usr/lib64 /usr/libexec -name plasma-changeicons 2>/dev/null | head -1 || true)"
 if [ -n "$ci" ]; then "$ci" nothing-dots >/dev/null 2>&1 || k kdeglobals Icons Theme nothing-dots; else k kdeglobals Icons Theme nothing-dots; fi
+plasma-apply-cursortheme framework-dots >/dev/null 2>&1 || k kcminputrc Mouse cursorTheme framework-dots
 busctl --user call org.kde.KWin /KWin org.kde.KWin reconfigure >/dev/null 2>&1 || true
 fx() { busctl --user call org.kde.KWin /Effects org.kde.kwin.Effects "$1" s "$2" >/dev/null 2>&1 || true; }
 for x in scale glide fade squash magiclamp; do fx unloadEffect $x; done; for x in dissolve minimize; do fx loadEffect framework_dots_$x; done

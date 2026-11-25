@@ -60,7 +60,7 @@ ways=0; if [ -e "$state/waywallen" ] && ask "Also remove the Waywallen app and i
 
 # A copy of how things are now, in case something needs to be looked up later
 bak="$S/framework-dots-backup-$(date +%Y%m%d-%H%M%S)-uninstall"; mkdir -p "$bak" || exit 1
-for f in kdeglobals kwinrc breezerc dolphinrc ksplashrc plasmarc plasmashellrc plasma-org.kde.plasma.desktop-appletsrc; do [ ! -e "$C/$f" ] || cp -a "$C/$f" "$bak/"; done
+for f in kdeglobals kwinrc breezerc dolphinrc ksplashrc plasmarc kcminputrc plasmashellrc plasma-org.kde.plasma.desktop-appletsrc; do [ ! -e "$C/$f" ] || cp -a "$C/$f" "$bak/"; done
 
 # Back to the original files, so everything below recognises them
 if [ -x "$HOME/.local/bin/framework-dots-accent" ]; then "$HOME/.local/bin/framework-dots-accent" reset --files-only --quiet; fi
@@ -111,6 +111,11 @@ if [ -z "${FD_TEST:-}" ]; then
   esac
 fi
 
+if [ "$(now kcminputrc Mouse cursorTheme || true)" = framework-dots ]; then
+  cu="$(ini "$orig/kcminputrc" Mouse cursorTheme || ini "$orig/kdedefaults/kcminputrc" Mouse cursorTheme || true)"; case "$cu" in ""|framework-dots) cu=breeze_cursors ;; esac
+  [ -n "${FD_TEST:-}" ] || plasma-apply-cursortheme "$cu" >/dev/null 2>&1
+fi
+
 # ---- settings (install.sh has the same list) ----
 # file, group, key, then the value or values the theme uses
 back() {
@@ -152,6 +157,7 @@ if [ "$(ini "$C/kwinrc" Plugins framework_dots_minimizeEnabled || true)" = true 
 fi
 for x in dissolve minimize; do back kwinrc Plugins framework_dots_${x}Enabled true false; done
 back kwinrc TabBox LayoutName framework_dots
+back kcminputrc Mouse cursorTheme framework-dots
 g=org.kde.kdecoration2
 case "$(now kwinrc $g theme || true)" in __aurorae__svg__framework-dots*)
   back kwinrc $g library org.kde.kwin.aurorae; back kwinrc $g BorderSize Tiny; back kwinrc $g BorderSizeAuto false
@@ -189,7 +195,8 @@ else
 fi
 for f in "$state"/*-theme.auto.conf; do if [ -e "$f" ] && cmp -s "$f" "$C/kitty/$(basename "$f")"; then rm -f "$C/kitty/$(basename "$f")"; fi; done
 for w in dotboard dotmedia dotclock dotsysmon dotplaying dottimer dotkeys dotdesktops dotbatterypercent dotcenter dotlauncher dotweather claudeusage; do rm -rf "$S/plasma/plasmoids/local.$w"; done
-rm -rf "$S/icons/nothing-dots" "$S/icons/nothing-dots-light" "$S/plasma/desktoptheme/breeze-rounded-dock" "$S/plasma/desktoptheme/breeze-rounded-dock-light"
+if [ -L "$HOME/.icons/framework-dots" ]; then rm -f "$HOME/.icons/framework-dots"; rmdir "$HOME/.icons" 2>/dev/null; fi
+rm -rf "$S/icons/framework-dots" "$S/icons/nothing-dots" "$S/icons/nothing-dots-light" "$S/plasma/desktoptheme/breeze-rounded-dock" "$S/plasma/desktoptheme/breeze-rounded-dock-light"
 rm -rf "$S/plasma/look-and-feel/$D" "$S/plasma/look-and-feel/$L" "$S/fonts/fd-dots" "$S/plasma-qml/org/kde/plasma/workspace/osd"
 rm -f "$S/icons/hicolor/scalable/apps"/framework-logo-dots*.svg
 rmdir -p "$S/plasma-qml/org/kde/plasma/workspace" 2>/dev/null

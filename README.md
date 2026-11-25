@@ -47,9 +47,56 @@ Pictures use demo music and notifications, London weather, and sample Claude usa
 |:---:|:---:|
 | <img src="preview/popups.png" width="330" alt="Notification pop-ups"> | <img src="preview/timer.png" width="310" alt="Focus timer popup"> |
 
+**Weather board**
+
+<img src="preview/weather-board.png" width="420" alt="Dotted weather board">
+
+**Alt+Tab**
+
+![Alt+Tab window cards](preview/alttab.png)
+
+**KRunner**
+
+<img src="preview/krunner.png" width="560" alt="KRunner with a dotted search field">
+
+**Pointer**
+
+<img src="preview/pointer.png" width="640" alt="Black and white dotted pointers">
+
+**Editor and terminal tools**
+
+![KWrite, delta, lazygit and eza](preview/tools.png)
+
 **Claude Code usage**
 
 <img src="preview/claude.png" width="310" alt="Claude Code usage popup">
+
+## Features
+
+| | |
+|---|---|
+| **Light and dark** | Everything follows KDE's light/dark switch |
+| **Any accent colour** | Pick one in the notification center; it recolours icons, widgets, windows, terminal and wallpapers |
+| **Top bar** | Workspaces, keyboard shortcuts, system monitor, music, clock, focus timer, Claude Code usage, battery and notification center |
+| **Dock** | Floating, dotted, with one-dot indicators for open apps |
+| **App launcher** | Full screen, with search, categories and favorites |
+| **Desktop boards** | Dotted clock, music player and animated weather with a five-day view |
+| **Notification center** | Quick toggles, volume and brightness sliders, accent colours and notification history |
+| **Pop-ups** | Matching notifications and a dotted volume/brightness pop-up |
+| **Windows** | Dotted title bars and Alt+Tab cards |
+| **Animations** | Windows form from dots, dissolve when closed, and pour into the dock when minimized |
+| **KRunner** (Alt+Space) | Dotted search field and highlight |
+| **Pointer** | Black and white dots, with animated busy pointers |
+| **Icons** | Dotted system, tray, folder and file-type icons |
+| **Fonts** | Space Mono, and FD Dots for dotted text |
+| **Terminal** | kitty, fish, fastfetch, btop, cava, bat, delta, lazygit, fzf, eza, micro and Neovim |
+| **Editors** | Kate and KWrite themes |
+| **Browser** | Optional Floorp theme |
+| **Wallpapers** | Black hole stills in dark and light, and an optional moving one |
+| **Splash screen** | Dotted, in dark and light |
+| **Installer** | One command, no password, saves your settings first, with an uninstaller |
+
+The lock and login screens are left alone. Everything installs in your home folder, so no system files are changed.
 
 New to Linux? This guide assumes no experience. Copy each grey box into a terminal and press Enter.
 
@@ -135,7 +182,7 @@ cd framework-dots
 
 </details>
 
-> **What it changes:** KDE colours, icons, fonts, title bars, window animations, splash screen, the volume pop-up and some Dolphin (file manager) settings,
+> **What it changes:** KDE colours, icons, pointer, fonts, title bars, window animations, splash screen, the volume pop-up and some Dolphin (file manager) settings,
 > plus your **kitty** terminal settings if you say yes. It saves your old ones first, in
 > `~/.local/share/framework-dots-backup-…`, so you can [undo it](#5-undo-everything).
 > `~` means your home folder.
@@ -190,6 +237,11 @@ Kate and KWrite pick up the matching editor theme by themselves, unless you've c
 
 To open the app launcher with the **Meta** (Windows) key: right-click its nine dots, choose **Configure**, then **Keyboard Shortcuts**,
 click the button and press Meta. Say yes to reassigning it. **Alt+F1** still opens KDE's menu.
+
+### KRunner and the pointer
+
+**Alt+Space** opens KRunner, which picks up the theme by itself. The dotted highlight also appears in KDE's own pop-up lists.
+To change the pointer or its size, go to System Settings → **Cursors**. Switching between light and dark sets the dotted one again.
 
 ### Window animation
 
