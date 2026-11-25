@@ -86,7 +86,8 @@ I built this on **one computer**, and that's the only one it has been used on:
 | Other distros (Fedora, Kubuntu, KDE neon and so on) | Should mostly work on Plasma 6. The volume pop-up is skipped if KDE keeps its files somewhere else |
 | Other Plasma 6 versions | Most things should work. The volume pop-up and widgets are the likeliest to break |
 | X11 | Unknown |
-| Several screens, or 100% scale | Unknown. Dots may look less crisp at 100% |
+| Several screens | Unknown |
+| 100% or 125% scale | Looked right on a hidden 1920x1200 test screen. At 100%, small icons are more like lines than dots |
 | NVIDIA or AMD graphics | The theme should be fine. For the moving wallpaper, see Waywallen's notes on NVIDIA |
 | Plasma 5, GNOME, XFCE, Hyprland and others | Won't work, though the still wallpapers are just pictures |
 
@@ -274,7 +275,7 @@ stay in `~/.local/share/framework-dots-backup-…`.
 | Dots behind the top bar | In its panel configuration, set **Opacity** to **Opaque** |
 | Dock dots look uneven | In its panel configuration, set the height to **60** |
 | Volume pop-up missing after an update | Run `rm ~/.config/systemd/user/plasma-plasmashell.service.d/dot-osd.conf`, then log out and back in |
-| Moving wallpaper is frozen | A maximised window may be pausing it. Otherwise, log out and back in |
+| Moving wallpaper is frozen | A maximised window may be pausing it. If not, wait 30 seconds (it reloads itself after the taskbar restarts), or run `~/.local/bin/framework-dots-wallpaper-fix 0`. Otherwise, log out and back in |
 | Waywallen shows no wallpapers | Check you added **FrameworkDots-Wallpapers** itself, then refresh or restart Waywallen |
 | Waywallen won't open | Run `~/Applications/waywallen.AppImage` in a terminal and read the message |
 

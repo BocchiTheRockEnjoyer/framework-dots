@@ -1,0 +1,19 @@
+#!/bin/sh
+# Waywallen 0.6.1 sometimes stops sending frames after the taskbar restarts: the wallpaper freezes although it's
+# still running. This spots that in Waywallen's log and reloads the wallpaper. It does nothing otherwise.
+log="${XDG_STATE_HOME:-$HOME/.local/state}/waywallen/logs/daemon/waywallen-current.log"
+pgrep -u "$(id -u)" -x waywallen >/dev/null && [ -r "$log" ] || exit 0
+# Wait for the taskbar's wallpaper to reconnect, then for the frame helper to come back by itself
+sleep "${1:-9}"
+last=$(tail -n 400 "$log" | grep -E 'sync::reaper: reaper .*(exiting|imported)' | tail -n 1)
+case "$last" in *exiting*) ;; *) exit 0 ;; esac
+# A locked screen or a closing renderer also ends it, and Waywallen recovers from those by itself
+tail -n 400 "$log" | awk '/sync::reaper: reaper .*exiting/ { r = NR; reg = 0; bad = 0 } /display [0-9]+ registered/ { if (r) reg = 1 } /shutdown complete|reader exit|evicting|screen lock active=true/ { if (r && NR >= r - 4) bad = 1 } END { exit !(reg && !bad) }' || exit 0
+id=$(grep -oE "(recall|apply)/[0-9]+" "$log" | tail -n 1 | cut -d/ -f2)
+[ -n "$id" ] || exit 0
+pid=$(pgrep -u "$(id -u)" -f 'waywallen-weweb-renderer --ipc' | head -n 1)
+[ -n "$pid" ] && kill -TERM "$pid"
+for _ in 1 2 3 4 5 6 7 8; do sleep 1; pgrep -u "$(id -u)" -f 'waywallen-weweb-renderer --ipc' >/dev/null || break; done
+sleep 2
+busctl --user call org.waywallen.waywallen.Daemon /org/waywallen/waywallen/Daemon org.waywallen.waywallen.Daemon1 ApplyById s "$id" >/dev/null
+echo "Wallpaper had stopped; reloaded $id."

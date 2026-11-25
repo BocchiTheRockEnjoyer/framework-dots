@@ -142,7 +142,7 @@ for f in "$here"/wallpapers/still/*; do
   if [ ! -e "$t" ]; then cp "$f" "$t"; fi
   ! cmp -s "$f" "$t" || (cd "$HOME" && sha256sum "Pictures/Wallpapers/$(basename "$f")")
 done > "$state/pictures.sha256"
-for f in claude-usage framework-dots-mode framework-dots-accent; do put "$here/bin/$f" "$HOME/.local/bin"; done; put "$here/applications/framework-dots-accent.desktop" "$S/applications"
+for f in claude-usage framework-dots-mode framework-dots-accent framework-dots-wallpaper-fix; do put "$here/bin/$f" "$HOME/.local/bin"; done; put "$here/applications/framework-dots-accent.desktop" "$S/applications"
 mkdir -p "$C/systemd/user"; cp "$here"/systemd/* "$C/systemd/user/"
 if [ "$kitty" = y ]; then mkdir -p "$C/kitty"; rm -f "$C/kitty/kitty.conf"; cp "$here/kitty/kitty.conf" "$C/kitty/kitty.conf"; cp "$here/kitty/kitty.conf" "$state/kitty.conf.ours"
   # kitty switches between these by itself
@@ -210,6 +210,7 @@ for x in scale glide fade; do fx unloadEffect $x; done; fx loadEffect framework_
 rm -f "$HOME"/.cache/plasma_theme_breeze-rounded-dock* "$HOME/.cache/ksvg-elements"
 systemctl --user daemon-reload 2>/dev/null || true
 systemctl --user enable --now framework-dots-mode.path framework-dots-mode.service >/dev/null 2>&1 || true
+systemctl --user enable framework-dots-wallpaper-fix.service >/dev/null 2>&1 || true
 echo "Restarting the taskbar ..."
 systemctl --user restart plasma-plasmashell 2>/dev/null || echo "Couldn't restart the taskbar. Logging out and back in will do it."
 ready=0; for _ in $(seq 30); do sleep 1; case "$(plasma 'print("FDOK")' || true)" in *FDOK*) ready=1; break ;; esac; done

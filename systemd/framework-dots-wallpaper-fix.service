@@ -1,0 +1,10 @@
+[Unit]
+Description=Reload the moving wallpaper if it stopped when the taskbar restarted
+After=plasma-plasmashell.service
+
+[Service]
+Type=oneshot
+ExecStart=%h/.local/bin/framework-dots-wallpaper-fix
+
+[Install]
+WantedBy=plasma-plasmashell.service

@@ -97,7 +97,7 @@ if [ -z "${FD_TEST:-}" ]; then
     desktops().forEach(clear)' >/dev/null
   sleep 2
   case "$(plasma 'print("FDN" + panels().length + ".")' || true)" in *FDN0.*) plasma 'loadTemplate("org.kde.plasma.desktop.defaultPanel")' >/dev/null; echo "Added KDE's standard panel, because there was no other one."; sleep 2 ;; esac
-  systemctl --user disable --now framework-dots-mode.path framework-dots-mode.service >/dev/null 2>&1
+  systemctl --user disable --now framework-dots-mode.path framework-dots-mode.service framework-dots-wallpaper-fix.service >/dev/null 2>&1
 
   # ---- colours and icons ----
   if ours_cs "$(now kdeglobals General ColorScheme || true)"; then
@@ -190,7 +190,7 @@ rm -f "$S/color-schemes/FrameworkGraphite.colors" "$S/color-schemes/FrameworkGra
 if [ -s "$state/pictures.sha256" ]; then
   while read -r h p; do case "$p" in Pictures/Wallpapers/*) if [ "$(sha256sum "$HOME/$p" 2>/dev/null | cut -d' ' -f1)" = "$h" ]; then rm -f "$HOME/$p"; fi ;; esac; done < "$state/pictures.sha256"
 fi
-rm -f "$C/systemd/user/plasma-plasmashell.service.d/dot-osd.conf" "$C"/systemd/user/framework-dots-mode.path "$C"/systemd/user/framework-dots-mode.service
+rm -f "$C/systemd/user/plasma-plasmashell.service.d/dot-osd.conf" "$C"/systemd/user/framework-dots-mode.path "$C"/systemd/user/framework-dots-mode.service "$C/systemd/user/framework-dots-wallpaper-fix.service"
 rmdir "$C/systemd/user/plasma-plasmashell.service.d" 2>/dev/null
 rm -rf "$S/kwin/effects/framework_dots_dissolve"
 rm -rf "$S/aurorae/themes/framework-dots" "$S/aurorae/themes/framework-dots-light"
@@ -203,7 +203,7 @@ if [ -s "$state/terminal.sha256" ]; then
   [ ! -f "$C/btop/btop.conf" ] || sed -i -E 's/^color_theme = "framework-dots(-light)?"$/color_theme = "Default"/' "$C/btop/btop.conf"
   (cd "$C" && rmdir fastfetch fish/functions btop/themes btop cava 2>/dev/null)
 fi
-rm -f "$HOME/.local/bin/framework-dots-accent" "$S/applications/framework-dots-accent.desktop"
+rm -f "$HOME/.local/bin/framework-dots-wallpaper-fix" "$HOME/.local/bin/framework-dots-accent" "$S/applications/framework-dots-accent.desktop"
 rm -f "$HOME/.local/bin/framework-dots-mode" "$HOME/.local/bin/claude-usage"
 if grep -qs 'claude-usage' "$HOME/.claude/settings.json"; then echo "Note: ~/.claude/settings.json still mentions claude-usage. Remove that statusLine yourself."; fi
 if [ "$ways" = 1 ]; then

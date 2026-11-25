@@ -48,12 +48,14 @@ PlasmoidItem {
         id: apps
         autoPopulate: false
         appNameFormat: 0
-        flat: true; sorted: true; showSeparators: false; showRootSeparator: false; showTopLevelItems: false
+        flat: true; sorted: true; showSeparators: false; showTopLevelItems: false
         showAllApps: true; showAllAppsCategorized: false
-        showRecentApps: false; showRecentDocs: false; showRecentFolders: false; showPowerSession: false
+        showRecentApps: false; showRecentDocs: false; showPowerSession: false
         appletInterface: root
         onRefreshed: root.refreshed()
         Component.onCompleted: {
+            // Not every Plasma 6 version has these
+            for (const k of ["showRecentFolders", "showRootSeparator"]) if (k in apps) apps[k] = false
             if (favoritesModel) favoritesModel.initForClient("org.kde.plasma.kicker.favorites.instance-" + Plasmoid.id)
         }
     }
