@@ -13,7 +13,7 @@
     "break",
     { "type": "title", "color": { "user": "1;38;2;243;83;26", "at": "90", "host": "1" } },
     "break",
-    { "type": "host", "key": "machine", "format": "{name}" },
+    { "type": "host", "key": "machine", "format": "{name:-28}" },
     { "type": "os", "key": "system", "format": "{pretty-name}" },
     { "type": "kernel", "key": "kernel", "format": "{release}" },
     { "type": "de", "key": "desktop", "format": "{pretty-name} {version}" },

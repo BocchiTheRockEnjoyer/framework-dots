@@ -19,6 +19,10 @@ grey and orange. Made with help from [Claude Code](https://claude.com/claude-cod
 
 ![Dotted title bars, fastfetch, a music visualiser and btop](preview/windows.png)
 
+**App launcher**
+
+![Full-screen app launcher with dotted search](preview/launcher.png)
+
 ### Widgets
 
 Pictures use demo music and notifications, London weather, and sample Claude usage and slider levels.
@@ -39,9 +43,13 @@ Pictures use demo music and notifications, London weather, and sample Claude usa
 |:---:|:---:|
 | <img src="preview/center.png" width="360" alt="Notification center with toggles, sliders, accent colours and notifications"> | <img src="preview/volume.png" width="320" alt="Volume pop-up"> |
 
-| Focus timer | Claude Code usage |
+| Notification pop-ups | Focus timer |
 |:---:|:---:|
-| <img src="preview/timer.png" width="310" alt="Focus timer popup"> | <img src="preview/claude.png" width="310" alt="Claude Code usage popup"> |
+| <img src="preview/popups.png" width="330" alt="Notification pop-ups"> | <img src="preview/timer.png" width="310" alt="Focus timer popup"> |
+
+**Claude Code usage**
+
+<img src="preview/claude.png" width="310" alt="Claude Code usage popup">
 
 New to Linux? This guide assumes no experience. Copy each grey box into a terminal and press Enter.
 
