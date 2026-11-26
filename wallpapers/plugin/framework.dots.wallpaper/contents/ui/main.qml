@@ -29,7 +29,7 @@ WallpaperItem {
         running: root.visible && !(cover.item && cover.item.covered) && !(power.item && power.item.onBattery)
         fps: Math.max(10, Math.min(60, root.cfg.Fps))
         speed: root.cfg.Speed / 100
-        gain: 2.1 * root.cfg.Brightness / 100
+        gain: 2.6 * root.cfg.Brightness / 100
         accent: scheme.accent
         hotColor: root.mix(root.mix(scheme.accent, "white", 0.38), root.mix(scheme.accent, "black", 0.3), root.mode)
         background: root.mix("#090909", "#ededed", root.mode)

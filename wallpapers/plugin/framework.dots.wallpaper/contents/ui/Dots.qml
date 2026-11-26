@@ -12,7 +12,7 @@ Item {
     property string pattern: "blackhole" // or "swirl"
     readonly property bool swirl: pattern === "swirl"
     property real density: swirl ? 180 : 224   // dots across
-    property real gain: 2.1
+    property real gain: 2.6
     property real trail: swirl ? 0.71 : 0.7
     property real lightness: 0           // 0 dark, 1 light
     readonly property real dpr: Screen.devicePixelRatio || 1
