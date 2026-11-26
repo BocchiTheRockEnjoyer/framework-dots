@@ -77,9 +77,9 @@ if [ -z "${FD_TEST:-}" ]; then
     done < "$state/wallpaper"
   fi
   plasma "$js"' var ways = '"$ways"'; desktops().forEach(function(d) { var g = ["Wallpaper", "org.kde.image", "General"]; d.currentConfigGroup = g; var img = String(d.readConfig("Image") || "");
-    var mine = d.wallpaperPlugin == "org.kde.image" && /Pictures\/Wallpapers\/(dot-matrix-blackhole(-light)?|framework-logo-dots|graphite-orange-dots)\.png$/.test(img);
+    var mine = d.wallpaperPlugin == "framework.dots.wallpaper" || d.wallpaperPlugin == "org.kde.image" && /Pictures\/Wallpapers\/(dot-matrix-blackhole(-light)?|framework-logo-dots|graphite-orange-dots)\.png$/.test(img);
     if (!mine && !(ways && d.wallpaperPlugin == "org.waywallen.kde")) return;
-    var o = old[d.id]; if (o && ways && o[0] == "org.waywallen.kde") o = null;
+    var o = old[d.id]; if (o && (o[0] == "framework.dots.wallpaper" || ways && o[0] == "org.waywallen.kde")) o = null;
     if (o && o[0] == "org.kde.image" && /Pictures\/Wallpapers\/(dot-matrix-blackhole|framework-logo-dots|graphite-orange-dots)/.test(o[1])) o = null;
     d.wallpaperPlugin = o ? o[0] : "org.kde.image"; d.currentConfigGroup = ["Wallpaper", d.wallpaperPlugin, "General"];
     if (!o || o[0] == "org.kde.image") d.writeConfig("Image", o ? o[1] : ""); d.reloadConfig() })' >/dev/null
@@ -204,6 +204,7 @@ fi
 for f in "$state"/*-theme.auto.conf; do if [ -e "$f" ] && cmp -s "$f" "$C/kitty/$(basename "$f")"; then rm -f "$C/kitty/$(basename "$f")"; fi; done
 for w in dotboard dotmedia dotclock dotsysmon dotplaying dottimer dotkeys dotdesktops dotbatterypercent dotcenter dotlauncher dotweather claudeusage; do rm -rf "$S/plasma/plasmoids/local.$w"; done
 if [ -L "$HOME/.icons/framework-dots" ]; then rm -f "$HOME/.icons/framework-dots"; rmdir "$HOME/.icons" 2>/dev/null; fi
+rm -rf "$S/plasma/wallpapers/framework.dots.wallpaper"
 rm -rf "$S/icons/framework-dots" "$S/icons/nothing-dots" "$S/icons/nothing-dots-light" "$S/plasma/desktoptheme/breeze-rounded-dock" "$S/plasma/desktoptheme/breeze-rounded-dock-light"
 rm -rf "$S/plasma/look-and-feel/$D" "$S/plasma/look-and-feel/$L" "$S/fonts/fd-dots" "$S/plasma-qml/org/kde/plasma/workspace/osd"
 rm -f "$S/icons/hicolor/scalable/apps"/framework-logo-dots*.svg

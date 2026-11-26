@@ -1,0 +1,13 @@
+{
+    "KPackageStructure": "Plasma/Wallpaper",
+    "KPlugin": {
+        "Authors": [ { "Name": "Framework Dots" } ],
+        "Description": "Moving dot-matrix black hole, drawn on the graphics card",
+        "Icon": "preferences-desktop-wallpaper",
+        "Id": "framework.dots.wallpaper",
+        "License": "GPL-3.0-or-later",
+        "Name": "Framework Dots",
+        "Version": "1.1"
+    },
+    "X-KDE-ParentApp": "org.kde.plasmashell"
+}

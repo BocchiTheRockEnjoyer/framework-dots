@@ -3,7 +3,7 @@
 #   ./install.sh                 asks a few questions first
 #   ./install.sh --yes           no questions: theme only, unless you add the options below
 #   --layout / --no-layout       add (or don't add) the top bar, dock and desktop widgets
-#   --wallpaper still|moving|none
+#   --wallpaper dots|still|waywallen|none   (dots: the moving dot wallpaper)
 #   --kitty / --no-kitty         use (or don't use) the kitty terminal colours
 #   --terminal / --no-terminal   add (or don't add) the looks for fastfetch, fish, btop, cava, bat, delta, lazygit, fzf, eza, micro and nvim
 set -euo pipefail
@@ -16,7 +16,7 @@ while [ $# -gt 0 ]; do
     --layout) layout=y ;; --no-layout) layout=n ;;
     --terminal) term=y ;; --no-terminal) term=n ;;
     --kitty) kitty=y ;; --no-kitty) kitty=n ;;
-    --wallpaper) wall="${2:-}"; case "$wall" in still|moving|none) shift ;; *) echo "--wallpaper needs still, moving or none."; exit 2 ;; esac ;;
+    --wallpaper) wall="${2:-}"; case "$wall" in moving) wall=dots; shift ;; dots|still|none) shift ;; waywallen) wall=none+moving; shift ;; *) echo "--wallpaper needs dots, still, waywallen or none."; exit 2 ;; esac ;;
     -h|--help) usage; exit 0 ;;
     *) echo "Unknown option: $1"; usage; exit 2 ;;
   esac
@@ -91,17 +91,16 @@ fi
 if [ -z "$wall" ]; then
   wall=none
   if [ "$yes" = 0 ]; then
-    if ask "Set the black hole picture as your wallpaper?" y; then wall=still; fi
-    if [ "$(uname -m)" = x86_64 ] && ask "Also download the moving wallpaper app? (about 235 MB, a few manual steps)" n; then wall="$wall+moving"; fi
+    if ask "Use the moving dot wallpaper? (light on battery, pauses behind windows)" y; then wall=dots
+    elif ask "Use the black hole picture instead?" y; then wall=still; fi
   fi
 fi
-[ "$wall" != moving ] || wall=none+moving
 if [ "$yes" = 0 ]; then
   echo; echo "  Theme:      yes"
   echo "  Bar, dock:  $([ "$layout" = y ] && echo yes || { [ "$has_layout" = 1 ] && echo "already there" || echo no; })"
   echo "  Kitty:      $([ "$kitty" = y ] && echo yes || echo no)"
   echo "  Terminal:   $([ "$term" = y ] && echo yes || echo no)"
-  case "$wall" in none) w=no ;; still) w=picture ;; none+moving) w="moving wallpaper app" ;; *) w="picture, and the moving wallpaper app" ;; esac
+  case "$wall" in none) w=no ;; dots) w="moving dots" ;; still) w=picture ;; none+moving) w="Waywallen app" ;; *) w="picture, and the Waywallen app" ;; esac
   echo "  Wallpaper:  $w"; echo
   ask "Install now?" y || { echo "Nothing was changed."; exit 0; }
 fi
@@ -137,6 +136,7 @@ put "$here/cursors/framework-dots" "$S/icons"
 if [ ! -e "$HOME/.icons/framework-dots" ]; then mkdir -p "$HOME/.icons"; rm -f "$HOME/.icons/framework-dots"; ln -s "$S/icons/framework-dots" "$HOME/.icons/framework-dots"; fi
 mkdir -p "$S/icons/hicolor/scalable/apps"; cp "$here"/icons/hicolor/*.svg "$S/icons/hicolor/scalable/apps/"
 for p in "$here"/plasmoids/*; do put "$p" "$S/plasma/plasmoids"; done
+put "$here/wallpapers/plugin/framework.dots.wallpaper" "$S/plasma/wallpapers"
 for x in "" -light; do put "$here/theme/breeze-rounded-dock$x" "$S/plasma/desktoptheme"; done
 for x in "" light.; do put "$here/splash/framework.dots.${x}desktop" "$S/plasma/look-and-feel"; done
 for x in "" Light; do put "$here/colors/FrameworkGraphite$x.colors" "$S/color-schemes"; done
@@ -237,12 +237,16 @@ if [ "$ready" = 1 ]; then
     ids="$(plasma "$(cat "$here/layout.js")" | sed -n 's/.*FDIDS \([0-9]* [0-9]*\).*/\1/p' || true)"
     case "$ids" in *[0-9]*) echo "$ids" >> "$state/panels"; echo "Added the bar, dock and widgets." ;; *) echo "The bar and dock may not have been added. Run this installer again to retry." ;; esac
   fi
-  case "$wall" in still*)
+  case "$wall" in still*|dots)
     # Remember the old wallpaper, unless it's already ours
     if [ ! -e "$state/wallpaper" ]; then
       plasma 'desktops().forEach(function(d) { d.currentConfigGroup = ["Wallpaper", d.wallpaperPlugin, "General"]; print("FDW|" + d.id + "|" + d.wallpaperPlugin + "|" + (d.readConfig("Image") || "") + "|\n") })' | grep '^FDW' > "$state/wallpaper" || true
     fi
-    plasma-apply-wallpaperimage "$HOME/Pictures/Wallpapers/dot-matrix-blackhole.png" >/dev/null 2>&1 || echo "Couldn't set the wallpaper. Right-click the desktop to choose it." ;;
+    if [ "$wall" = dots ]; then
+      plasma 'desktops().forEach(function(d) { d.wallpaperPlugin = "framework.dots.wallpaper" })' >/dev/null || echo "Couldn't set the wallpaper. Right-click the desktop to choose it."
+    else
+      plasma-apply-wallpaperimage "$HOME/Pictures/Wallpapers/dot-matrix-blackhole.png" >/dev/null 2>&1 || echo "Couldn't set the wallpaper. Right-click the desktop to choose it."
+    fi ;;
   esac
 elif [ "$layout" = y ]; then
   echo "The taskbar took too long to come back, so the bar and dock weren't added. Log in again and rerun this."

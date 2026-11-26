@@ -92,7 +92,7 @@ Pictures use demo music and notifications, London weather, and sample Claude usa
 | **Terminal** | kitty, fish, fastfetch, btop, cava, bat, delta, lazygit, fzf, eza, micro and Neovim |
 | **Editors** | Kate and KWrite themes |
 | **Browser** | Optional Floorp theme |
-| **Wallpapers** | Black hole stills in dark and light, and an optional moving one |
+| **Wallpapers** | A moving dotted black hole or swirl that pauses behind windows, plus stills in dark and light |
 | **Splash screen** | Dotted, in dark and light |
 | **Installer** | One command, no password, saves your settings first, with an uninstaller |
 
@@ -124,7 +124,7 @@ I built this on **one computer**, and that's the only one it has been used on:
 | **Screen** | One built-in screen, 2880x1920 at 200% scale |
 | **Distro** | CachyOS (based on Arch), kernel 7.3.5 |
 | **Desktop** | KDE Plasma 6.8.3 on Wayland (Qt 6.12, KDE Frameworks 6.32) |
-| **Moving wallpaper** | Waywallen 0.6.1 with its KDE plugin 0.4.6 and web wallpaper plugin 0.3.4 |
+| **Moving wallpaper** | Built in. The optional Waywallen version: Waywallen 0.6.1, KDE plugin 0.4.6, web wallpaper plugin 0.3.4 |
 
 **Not tested:**
 
@@ -135,7 +135,7 @@ I built this on **one computer**, and that's the only one it has been used on:
 | X11 | Unknown |
 | Several screens | Unknown |
 | 100% or 125% scale | Looked right on a hidden 1920x1200 test screen. At 100%, small icons are more like lines than dots |
-| NVIDIA or AMD graphics | The theme should be fine. For the moving wallpaper, see Waywallen's notes on NVIDIA |
+| NVIDIA or AMD graphics | Should be fine, but only Intel graphics have been tried. For the Waywallen version, see Waywallen's notes on NVIDIA |
 | Plasma 5, GNOME, XFCE, Hyprland and others | Won't work, though the still wallpapers are just pictures |
 
 The installer and uninstaller were also tested in a fresh, hidden Plasma session on the same computer, but not yet by a real
@@ -213,7 +213,7 @@ You can also add single widgets: right-click the desktop, **Add Widgets**, and s
 Both are included and follow KDE's light/dark switch. That includes kitty, btop, the terminal looks and the Floorp
 theme; btop changes the next time you open it. You can also pick **Framework Dots** or **Framework Dots Light** in
 System Settings → **Global Theme** (leave the layout option unticked).
-The moving black hole switches too (turn off **Follow light/dark mode** in its settings to stop that).
+The moving wallpaper switches too (untick **Follow light and dark mode** in its settings to stop that).
 Still pictures don't; there's a light one called `dot-matrix-blackhole-light.png`.
 
 ### Accent colour
@@ -252,9 +252,21 @@ or another **Virtual Desktop Switching Animation**.
 
 ## 4. Set the wallpaper
 
-The installer can set the still picture for you. The moving one takes a few more steps.
+The installer asks about this. Say yes to the **moving dot wallpaper**, or no to get the still picture instead.
 
-### Still picture (easy)
+### Moving dot wallpaper
+
+A dotted black hole that slowly turns, drawn by your graphics card. It's built into the theme, so there's nothing to download.
+
+- It **pauses by itself** when windows cover the desktop: a maximised or full-screen window, or windows side by side.
+- It follows **light and dark mode** and your **accent colour**.
+- To change it, right-click the desktop and choose **Desktop and Wallpaper**. Here you can pick the **Swirl** pattern, and change the
+  speed, brightness and frames per second. You can also pause it on battery.
+
+To turn it on later: right-click the desktop, choose **Desktop and Wallpaper**, set **Wallpaper type** to **Framework Dots**, and
+click **Apply**.
+
+### Still picture
 
 1. Right-click the desktop and choose **Desktop and Wallpaper**.
 2. Click **Add Image** and open **Pictures → Wallpapers** in your home folder.
@@ -266,16 +278,16 @@ Or use one command:
 plasma-apply-wallpaperimage ~/Pictures/Wallpapers/dot-matrix-blackhole.png
 ```
 
-### Moving wallpaper
+<details>
+<summary><b>Older moving version with Waywallen</b> (reacts to music; uses more battery)</summary>
 
-The black hole can spin, react to music, and change colour, speed and more. It needs a free app called
-[Waywallen](https://github.com/waywallen/waywallen). You **don't** need Steam or Wallpaper Engine.
-It uses more battery than the still picture.
+Before the built-in one, the moving black hole ran in a free app called [Waywallen](https://github.com/waywallen/waywallen).
+It can react to music, but it runs a web browser in the background, so it uses several times more power. You **don't** need
+Steam or Wallpaper Engine.
 
-**Step 1. Get the apps.** Run the installer again and say yes to the **moving wallpaper app**. It downloads about 235 MB and
-checks that the files are genuine. (If you used git, you can run `./wallpaper-setup.sh` instead.)
-
-The taskbar disappears for a moment. That's normal. (It's for ordinary Intel and AMD computers; on ARM, use Waywallen's own guide.)
+**Step 1. Get the apps.** Run the installer with `--wallpaper waywallen` (or run `./wallpaper-setup.sh` if you used git).
+It downloads about 235 MB and checks that the files are genuine. The taskbar disappears for a moment; that's normal.
+(It's for ordinary Intel and AMD computers; on ARM, use Waywallen's own guide.)
 
 **Step 2. Add the wallpaper plugin.**
 Open **Waywallen** from the app menu. Click the **puzzle piece** at the bottom left, choose to install a plugin, and pick
@@ -283,26 +295,16 @@ Open **Waywallen** from the app menu. Click the **puzzle piece** at the bottom l
 Waywallen warns that plugins can access your files, so only add ones you trust. This one comes from Waywallen's makers.
 
 **Step 3. Show it where the wallpapers are.**
-Go to **Wallpapers** and click the **drive icon** at the top right. Add this folder, which the theme installer made:
-
-```
-FrameworkDots-Wallpapers
-```
-
-It's in your home folder. If it asks what kind, choose **Workshop** or **Wallpaper Engine**. Then click **refresh**.
+Go to **Wallpapers** and click the **drive icon** at the top right. Add the **FrameworkDots-Wallpapers** folder in your home
+folder. If it asks what kind, choose **Workshop** or **Wallpaper Engine**. Then click **refresh**.
 
 **Step 4. Turn it on.**
 Right-click the desktop, choose **Desktop and Wallpaper**, change **Wallpaper type** to **Waywallen**, and click **Apply**.
-The desktop may go blank until the next step.
-
-**Step 5. Pick it.**
-In Waywallen, click **Dot Matrix Black Hole** and apply it. Open its settings to change the look.
-You can close Waywallen's window; the wallpaper keeps running, and it starts by itself when you log in.
+Then, in Waywallen, click **Dot Matrix Black Hole** and apply it.
 
 **To save battery:** in Waywallen's settings (the gear), pause it when a window is **maximised** or when **on battery**.
-Lowering **Particles** and **Dots across the screen** helps too.
 
-**To go back to a picture,** use the command under [Still picture](#still-picture-easy).
+</details>
 
 ## 5. Undo everything
 
@@ -338,7 +340,7 @@ stay in `~/.local/share/framework-dots-backup-…`.
 | Dots behind the top bar | In its panel configuration, set **Opacity** to **Opaque** |
 | Dock dots look uneven | In its panel configuration, set the height to **60** |
 | Volume pop-up missing after an update | Run `rm ~/.config/systemd/user/plasma-plasmashell.service.d/dot-osd.conf`, then log out and back in |
-| Moving wallpaper is frozen | A maximised window may be pausing it. If not, wait 30 seconds (it reloads itself after the taskbar restarts), or run `~/.local/bin/framework-dots-wallpaper-fix 0`. Otherwise, log out and back in |
+| Moving wallpaper is frozen | It pauses while windows cover the desktop: move them, or minimise them. Pausing on battery may be on in its settings. With Waywallen, wait 30 seconds or run `~/.local/bin/framework-dots-wallpaper-fix 0` |
 | Waywallen shows no wallpapers | Check you added **FrameworkDots-Wallpapers** itself, then refresh or restart Waywallen |
 | Waywallen won't open | Run `~/Applications/waywallen.AppImage` in a terminal and read the message |
 
@@ -362,7 +364,7 @@ Still stuck? Open an **Issue** at the top of this page. Say which system and Pla
 - **Claude Code usage widget:** shows tokens by itself. For plan limits, set `statusLine` in `~/.claude/settings.json` to
   `{"type": "command", "command": "~/.local/bin/claude-usage --record"}`. It only reads files on your computer.
 - **Colours:** orange `#F3531A`, boards `#0C0C0C`, outline `#4A4A4A`, graphite `#252525` and `#1A1A1A`.
-- **For tinkerers:** `sources` has the rough scripts that drew the icons.
+- **For tinkerers:** `sources` has the rough scripts that drew the icons, and the wallpaper's shader code (`sources/wallpaper`).
 
 ## Credits and licence
 
@@ -375,7 +377,7 @@ Still stuck? Open an **Issue** at the top of this page. Say which system and Pla
   Font License, in `fonts/fd-dots/OFL.txt`
 - Framework logo shape from [Simple Icons](https://simpleicons.org)
 
-Licensed GPL-3.0-or-later, except where noted above. The moving wallpaper uses
+Licensed GPL-3.0-or-later, except where noted above. The optional older moving wallpaper uses
 [Waywallen](https://github.com/waywallen), a separate project that isn't included here.
 
 Not affiliated with Framework, Nothing, KDE or Anthropic. Their names and logos are their own.
