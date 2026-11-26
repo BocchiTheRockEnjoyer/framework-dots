@@ -19,9 +19,9 @@ Item {
     Rectangle {
         id: board
         width: parent.width; height: 52; radius: 12
-        color: tile.active ? "#f3531a" : Qt.rgba(tile.ink.r, tile.ink.g, tile.ink.b, area.containsMouse ? 0.14 : 0.07)
+        color: tile.active ? Kirigami.Theme.highlightColor : Qt.rgba(tile.ink.r, tile.ink.g, tile.ink.b, area.containsMouse ? 0.14 : 0.07)
         border.width: tile.activeFocus ? 2 : 1
-        border.color: tile.activeFocus ? "#f3531a" : Qt.rgba(tile.ink.r, tile.ink.g, tile.ink.b, tile.active ? 0 : 0.2)
+        border.color: tile.activeFocus ? Kirigami.Theme.highlightColor : Qt.rgba(tile.ink.r, tile.ink.g, tile.ink.b, tile.active ? 0 : 0.2)
         Behavior on color { ColorAnimation { duration: 120 } }
         DotIcon { anchors.centerIn: parent; rows: tile.glyph; color: tile.active ? "#141414" : tile.ink }
     }

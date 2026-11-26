@@ -99,7 +99,7 @@ PlasmoidItem {
                     visible: root.cur !== null
                     Layout.alignment: Qt.AlignHCenter
                     spacing: 18
-                    DotIcon { pitch: 6; color: "#f3531a"; rows: root.icons[root.cur ? root.kind(root.cur.weather_code, root.cur.is_day) : "cloud"] }
+                    DotIcon { pitch: 6; color: Kirigami.Theme.highlightColor; rows: root.icons[root.cur ? root.kind(root.cur.weather_code, root.cur.is_day) : "cloud"] }
                     ColumnLayout {
                         spacing: 2
                         Text { text: root.cur ? Math.round(root.cur.temperature_2m) + "°" : ""; font.family: "FD Dots"; font.capitalization: Font.AllUppercase; font.pointSize: 42; color: Kirigami.Theme.textColor }
@@ -143,7 +143,7 @@ PlasmoidItem {
                             PC.Label { text: root.hourOf(modelData.t); opacity: 0.6; font: Kirigami.Theme.smallFont; Layout.alignment: Qt.AlignHCenter }
                             DotIcon { rows: root.icons[root.kind(modelData.c, modelData.d)]; Layout.alignment: Qt.AlignHCenter }
                             PC.Label { text: Math.round(modelData.v) + "°"; Layout.alignment: Qt.AlignHCenter }
-                            PC.Label { text: (modelData.p ?? 0) + "%"; color: (modelData.p ?? 0) >= 50 ? "#f3531a" : Kirigami.Theme.textColor; opacity: (modelData.p ?? 0) >= 50 ? 1 : 0.5; font: Kirigami.Theme.smallFont; Layout.alignment: Qt.AlignHCenter }
+                            PC.Label { text: (modelData.p ?? 0) + "%"; color: (modelData.p ?? 0) >= 50 ? Kirigami.Theme.highlightColor : Kirigami.Theme.textColor; opacity: (modelData.p ?? 0) >= 50 ? 1 : 0.5; font: Kirigami.Theme.smallFont; Layout.alignment: Qt.AlignHCenter }
                         }
                     }
                 }
@@ -160,7 +160,7 @@ PlasmoidItem {
                             DotIcon { rows: root.icons[root.kind(modelData.c, 1)]; Layout.alignment: Qt.AlignHCenter }
                             PC.Label { text: Math.round(modelData.hi) + "°"; Layout.alignment: Qt.AlignHCenter }
                             PC.Label { text: Math.round(modelData.lo) + "°"; opacity: 0.6; Layout.alignment: Qt.AlignHCenter }
-                            PC.Label { text: (modelData.p ?? 0) + "%"; color: (modelData.p ?? 0) >= 50 ? "#f3531a" : Kirigami.Theme.textColor; opacity: (modelData.p ?? 0) >= 50 ? 1 : 0.5; font: Kirigami.Theme.smallFont; Layout.alignment: Qt.AlignHCenter }
+                            PC.Label { text: (modelData.p ?? 0) + "%"; color: (modelData.p ?? 0) >= 50 ? Kirigami.Theme.highlightColor : Kirigami.Theme.textColor; opacity: (modelData.p ?? 0) >= 50 ? 1 : 0.5; font: Kirigami.Theme.smallFont; Layout.alignment: Qt.AlignHCenter }
                         }
                     }
                 }

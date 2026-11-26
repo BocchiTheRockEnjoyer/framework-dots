@@ -55,7 +55,7 @@ PlasmoidItem {
                         visible: root.spark[Math.floor(index / 11)][index % 11] === "#"
                         x: (index % 11) * 2 + 0.15; y: Math.floor(index / 11) * 2 + 0.15
                         width: 1.7; height: 1.7; radius: 0.85
-                        color: "#f3531a"
+                        color: Kirigami.Theme.highlightColor
                     }
                 }
             }
@@ -63,7 +63,7 @@ PlasmoidItem {
                 anchors.verticalCenter: parent.verticalCenter
                 text: root.shortText
                 font.family: "FD Dots"; font.capitalization: Font.AllUppercase; font.pointSize: 13
-                color: root.pct("five_hour") >= 80 ? "#f3531a" : Kirigami.Theme.textColor
+                color: root.pct("five_hour") >= 80 ? Kirigami.Theme.highlightColor : Kirigami.Theme.textColor
             }
         }
     }
@@ -87,7 +87,7 @@ PlasmoidItem {
                     readonly property int col: Math.floor(index / 3)
                     readonly property int lit: value <= 0 ? 0 : Math.max(1, Math.round(Math.min(100, value) / 100 * 30))
                     x: col * 9 + 1; y: (index % 3) * 9 + 1; width: 7; height: 7; radius: 3.5
-                    color: col < lit && (col === lit - 1 || value >= 80) ? "#f3531a" : Kirigami.Theme.textColor
+                    color: col < lit && (col === lit - 1 || value >= 80) ? Kirigami.Theme.highlightColor : Kirigami.Theme.textColor
                     opacity: col < lit ? 1 : 0.18
                 }
             }

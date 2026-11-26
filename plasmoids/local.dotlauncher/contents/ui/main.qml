@@ -38,7 +38,7 @@ PlasmoidItem {
             columns: 3; spacing: dot * 0.72
             scale: button.pressed ? 0.9 : button.containsMouse ? 1.08 : 1
             Behavior on scale { NumberAnimation { duration: 110 } }
-            Repeater { model: 9; Rectangle { required property int index; width: nine.dot; height: width; radius: width / 2; color: index === 4 && (button.containsMouse || (root.dash && root.dash.visible)) ? "#f3531a" : Kirigami.Theme.textColor } }
+            Repeater { model: 9; Rectangle { required property int index; width: nine.dot; height: width; radius: width / 2; color: index === 4 && (button.containsMouse || (root.dash && root.dash.visible)) ? Kirigami.Theme.highlightColor : Kirigami.Theme.textColor } }
         }
     }
 

@@ -6,6 +6,7 @@ import org.kde.plasma.core as PlasmaCore
 import org.kde.plasma.private.mpris as Mpris
 
 PlasmoidItem {
+    readonly property color accent: Kirigami.Theme.highlightColor     // follows the colour scheme, no restart needed
     id: root
 
     // Boards follow the colour scheme: light text on dark, dark on light
@@ -63,7 +64,7 @@ PlasmoidItem {
                 visible: gl.rows7.length === 7 && gl.rows7[Math.floor(index / 7)][index % 7] === "#"
                 x: 6 + (index % 7) * gl.pitch; y: 6 + Math.floor(index / 7) * gl.pitch
                 width: gl.pitch * 0.84; height: width; radius: width / 2
-                color: gl.containsMouse ? "#f3531a" : gl.tint
+                color: gl.containsMouse ? Kirigami.Theme.highlightColor : gl.tint
             }
         }
     }
@@ -178,7 +179,7 @@ PlasmoidItem {
                 x: view.p * root.art0; y: view.p * root.art0; width: view.p * root.artN; height: width
                 onWidthChanged: requestPaint()
                 NumberAnimation { id: appear; target: cover; property: "opacity"; to: 1; duration: 350 }
-                Connections { target: root; function onColourChanged() { cover.requestPaint() } function onDarkChanged() { cover.requestPaint() } }
+                Connections { target: root; function onColourChanged() { cover.requestPaint() } function onDarkChanged() { cover.requestPaint() } function onAccentChanged() { cover.requestPaint() } }
                 onPaint: {
                     var c = getContext("2d"), n = root.dense, q = width / n, a = probe.px, cr = n * 0.07; c.reset()
                     if (a.length === n * n) {
@@ -195,7 +196,7 @@ PlasmoidItem {
                         var p = view.p, note = ["....#######", "....#######", "....#.....#", "....#.....#", "....#.....#", "....#.....#", ".####..####", "#####.#####", "#####.#####", ".###...###."]
                         for (var gy = 0; gy < root.artN; gy++) for (var gx = 0; gx < root.artN; gx++) {
                             var on = gy >= 8 && gy < 18 && gx >= 8 && gx < 19 && note[gy - 8][gx - 8] === "#"
-                            c.fillStyle = on ? "#f3531a" : root.gridInk; c.beginPath(); c.arc((gx + 0.5) * p, (gy + 0.5) * p, p * (on ? 0.42 : 0.38), 0, 6.2832); c.fill()
+                            c.fillStyle = on ? root.accent : root.gridInk; c.beginPath(); c.arc((gx + 0.5) * p, (gy + 0.5) * p, p * (on ? 0.42 : 0.38), 0, 6.2832); c.fill()
                         }
                     }
                 }
@@ -207,7 +208,7 @@ PlasmoidItem {
                 spacing: view.p * 0.3
                 Glyph { pitch: view.p * 0.6; enabled: root.player?.canGoPrevious ?? false; onClicked: root.player.Previous()
                     rows7: ["#.....#", "#...###", "#..####", "#.#####", "#..####", "#...###", "#.....#"] }
-                Glyph { pitch: view.p * 0.6; enabled: root.track !== ""; tint: "#f3531a"; onClicked: root.player.PlayPause()
+                Glyph { pitch: view.p * 0.6; enabled: root.track !== ""; tint: Kirigami.Theme.highlightColor; onClicked: root.player.PlayPause()
                     rows7: root.playing ? ["##...##", "##...##", "##...##", "##...##", "##...##", "##...##", "##...##"] : ["##.....", "####...", "######.", "#######", "######.", "####...", "##....."] }
                 Glyph { pitch: view.p * 0.6; enabled: root.player?.canGoNext ?? false; onClicked: root.player.Next()
                     rows7: ["#.....#", "###...#", "####..#", "#####.#", "####..#", "###...#", "#.....#"] }
@@ -227,7 +228,7 @@ PlasmoidItem {
                                 readonly property int lv: root.playing ? root.levels[bar.index] : 1
                                 x: view.p * 0.08; y: index * view.p + view.p * 0.08
                                 width: view.p * 0.84; height: width; radius: width / 2
-                                color: index === 5 - lv && root.playing ? "#f3531a" : root.ink
+                                color: index === 5 - lv && root.playing ? Kirigami.Theme.highlightColor : root.ink
                                 opacity: index >= 5 - lv ? (root.playing ? 1 : 0.4) : 0.07
                             }
                         }
@@ -246,7 +247,7 @@ PlasmoidItem {
                         required property int index
                         x: index * view.p + view.p * 0.08; y: view.p * 0.08
                         width: view.p * 0.84; height: width; radius: width / 2
-                        color: index === prog.lit - 1 ? "#f3531a" : root.ink
+                        color: index === prog.lit - 1 ? Kirigami.Theme.highlightColor : root.ink
                         opacity: index < prog.lit ? 1 : 0.12
                     }
                 }

@@ -33,6 +33,9 @@ PlasmoidItem {
     property var tint: []       // last lit state, so fading dots keep their colour
     property var changed: []    // indexes to redraw; empty = everything
     signal repaint()
+    // The accent comes from the colour scheme, so a new accent shows without restarting the taskbar
+    readonly property color accent: Kirigami.Theme.highlightColor
+    onAccentChanged: { changed = []; repaint() }
     // The colon and the seconds track change every second, so they are separate dots: the canvas is only redrawn once a minute
     property int second: 0
     property int colonX: 0
@@ -123,7 +126,7 @@ PlasmoidItem {
                 property bool needAll: true
                 function dot(c, i, p) {
                     var v = root.shown[i]; if (v <= 0) return
-                    c.globalAlpha = v; c.fillStyle = root.tint[i] === 2 ? "#f3531a" : root.ink
+                    c.globalAlpha = v; c.fillStyle = root.tint[i] === 2 ? root.accent : root.ink
                     c.beginPath(); c.arc((i % root.cols + 0.5) * p, (Math.floor(i / root.cols) + 0.5) * p, p * 0.42, 0, 6.2832); c.fill()
                 }
                 onPaint: {
@@ -151,11 +154,11 @@ PlasmoidItem {
             Item {
                 anchors.fill: parent
                 visible: !root.secs || root.second % 2 === 0
-                Repeater { model: 8; Dot { required property int index; col: root.colonX + index % 2; row: (index < 4 ? 14 : 18) + (index % 4 >> 1); color: "#f3531a" } }
+                Repeater { model: 8; Dot { required property int index; col: root.colonX + index % 2; row: (index < 4 ? 14 : 18) + (index % 4 >> 1); color: Kirigami.Theme.highlightColor } }
             }
             Repeater {
                 model: root.secs ? 60 : 0
-                Dot { required property int index; col: 2 + index; row: 28; visible: index <= root.second; color: index === root.second ? "#f3531a" : root.ink }
+                Dot { required property int index; col: 2 + index; row: 28; visible: index <= root.second; color: index === root.second ? Kirigami.Theme.highlightColor : root.ink }
             }
         }
     }

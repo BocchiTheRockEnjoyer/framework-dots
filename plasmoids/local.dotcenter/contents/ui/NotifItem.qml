@@ -26,7 +26,7 @@ Rectangle {
     implicitHeight: col.implicitHeight + 20
     radius: 12
     color: Qt.rgba(ink.r, ink.g, ink.b, area.containsMouse ? 0.1 : 0.05)
-    border.width: 1; border.color: critical ? "#f3531a" : Qt.rgba(ink.r, ink.g, ink.b, 0.16)
+    border.width: 1; border.color: critical ? Kirigami.Theme.highlightColor : Qt.rgba(ink.r, ink.g, ink.b, 0.16)
     MouseArea { id: area; anchors.fill: parent; hoverEnabled: true; cursorShape: it.model.hasDefaultAction ? Qt.PointingHandCursor : Qt.ArrowCursor; acceptedButtons: Qt.LeftButton | Qt.MiddleButton
         onClicked: m => { if (m.button === Qt.MiddleButton) it.closed(); else if (it.model.hasDefaultAction) it.opened() } }
     ColumnLayout {
@@ -41,7 +41,7 @@ Rectangle {
             Item {
                 Layout.preferredWidth: 16; Layout.preferredHeight: 16
                 Accessible.role: Accessible.Button; Accessible.name: "Dismiss"; Accessible.onPressAction: it.closed()
-                DotIcon { anchors.centerIn: parent; pitch: 1.2; color: x.containsMouse ? "#f3531a" : it.ink; opacity: x.containsMouse ? 1 : 0.5
+                DotIcon { anchors.centerIn: parent; pitch: 1.2; color: x.containsMouse ? Kirigami.Theme.highlightColor : it.ink; opacity: x.containsMouse ? 1 : 0.5
                     rows: ["#.........#", ".#.......#.", "..#.....#..", "...#...#...", "....#.#....", ".....#.....", "....#.#....", "...#...#...", "..#.....#..", ".#.......#.", "#.........#"] }
                 MouseArea { id: x; anchors.fill: parent; anchors.margins: -4; hoverEnabled: true; cursorShape: Qt.PointingHandCursor; onClicked: it.closed() }
             }

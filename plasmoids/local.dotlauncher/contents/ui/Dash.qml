@@ -83,12 +83,12 @@ Kicker.DashboardWindow {
                     anchors.fill: parent
                     horizontalAlignment: TextInput.AlignHCenter; verticalAlignment: TextInput.AlignVCenter
                     font.family: "FD Dots"; font.capitalization: Font.AllUppercase; font.pointSize: 30
-                    color: page.ink; selectionColor: "#f3531a"; selectedTextColor: "#141414"
+                    color: page.ink; selectionColor: Kirigami.Theme.highlightColor; selectedTextColor: "#141414"
                     clip: true; maximumLength: 80
                     Accessible.role: Accessible.EditableText; Accessible.name: "Search apps"
                     cursorDelegate: Item {
                         Column { anchors.verticalCenter: parent.verticalCenter; x: 2; spacing: 2; visible: dash.searching
-                            Repeater { model: 5; Rectangle { width: 5; height: 5; radius: 2.5; color: "#f3531a" } }
+                            Repeater { model: 5; Rectangle { width: 5; height: 5; radius: 2.5; color: Kirigami.Theme.highlightColor } }
                             SequentialAnimation on opacity { loops: Animation.Infinite; running: dash.visible && dash.searching; PauseAnimation { duration: 500 } NumberAnimation { to: 0; duration: 60 } PauseAnimation { duration: 400 } NumberAnimation { to: 1; duration: 60 } } }
                     }
                     onTextChanged: dash.runnerModel.query = text
@@ -109,7 +109,7 @@ Kicker.DashboardWindow {
                     }
                 }
                 Row { anchors { bottom: parent.bottom; horizontalCenter: parent.horizontalCenter } spacing: 6
-                    Repeater { model: Math.floor(search.width / 10); Rectangle { required property int index; width: 4; height: 4; radius: 2; color: dash.searching ? "#f3531a" : page.ink; opacity: dash.searching ? 1 : 0.22 } } }
+                    Repeater { model: Math.floor(search.width / 10); Rectangle { required property int index; width: 4; height: 4; radius: 2; color: dash.searching ? Kirigami.Theme.highlightColor : page.ink; opacity: dash.searching ? 1 : 0.22 } } }
             }
 
             // Categories
@@ -127,7 +127,7 @@ Kicker.DashboardWindow {
                     required property int index
                     readonly property bool on: index === dash.group && !dash.searching
                     width: name.implicitWidth + 26; height: 34; radius: 17
-                    color: on ? "#f3531a" : Qt.rgba(page.ink.r, page.ink.g, page.ink.b, over.containsMouse ? 0.14 : 0.06)
+                    color: on ? Kirigami.Theme.highlightColor : Qt.rgba(page.ink.r, page.ink.g, page.ink.b, over.containsMouse ? 0.14 : 0.06)
                     border.width: 1; border.color: Qt.rgba(page.ink.r, page.ink.g, page.ink.b, on ? 0 : 0.18)
                     Accessible.role: Accessible.PageTab; Accessible.name: modelData.name; Accessible.onPressAction: dash.pick(index)
                     PC.Label { id: name; anchors.centerIn: parent; text: pill.modelData.name; textFormat: Text.PlainText; color: pill.on ? "#141414" : page.ink }
@@ -166,7 +166,7 @@ Kicker.DashboardWindow {
                     }
                     Kirigami.Icon { id: ic; anchors { top: parent.top; topMargin: 18; horizontalCenter: parent.horizontalCenter } width: 56; height: 56; source: app.model.decoration; animated: false; scale: hover.pressed ? 0.92 : 1 }
                     PC.Label { anchors { top: ic.bottom; topMargin: 8; left: parent.left; right: parent.right; margins: 12 } text: app.model.display || ""; textFormat: Text.PlainText; horizontalAlignment: Text.AlignHCenter; wrapMode: Text.Wrap; maximumLineCount: 2; elide: Text.ElideRight; font: Kirigami.Theme.smallFont; color: page.ink }
-                    Rectangle { anchors { bottom: parent.bottom; bottomMargin: 9; horizontalCenter: parent.horizontalCenter } width: 6; height: 6; radius: 3; color: "#f3531a"; visible: app.on }
+                    Rectangle { anchors { bottom: parent.bottom; bottomMargin: 9; horizontalCenter: parent.horizontalCenter } width: 6; height: 6; radius: 3; color: Kirigami.Theme.highlightColor; visible: app.on }
                     MouseArea {
                         id: hover
                         anchors.fill: parent
@@ -183,7 +183,7 @@ Kicker.DashboardWindow {
                 readonly property int at: grid.atYEnd ? pages - 1 : Math.min(pages - 1, Math.floor((grid.contentY - grid.originY) / Math.max(1, grid.height) + 0.25))
                 id: where
                 visible: pages > 1; spacing: 9
-                Repeater { model: where.pages; Rectangle { required property int index; width: 8; height: 8; radius: 4; color: index === where.at ? "#f3531a" : page.ink; opacity: index === where.at ? 1 : 0.25
+                Repeater { model: where.pages; Rectangle { required property int index; width: 8; height: 8; radius: 4; color: index === where.at ? Kirigami.Theme.highlightColor : page.ink; opacity: index === where.at ? 1 : 0.25
                     MouseArea { anchors.fill: parent; anchors.margins: -4; cursorShape: Qt.PointingHandCursor; onClicked: grid.contentY = grid.originY + Math.min(index * grid.height, Math.max(0, grid.contentHeight - grid.height)) } } }
             }
             Column {
@@ -208,9 +208,9 @@ Kicker.DashboardWindow {
                         required property int index
                         width: 46; height: 46; radius: 23
                         color: Qt.rgba(page.ink.r, page.ink.g, page.ink.b, am.containsMouse ? 0.14 : 0.06)
-                        border.width: 1; border.color: am.containsMouse ? "#f3531a" : Qt.rgba(page.ink.r, page.ink.g, page.ink.b, 0.18)
+                        border.width: 1; border.color: am.containsMouse ? Kirigami.Theme.highlightColor : Qt.rgba(page.ink.r, page.ink.g, page.ink.b, 0.18)
                         Accessible.role: Accessible.Button; Accessible.name: model.display || ""; Accessible.onPressAction: { dash.systemModel.trigger(index, "", null); dash.done() }
-                        Kirigami.Icon { anchors.centerIn: parent; width: 22; height: 22; source: act.model.decoration; isMask: true; color: am.containsMouse ? "#f3531a" : page.ink }
+                        Kirigami.Icon { anchors.centerIn: parent; width: 22; height: 22; source: act.model.decoration; isMask: true; color: am.containsMouse ? Kirigami.Theme.highlightColor : page.ink }
                         PC.Label { anchors { bottom: parent.top; bottomMargin: 5; horizontalCenter: parent.horizontalCenter } visible: am.containsMouse; text: act.model.display || ""; textFormat: Text.PlainText; font: Kirigami.Theme.smallFont; color: page.ink }
                         MouseArea { id: am; anchors.fill: parent; hoverEnabled: true; cursorShape: Qt.PointingHandCursor; onClicked: { dash.systemModel.trigger(act.index, "", null); dash.done() } }
                     }

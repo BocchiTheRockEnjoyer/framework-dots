@@ -39,7 +39,7 @@ PlasmoidItem {
             id: row
             anchors.centerIn: parent
             spacing: 5
-            DotIcon { rows: root.glyph; color: root.running ? "#f3531a" : Kirigami.Theme.textColor; anchors.verticalCenter: parent.verticalCenter }
+            DotIcon { rows: root.glyph; color: root.running ? Kirigami.Theme.highlightColor : Kirigami.Theme.textColor; anchors.verticalCenter: parent.verticalCenter }
             Text { visible: root.running || root.remain < root.total; text: root.fmt(root.remain); font.family: "FD Dots"; font.capitalization: Font.AllUppercase; font.pointSize: 13; color: Kirigami.Theme.textColor; anchors.verticalCenter: parent.verticalCenter }
         }
     }

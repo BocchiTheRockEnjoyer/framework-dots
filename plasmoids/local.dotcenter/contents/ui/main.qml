@@ -37,7 +37,7 @@ PlasmoidItem {
         acceptedButtons: Qt.LeftButton | Qt.MiddleButton
         onClicked: m => { if (m.button === Qt.MiddleButton && root.notifs) root.notifs.setDnd(!root.dnd); else root.expanded = !root.expanded }
         DotIcon { id: icon; anchors.centerIn: parent; rows: root.dnd ? root.bellOff : root.bell; color: root.ink; opacity: root.dnd ? 0.6 : 1 }
-        Rectangle { visible: root.fresh > 0 && !root.dnd; width: 7; height: 7; radius: 3.5; color: "#f3531a"; anchors { right: icon.right; top: icon.top; rightMargin: -1; topMargin: -1 } }
+        Rectangle { visible: root.fresh > 0 && !root.dnd; width: 7; height: 7; radius: 3.5; color: Kirigami.Theme.highlightColor; anchors { right: icon.right; top: icon.top; rightMargin: -1; topMargin: -1 } }
     }
 
     fullRepresentation: Item {
@@ -70,7 +70,7 @@ PlasmoidItem {
             }
             Accent {
                 Layout.fillWidth: true; ink: root.ink
-                // Started outside the taskbar, which restarts while the colour changes
+                // Started outside the taskbar, so closing it never stops the change halfway
                 onChosen: c => { root.expanded = false; sh.run("systemd-run --user --collect --quiet \"$HOME/.local/bin/framework-dots-accent\" " + c) }
             }
             Rectangle { Layout.fillWidth: true; implicitHeight: 1; color: root.ink; opacity: 0.14 }

@@ -35,7 +35,7 @@ PlasmoidItem {
                         anchors.centerIn: parent
                         width: parent.current ? 18 : 7; height: 7; radius: 3.5
                         antialiasing: true
-                        color: parent.current ? "#f3531a" : Kirigami.Theme.textColor
+                        color: parent.current ? Kirigami.Theme.highlightColor : Kirigami.Theme.textColor
                         opacity: parent.current || parent.containsMouse ? 1 : 0.4
                         Behavior on width { NumberAnimation { duration: Kirigami.Units.shortDuration } }
                     }

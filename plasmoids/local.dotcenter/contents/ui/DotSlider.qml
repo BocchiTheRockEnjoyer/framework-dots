@@ -1,4 +1,5 @@
 import QtQuick
+import org.kde.kirigami as Kirigami
 Item {
     id: s
     property var glyph: []
@@ -31,7 +32,7 @@ Item {
                 readonly property int col: Math.floor(index / 2)
                 x: col * track.pitch; y: 6 + (index % 2) * track.pitch
                 width: 6; height: 6; radius: 3
-                color: col === track.lit - 1 && !s.faded ? "#f3531a" : s.ink
+                color: col === track.lit - 1 && !s.faded ? Kirigami.Theme.highlightColor : s.ink
                 opacity: col < track.lit ? (s.faded ? 0.4 : 1) : 0.16
             }
         }

@@ -95,7 +95,7 @@ RowLayout {
                         y: (index % progressBar.rows) * progressBar.pitch + 1
                         width: 6; height: 6; radius: 3
                         antialiasing: true
-                        color: col < progressBar.lit && (col === progressBar.lit - 1 || progressBar.value > 100) ? "#f3531a" : Kirigami.Theme.textColor
+                        color: col < progressBar.lit && (col === progressBar.lit - 1 || progressBar.value > 100) ? Kirigami.Theme.highlightColor : Kirigami.Theme.textColor
                         opacity: col < progressBar.lit ? 1 : 0.18
                     }
                 }

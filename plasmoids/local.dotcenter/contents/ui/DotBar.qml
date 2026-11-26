@@ -16,7 +16,7 @@ Item {
             readonly property int col: Math.floor(index / bar.rows)
             x: col * bar.pitch + 1; y: (index % bar.rows) * bar.pitch + 1
             width: bar.pitch - 2; height: width; radius: width / 2
-            color: col < bar.lit && (bar.hot || col === bar.lit - 1) ? "#f3531a" : Kirigami.Theme.textColor
+            color: col < bar.lit && (bar.hot || col === bar.lit - 1) ? Kirigami.Theme.highlightColor : Kirigami.Theme.textColor
             opacity: col < bar.lit ? 1 : 0.18
         }
     }

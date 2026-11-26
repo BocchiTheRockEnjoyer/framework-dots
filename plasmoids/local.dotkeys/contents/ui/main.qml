@@ -35,7 +35,7 @@ PlasmoidItem {
                     readonly property bool head: modelData[1] === ""
                     spacing: 24
                     Layout.topMargin: head ? 8 : 0
-                    PC.Label { text: modelData[0]; Layout.preferredWidth: 190; color: parent.head ? "#f3531a" : Kirigami.Theme.textColor; font.bold: parent.head }
+                    PC.Label { text: modelData[0]; Layout.preferredWidth: 190; color: parent.head ? Kirigami.Theme.highlightColor : Kirigami.Theme.textColor; font.bold: parent.head }
                     PC.Label { text: modelData[1]; opacity: 0.7; Layout.preferredWidth: 200 }
                 }
             }

@@ -103,7 +103,7 @@ PlasmoidItem {
                     y: modelData.y * root.pitch + (root.pitch - height) / 2
                     width: 1.7; height: 1.7; radius: 0.85
                     antialiasing: true
-                    color: modelData.k === "red" ? "#f3531a" : Kirigami.Theme.textColor
+                    color: modelData.k === "red" ? Kirigami.Theme.highlightColor : Kirigami.Theme.textColor
                     opacity: modelData.k === "dim" ? 0.3 : 1
                 }
             }

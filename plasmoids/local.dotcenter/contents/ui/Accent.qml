@@ -1,10 +1,11 @@
 import QtQuick
+import org.kde.kirigami as Kirigami
 import org.kde.plasma.components as PC
 // Accent colour presets, and a window for any other colour. framework-dots-accent does the work.
 Item {
     id: bar
     property color ink
-    property color now: "#f3531a"       // rewritten by framework-dots-accent
+    property color now: Kirigami.Theme.highlightColor      // the accent in use, from the colour scheme
     signal chosen(string c)
     // Written as numbers so the recolouring leaves them alone
     readonly property var presets: [["orange", 243 / 255, 83 / 255, 26 / 255], ["red", 1, .231, .231], ["pink", 1, .31, .639], ["purple", .663, .439, 1], ["blue", .298, .553, 1], ["cyan", .133, .827, .933], ["green", .224, .827, .325], ["lime", .224, 1, .078], ["yellow", 1, .839, .039], ["white", .949, .949, .949]]

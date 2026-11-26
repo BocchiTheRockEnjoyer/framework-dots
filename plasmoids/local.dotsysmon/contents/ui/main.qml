@@ -35,7 +35,7 @@ PlasmoidItem {
                     DotBar { cols: 6; rows: 3; pitch: 5; value: modelData.v / 100; hot: modelData.v >= 85; anchors.verticalCenter: parent.verticalCenter }
                 }
             }
-            Text { text: Math.round(root.n(temp)) + "°"; font.family: "FD Dots"; font.capitalization: Font.AllUppercase; font.pointSize: 13; color: root.n(temp) >= 85 ? "#f3531a" : Kirigami.Theme.textColor; anchors.verticalCenter: parent.verticalCenter }
+            Text { text: Math.round(root.n(temp)) + "°"; font.family: "FD Dots"; font.capitalization: Font.AllUppercase; font.pointSize: 13; color: root.n(temp) >= 85 ? Kirigami.Theme.highlightColor : Kirigami.Theme.textColor; anchors.verticalCenter: parent.verticalCenter }
         }
     }
     fullRepresentation: Item {
@@ -121,7 +121,7 @@ PlasmoidItem {
                                 required property int index
                                 anchors.horizontalCenter: parent.horizontalCenter
                                 y: index * 6; width: 5; height: 5; radius: 2.5
-                                color: index === 5 - cr.lit || cr.u >= 85 ? "#f3531a" : Kirigami.Theme.textColor
+                                color: index === 5 - cr.lit || cr.u >= 85 ? Kirigami.Theme.highlightColor : Kirigami.Theme.textColor
                                 opacity: index >= 5 - cr.lit ? 1 : 0.15
                             }
                         }

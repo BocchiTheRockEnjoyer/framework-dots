@@ -15,6 +15,10 @@ grey and orange.
 
 ![Four desktops in green, blue, pink and purple](preview/accents.png)
 
+**Moving wallpaper: black hole or swirl**
+
+![The swirl pattern of the moving dot wallpaper](preview/swirl.png)
+
 **Windows and terminal**
 
 ![Dotted title bars, fastfetch, a music visualiser and btop](preview/windows.png)
@@ -227,7 +231,7 @@ or use a terminal:
 ~/.local/bin/framework-dots-accent reset
 ```
 
-It recolours the icons, widgets, windows, terminal looks, wallpapers and Floorp theme. The taskbar restarts, and open apps such as
+It recolours the icons, widgets, windows, terminal looks, wallpapers and Floorp theme. Everything changes within a few seconds, without restarting. Open apps such as
 Floorp and btop need reopening. Very dark colours are lightened so you can see them on black.
 
 ### Alt-Tab and editors

@@ -95,7 +95,7 @@ PlasmoidItem {
                         required property int index
                         readonly property bool on: index >= 5 - (root.playing ? root.levels[c.index] : 1)
                         y: index * pitch; width: pitch * 0.8; height: width; radius: width / 2
-                        color: on && root.playing && index === 5 - root.levels[c.index] ? "#f3531a" : Kirigami.Theme.textColor
+                        color: on && root.playing && index === 5 - root.levels[c.index] ? Kirigami.Theme.highlightColor : Kirigami.Theme.textColor
                         opacity: on ? 1 : 0.18
                     }
                 }
@@ -162,7 +162,7 @@ PlasmoidItem {
                         Item {
                             required property int index
                             width: 5; height: 3
-                            Rectangle { width: 3; height: 3; radius: 1.5; color: index === line.lit - 1 ? "#f3531a" : Kirigami.Theme.textColor; opacity: index < line.lit ? 0.9 : 0.18 }
+                            Rectangle { width: 3; height: 3; radius: 1.5; color: index === line.lit - 1 ? Kirigami.Theme.highlightColor : Kirigami.Theme.textColor; opacity: index < line.lit ? 0.9 : 0.18 }
                         }
                     }
                 }
@@ -188,7 +188,7 @@ PlasmoidItem {
                 visible: gl.n > 0 && gl.rows9[Math.floor(index / gl.n)][index % gl.n] === "#"
                 x: 7 + (index % gl.n) * gl.pitch; y: 7 + Math.floor(index / gl.n) * gl.pitch
                 width: gl.pitch * 0.84; height: width; radius: width / 2
-                color: gl.containsMouse ? "#f3531a" : gl.tint
+                color: gl.containsMouse ? Kirigami.Theme.highlightColor : gl.tint
             }
         }
     }
@@ -205,7 +205,7 @@ PlasmoidItem {
             Rectangle {
                 required property int index
                 x: index * 8 + 1; y: 4; width: 6; height: 6; radius: 3
-                color: index === dts.lit - 1 ? "#f3531a" : Kirigami.Theme.textColor
+                color: index === dts.lit - 1 ? Kirigami.Theme.highlightColor : Kirigami.Theme.textColor
                 opacity: index < dts.lit ? 1 : 0.18
             }
         }
@@ -314,15 +314,15 @@ PlasmoidItem {
             Row {
                 Layout.alignment: Qt.AlignHCenter
                 spacing: 2
-                Glyph { anchors.verticalCenter: parent.verticalCenter; visible: root.shuffle !== 0; pitch: 2; tint: root.shuffle === 2 ? "#f3531a" : Kirigami.Theme.textColor; onClicked: root.player.shuffle = root.shuffle === 2 ? 1 : 2
+                Glyph { anchors.verticalCenter: parent.verticalCenter; visible: root.shuffle !== 0; pitch: 2; tint: root.shuffle === 2 ? Kirigami.Theme.highlightColor : Kirigami.Theme.textColor; onClicked: root.player.shuffle = root.shuffle === 2 ? 1 : 2
                     rows9: [".......#.", "##....###", "..#..#.#.", "...##....", "...##....", "..#..#.#.", "##....###", ".......#.", "........."] }
                 Glyph { anchors.verticalCenter: parent.verticalCenter; enabled: root.player?.canGoPrevious ?? false; onClicked: root.player.Previous()
                     rows9: ["#.....#", "#...###", "#..####", "#.#####", "#..####", "#...###", "#.....#"] }
-                Glyph { anchors.verticalCenter: parent.verticalCenter; pitch: 4; tint: "#f3531a"; enabled: root.track !== ""; onClicked: root.player.PlayPause()
+                Glyph { anchors.verticalCenter: parent.verticalCenter; pitch: 4; tint: Kirigami.Theme.highlightColor; enabled: root.track !== ""; onClicked: root.player.PlayPause()
                     rows9: root.playing ? ["##...##", "##...##", "##...##", "##...##", "##...##", "##...##", "##...##"] : ["##.....", "####...", "######.", "#######", "######.", "####...", "##....."] }
                 Glyph { anchors.verticalCenter: parent.verticalCenter; enabled: root.player?.canGoNext ?? false; onClicked: root.player.Next()
                     rows9: ["#.....#", "###...#", "####..#", "#####.#", "####..#", "###...#", "#.....#"] }
-                Glyph { anchors.verticalCenter: parent.verticalCenter; visible: root.loop !== 0; pitch: 2; tint: root.loop > 1 ? "#f3531a" : Kirigami.Theme.textColor; onClicked: root.player.loopStatus = root.loop === 1 ? 2 : root.loop === 2 ? 3 : 1
+                Glyph { anchors.verticalCenter: parent.verticalCenter; visible: root.loop !== 0; pitch: 2; tint: root.loop > 1 ? Kirigami.Theme.highlightColor : Kirigami.Theme.textColor; onClicked: root.player.loopStatus = root.loop === 1 ? 2 : root.loop === 2 ? 3 : 1
                     rows9: root.loop === 3 ? ["......#..", "########.", "#.....#..", "#...#....", "...##...#", "....#...#", "..#.....#", ".########", "..#......"] : ["......#..", "########.", "#.....#..", "#........", "........#", "........#", "..#.....#", ".########", "..#......"] }
             }
             RowLayout {

@@ -54,7 +54,7 @@ KWin.TabBoxSwitcher {
                         radius: 14
                         color: Qt.rgba(box.ink.r, box.ink.g, box.ink.b, card.on ? 0.1 : 0.035)
                         border.width: card.on ? 2 : 1
-                        border.color: card.on ? "#f3531a" : Qt.rgba(box.ink.r, box.ink.g, box.ink.b, 0.16)
+                        border.color: card.on ? Kirigami.Theme.highlightColor : Qt.rgba(box.ink.r, box.ink.g, box.ink.b, 0.16)
                     }
                     Item {
                         id: shot
@@ -68,7 +68,7 @@ KWin.TabBoxSwitcher {
                         spacing: 7
                         Kirigami.Icon { source: card.model.icon; Layout.preferredWidth: 20; Layout.preferredHeight: 20 }
                         Text { text: card.caption; textFormat: Text.PlainText; elide: Text.ElideRight; Layout.fillWidth: true; font: Kirigami.Theme.smallFont; color: box.ink; opacity: card.on ? 1 : 0.65 }
-                        Rectangle { visible: card.on; width: 7; height: 7; radius: 3.5; color: "#f3531a" }
+                        Rectangle { visible: card.on; width: 7; height: 7; radius: 3.5; color: Kirigami.Theme.highlightColor }
                     }
                     TapHandler { onSingleTapped: { if (card.index === grid.currentIndex) grid.model.activate(card.index); else grid.currentIndex = card.index } onDoubleTapped: grid.model.activate(card.index) }
                 }
@@ -82,7 +82,7 @@ KWin.TabBoxSwitcher {
                 Row {
                     anchors.horizontalCenter: parent.horizontalCenter
                     spacing: 7
-                    Repeater { model: Math.min(40, grid.count); Rectangle { required property int index; width: 7; height: 7; radius: 3.5; color: index === grid.currentIndex ? "#f3531a" : box.ink; opacity: index === grid.currentIndex ? 1 : 0.22 } }
+                    Repeater { model: Math.min(40, grid.count); Rectangle { required property int index; width: 7; height: 7; radius: 3.5; color: index === grid.currentIndex ? Kirigami.Theme.highlightColor : box.ink; opacity: index === grid.currentIndex ? 1 : 0.22 } }
                 }
             }
             Connections { target: tabBox; function onCurrentIndexChanged() { grid.currentIndex = tabBox.currentIndex } }

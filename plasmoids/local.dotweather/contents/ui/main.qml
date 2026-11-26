@@ -5,6 +5,7 @@ import org.kde.plasma.plasmoid
 import org.kde.plasma.core as PlasmaCore
 
 PlasmoidItem {
+    readonly property color accent: Kirigami.Theme.highlightColor     // follows the colour scheme, no restart needed
     id: root
 
     // Boards follow the colour scheme: light text on dark, dark on light
@@ -189,9 +190,10 @@ PlasmoidItem {
                 id: lit
                 anchors.fill: parent
                 property bool needAll: true
+                Connections { target: root; function onAccentChanged() { lit.needAll = true; lit.requestPaint() } }
                 function dot(c, i, p) {
                     var s = root.target[i]; if (!s) return
-                    c.globalAlpha = s === 3 ? 0.42 : 1; c.fillStyle = s === 2 ? "#f3531a" : root.ink
+                    c.globalAlpha = s === 3 ? 0.42 : 1; c.fillStyle = s === 2 ? root.accent : root.ink
                     c.beginPath(); c.arc((i % root.cols + 0.5) * p, (Math.floor(i / root.cols) + 0.5) * p, p * 0.42, 0, 6.2832); c.fill()
                 }
                 onPaint: {
